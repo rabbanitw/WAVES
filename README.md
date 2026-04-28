@@ -153,6 +153,24 @@ New commands and options can be added to the CLI by defining additional `@click.
 For detailed help on each command, including available options and arguments, use the `--help` option, e.g., `python cli.py status --help`. This guide provides a concise yet comprehensive overview of the CLI's capabilities, designed to facilitate efficient watermark evaluation workflows.
 
 
+## Diffusive Regeneration — Hardware Timing
+
+Measured against `dev_test/regen_batch.py` (symmetric WAVES regen, SD 1.4, DDIM 1000-step dense schedule, 512×512 input, empty prompt, guidance 7.5).
+
+| | A100 40GB, fp16 | 12-core Xeon @ 2.2 GHz, fp32 | slowdown |
+|---|---|---|---|
+| pipeline load | ~3 s | 13.9 s | ~5× |
+| regen N=10 (1 image) | 0.66 s | 41.4 s | ~63× |
+| 104-image batch, N=10 | 68 s | ~72 min (extrapolated) | ~63× |
+| 104-image batch, N=20 | 114 s | ~143 min (extrapolated) | — |
+
+Notes:
+
+- CPU runs use `torch_dtype=torch.float32` because PyTorch's CPU fp16 path is incomplete for several diffusion ops. fp32 on CPU and fp16 on GPU produce **bit-identical** outputs at the same seed (verified at N=10 on prompt_0: 27.39 dB PSNR in both).
+- The 63× slowdown is dominated by the UNet forward; VAE encode/decode is also slower on CPU but contributes a much smaller share since it runs once per image, not once per denoising iteration.
+- For one-off / debugging runs, CPU is workable. For sweeps over the full 104-image set or for tuning attack strengths, the A100 is two orders of magnitude faster and is the practical default.
+
+
 ## Contributions
 WAVES is an open platform for the research community. Contributions in the form of new attacks, watermarking techniques, or improvements to the evaluation protocol are welcome.
 
