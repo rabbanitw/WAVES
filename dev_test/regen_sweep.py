@@ -87,9 +87,10 @@ def main():
     print(f"  scheduler: DDIM, 1000-step dense schedule (one training timestep per inference step)")
     print()
 
+    base = os.path.splitext(os.path.basename(args.input))[0].split("_attempt_")[0]
     for n in args.steps:
         out = regen_symmetric(src, pipe, n_steps=n)
-        out_path = os.path.join(args.out_dir, f"prompt_0_regen_N{n:03d}.png")
+        out_path = os.path.join(args.out_dir, f"{base}_regen_N{n:03d}.png")
         out.save(out_path)
         p = psnr(src, out)
         print(f"  N={n:3d}  PSNR={p:5.2f} dB  -> {out_path}")
