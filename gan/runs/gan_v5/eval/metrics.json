@@ -1,0 +1,13 @@
+{
+  "n_pairs": 300,
+  "c_eval_orig_acc": 0.83,
+  "c_eval_edit_acc": 0.94,
+  "c_eval_overall_acc": 0.885,
+  "c_eval_flip_rate": 0.99,
+  "c_train_orig_acc": 0.8266666666666667,
+  "c_train_edit_acc": 0.92,
+  "c_train_flip_rate": 0.9866666666666667,
+  "lpips_GxEdit_vs_edit": 0.011738339861234029,
+  "lpips_orig_vs_edit": 0.3012042490641276,
+  "mean_linf": 0.06269979119300842
+}
