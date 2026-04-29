@@ -149,4 +149,4 @@ datasets
 models
 
 # wandb
-wandb
+wandbgan/runs/*/ckpt_*.pt

@@ -1,0 +1,9 @@
+{
+  "n_pairs": 300,
+  "c_eval_orig_acc": 0.83,
+  "c_eval_edit_acc": 0.94,
+  "c_eval_overall_acc": 0.885,
+  "label_flip_rate": 0.11333333333333333,
+  "lpips_GxEdit_vs_edit": 0.030614600479602815,
+  "lpips_orig_vs_edit": 0.3012042490641276
+}
