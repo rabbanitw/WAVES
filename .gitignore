@@ -149,4 +149,7 @@ datasets
 models
 
 # wandb
-wandbgan/runs/*/ckpt_*.pt
+wandb
+
+# large model checkpoints (kept on /mnt/data)
+gan/runs/*/ckpt_*.pt
