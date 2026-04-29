@@ -128,6 +128,70 @@ class PatchDiscriminator(nn.Module):
         return self.net(x)  # [B, 1, 30, 30]
 
 
+class FlatPerturbator(nn.Module):
+    """Adversarial perturbation network with NO downsampling.
+
+    All conv layers operate at the input resolution with 3x3 kernels, so
+    every output pixel is computed from a small local neighborhood of the
+    input — no encoder/decoder asymmetry, no spatial bottleneck. Output is
+    `clamp(x + epsilon * tanh(net(x)), -1, 1)` so the perturbation is
+    L_inf bounded by epsilon (in [-1,1] units; epsilon=16/255 ~= 0.063
+    matches the classical adversarial training budget).
+    """
+
+    def __init__(self, in_c: int = 3, ngf: int = 64, n_layers: int = 6,
+                 epsilon: float = 16.0 / 255.0):
+        super().__init__()
+        self.epsilon = epsilon
+        layers = [nn.Conv2d(in_c, ngf, 3, padding=1), nn.LeakyReLU(0.2, inplace=True)]
+        for _ in range(n_layers - 2):
+            layers += [
+                nn.Conv2d(ngf, ngf, 3, padding=1),
+                nn.InstanceNorm2d(ngf, affine=True),
+                nn.LeakyReLU(0.2, inplace=True),
+            ]
+        layers += [nn.Conv2d(ngf, in_c, 3, padding=1), nn.Tanh()]
+        self.net = nn.Sequential(*layers)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        delta = self.net(x)
+        return torch.clamp(x + self.epsilon * delta, -1.0, 1.0)
+
+
+class GlobalDiscriminator(nn.Module):
+    """Global-receptive-field discriminator. Outputs a single scalar logit
+    per image (real vs fake). Conv stack downsamples 256->8, then global
+    avg pool + linear collapses to 1 scalar — so the discriminator looks at
+    image-level statistics, not just local patches.
+    """
+
+    def __init__(self, in_c: int = 3, ndf: int = 64):
+        super().__init__()
+
+        def block(in_c, out_c, normalize=True, stride=2):
+            layers = [nn.Conv2d(in_c, out_c, 4, stride=stride, padding=1, bias=not normalize)]
+            if normalize:
+                layers.append(nn.InstanceNorm2d(out_c, affine=True))
+            layers.append(nn.LeakyReLU(0.2, inplace=True))
+            return layers
+
+        self.features = nn.Sequential(
+            *block(in_c, ndf, normalize=False),    # 128
+            *block(ndf, ndf * 2),                   # 64
+            *block(ndf * 2, ndf * 4),               # 32
+            *block(ndf * 4, ndf * 8),               # 16
+            *block(ndf * 8, ndf * 8),               # 8
+        )
+        self.head = nn.Sequential(
+            nn.AdaptiveAvgPool2d(1),
+            nn.Flatten(),
+            nn.Linear(ndf * 8, 1),
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.head(self.features(x))  # [B, 1]
+
+
 # -------- Classifier (C_eval) --------
 
 class BinaryClassifier(nn.Module):
@@ -155,8 +219,10 @@ def count_params(m: nn.Module) -> int:
 if __name__ == "__main__":
     G = GeneratorUNet()
     D = PatchDiscriminator()
+    Dg = GlobalDiscriminator()
     C = BinaryClassifier(pretrained=False)
     x = torch.randn(2, 3, 256, 256)
-    print(f"G  params={count_params(G)/1e6:5.2f}M  out={tuple(G(x).shape)}")
-    print(f"D  params={count_params(D)/1e6:5.2f}M  out={tuple(D(x).shape)}")
-    print(f"C  params={count_params(C)/1e6:5.2f}M  out={tuple(C(x).shape)}")
+    print(f"G   params={count_params(G)/1e6:5.2f}M  out={tuple(G(x).shape)}")
+    print(f"D   params={count_params(D)/1e6:5.2f}M  out={tuple(D(x).shape)}")
+    print(f"Dg  params={count_params(Dg)/1e6:5.2f}M  out={tuple(Dg(x).shape)}")
+    print(f"C   params={count_params(C)/1e6:5.2f}M  out={tuple(C(x).shape)}")
