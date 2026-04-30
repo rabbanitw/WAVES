@@ -19,7 +19,11 @@ from torch.optim import AdamW
 from torch.optim.lr_scheduler import CosineAnnealingLR
 from torch.utils.data import DataLoader
 
-from data import DatasetConfig, PicoBananaSingle, make_splits
+from data import (
+    DatasetConfig, DatasetConfigV2,
+    PicoBananaSingle, PicoBananaSingleV2,
+    make_splits, make_splits_v2,
+)
 from models import BinaryClassifier
 
 
@@ -50,19 +54,28 @@ def main():
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--no-pretrained", action="store_true")
     ap.add_argument("--backbone", default="resnet18", choices=["resnet18", "resnet50"])
+    ap.add_argument("--v2", action="store_true",
+                    help="use the larger v2 dataset (preprocessed v1 + photoreal_v2 download)")
     args = ap.parse_args()
 
     os.makedirs(args.out_dir, exist_ok=True)
     torch.manual_seed(args.seed)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    cfg = DatasetConfig()
-    train_items, val_items, test_items, _ = make_splits(cfg)
+    if args.v2:
+        cfg = DatasetConfigV2()
+        train_items, val_items, test_items, _ = make_splits_v2(cfg)
+        SingleDS = PicoBananaSingleV2
+        print(f"using V2 dataset (combined v1-resized + photoreal_v2 download)")
+    else:
+        cfg = DatasetConfig()
+        train_items, val_items, test_items, _ = make_splits(cfg)
+        SingleDS = PicoBananaSingle
     print(f"splits: train={len(train_items)}  val={len(val_items)}  test={len(test_items)} (pairs)")
 
-    train_ds = PicoBananaSingle(train_items, cfg)
-    val_ds = PicoBananaSingle(val_items, cfg)
-    test_ds = PicoBananaSingle(test_items, cfg)
+    train_ds = SingleDS(train_items, cfg)
+    val_ds = SingleDS(val_items, cfg)
+    test_ds = SingleDS(test_items, cfg)
     print(f"single examples: train={len(train_ds)}  val={len(val_ds)}  test={len(test_ds)}")
 
     train_dl = DataLoader(train_ds, batch_size=args.batch, shuffle=True,

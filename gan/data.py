@@ -163,6 +163,117 @@ def make_splits(cfg: DatasetConfig | None = None):
     return train, val, test, cfg
 
 
+# ----- v2: original v1 splits + photoreal_v2 download -> bigger train set -----
+
+@dataclass
+class DatasetConfigV2:
+    """Combined dataset across the existing sample_6k (now also preprocessed
+    to 384-JPEG-q95 with slot offset +100000) and the new photoreal_v2
+    download. Test/val are inherited from v1 unchanged so accuracy numbers
+    are directly comparable to the original C_eval (88.5% test_acc baseline)."""
+    v2_root: str = "/mnt/data/pico-banana-400k/photoreal_v2"
+    v2_metadata_download: str = "/mnt/data/pico-banana-400k/photoreal_v2/metadata.jsonl"
+    v2_metadata_v1_resized: str = "/mnt/data/pico-banana-400k/photoreal_v2/v1_resized_metadata.jsonl"
+    image_size: int = 256
+    jpeg_q: int = 95
+
+
+def _attach_root(items, root):
+    for d in items:
+        d["root"] = root
+    return items
+
+
+def make_splits_v2(cfg: DatasetConfigV2 | None = None):
+    cfg = cfg or DatasetConfigV2()
+
+    # Load v1-resized (the existing photoreal pairs preprocessed to 384 JPG)
+    v1_resized = load_metadata(cfg.v2_metadata_v1_resized, photoreal_only=False)
+    v1_resized = _attach_root(v1_resized, cfg.v2_root)
+
+    # Recover the v1 train/val/test split: undo the +100000 slot offset and
+    # apply split_by_slot with the same seed=17 the original v1 used.
+    for d in v1_resized:
+        d["v1_slot"] = d["slot"] - 100000
+    # Sort by v1_slot so split_by_slot's deterministic shuffle matches v1.
+    by_v1_slot = sorted(v1_resized, key=lambda d: d["v1_slot"])
+    # split_by_slot uses d["slot"] for sorting; temporarily swap.
+    for d in by_v1_slot:
+        d["_orig_slot"] = d["slot"]
+        d["slot"] = d["v1_slot"]
+    v1_train, v1_val, v1_test = split_by_slot(by_v1_slot)
+    for d in by_v1_slot:
+        d["slot"] = d.pop("_orig_slot")
+        del d["v1_slot"]
+
+    # Load new photoreal_v2 downloads (all already photoreal)
+    new_items = []
+    if os.path.exists(cfg.v2_metadata_download):
+        new_items = load_metadata(cfg.v2_metadata_download, photoreal_only=False)
+        new_items = _attach_root(new_items, cfg.v2_root)
+    # All new items go into train.
+    train = v1_train + new_items
+    return train, v1_val, v1_test, cfg
+
+
+class PicoBananaPairedV2(Dataset):
+    """Like PicoBananaPaired but reads images from per-item d['root']
+    (which is set in make_splits_v2). Same matched-codec preprocessing."""
+
+    def __init__(self, items, cfg: DatasetConfigV2):
+        self.items = list(items)
+        self.cfg = cfg
+
+    def __len__(self):
+        return len(self.items)
+
+    def __getitem__(self, i):
+        d = self.items[i]
+        orig = _load_and_match_codec(
+            os.path.join(d["root"], d["src_path"]),
+            self.cfg.image_size, self.cfg.jpeg_q,
+        )
+        edit = _load_and_match_codec(
+            os.path.join(d["root"], d["edit_path"]),
+            self.cfg.image_size, self.cfg.jpeg_q,
+        )
+        return {
+            "orig": to_tensor_neg1_1(orig),
+            "edit": to_tensor_neg1_1(edit),
+            "slot": d["slot"],
+            "edit_type": d.get("edit_type", ""),
+        }
+
+
+class PicoBananaSingleV2(Dataset):
+    """Single-image (orig OR edit) variant of PicoBananaPairedV2."""
+
+    def __init__(self, items, cfg: DatasetConfigV2):
+        self.items = list(items)
+        self.cfg = cfg
+        self.idx = []
+        for i in range(len(self.items)):
+            self.idx.append((i, 0))
+            self.idx.append((i, 1))
+
+    def __len__(self):
+        return len(self.idx)
+
+    def __getitem__(self, k):
+        i, label = self.idx[k]
+        d = self.items[i]
+        rel = d["src_path"] if label == 0 else d["edit_path"]
+        img = _load_and_match_codec(
+            os.path.join(d["root"], rel),
+            self.cfg.image_size, self.cfg.jpeg_q,
+        )
+        return {
+            "img": to_tensor_neg1_1(img),
+            "label": int(label),
+            "slot": d["slot"],
+        }
+
+
 if __name__ == "__main__":
     cfg = DatasetConfig()
     train, val, test, _ = make_splits(cfg)
