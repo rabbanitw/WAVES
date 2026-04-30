@@ -49,6 +49,7 @@ def main():
     ap.add_argument("--workers", type=int, default=8)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--no-pretrained", action="store_true")
+    ap.add_argument("--backbone", default="resnet18", choices=["resnet18", "resnet50"])
     args = ap.parse_args()
 
     os.makedirs(args.out_dir, exist_ok=True)
@@ -71,7 +72,9 @@ def main():
     test_dl = DataLoader(test_ds, batch_size=args.batch, shuffle=False,
                          num_workers=args.workers, pin_memory=True)
 
-    model = BinaryClassifier(pretrained=not args.no_pretrained).to(device)
+    model = BinaryClassifier(pretrained=not args.no_pretrained,
+                             backbone=args.backbone).to(device)
+    print(f"backbone: {args.backbone}  pretrained: {not args.no_pretrained}")
     opt = AdamW(model.parameters(), lr=args.lr, weight_decay=1e-4)
     sched = CosineAnnealingLR(opt, T_max=args.epochs * len(train_dl))
     crit = nn.CrossEntropyLoss()

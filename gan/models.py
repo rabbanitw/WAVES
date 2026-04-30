@@ -195,14 +195,24 @@ class GlobalDiscriminator(nn.Module):
 # -------- Classifier (C_eval) --------
 
 class BinaryClassifier(nn.Module):
-    """ResNet-18 (ImageNet-pretrained) with a 2-class head for orig vs edit."""
+    """ResNet (ImageNet-pretrained) with a 2-class head for orig vs edit.
 
-    def __init__(self, pretrained: bool = True):
+    backbone in {"resnet18", "resnet50"}. Default "resnet18" for back-compat
+    with the C_eval / C_train checkpoints we already have on disk.
+    """
+
+    def __init__(self, pretrained: bool = True, backbone: str = "resnet18"):
         super().__init__()
-        weights = models.ResNet18_Weights.IMAGENET1K_V1 if pretrained else None
-        self.backbone = models.resnet18(weights=weights)
-        self.backbone.fc = nn.Linear(self.backbone.fc.in_features, 2)
-        # ImageNet normalization buffers (input is [-1, 1])
+        if backbone == "resnet18":
+            weights = models.ResNet18_Weights.IMAGENET1K_V1 if pretrained else None
+            net = models.resnet18(weights=weights)
+        elif backbone == "resnet50":
+            weights = models.ResNet50_Weights.IMAGENET1K_V2 if pretrained else None
+            net = models.resnet50(weights=weights)
+        else:
+            raise ValueError(f"Unknown backbone {backbone!r}; use resnet18 or resnet50")
+        net.fc = nn.Linear(net.fc.in_features, 2)
+        self.backbone = net
         self.register_buffer("mean", torch.tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1))
         self.register_buffer("std", torch.tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1))
 
