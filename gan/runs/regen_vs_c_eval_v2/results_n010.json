@@ -1,0 +1,7 @@
+{
+  "n_steps": 10,
+  "n": 300,
+  "baseline_edit_acc": 0.98,
+  "regen_edit_acc": 0.32,
+  "delta": 0.6599999999999999
+}

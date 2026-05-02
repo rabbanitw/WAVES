@@ -1,0 +1,562 @@
+[
+  {
+    "pair": 0,
+    "slot": 0,
+    "edit_type": "Add new scene context/background",
+    "N": 1,
+    "psnr_orig": 23.342778741401293,
+    "psnr_edit": 20.039180666208217,
+    "lpips_orig": 0.12287686765193939,
+    "lpips_edit": 0.16562265157699585
+  },
+  {
+    "pair": 0,
+    "slot": 0,
+    "edit_type": "Add new scene context/background",
+    "N": 5,
+    "psnr_orig": 23.16587584221184,
+    "psnr_edit": 19.902072587096498,
+    "lpips_orig": 0.129816472530365,
+    "lpips_edit": 0.17154967784881592
+  },
+  {
+    "pair": 0,
+    "slot": 0,
+    "edit_type": "Add new scene context/background",
+    "N": 10,
+    "psnr_orig": 22.998314980278785,
+    "psnr_edit": 19.75694280049229,
+    "lpips_orig": 0.135090172290802,
+    "lpips_edit": 0.17752955853939056
+  },
+  {
+    "pair": 0,
+    "slot": 0,
+    "edit_type": "Add new scene context/background",
+    "N": 20,
+    "psnr_orig": 22.749935100637657,
+    "psnr_edit": 19.544249248344393,
+    "lpips_orig": 0.1429687738418579,
+    "lpips_edit": 0.18622514605522156
+  },
+  {
+    "pair": 0,
+    "slot": 0,
+    "edit_type": "Add new scene context/background",
+    "N": 40,
+    "psnr_orig": 22.350931654669356,
+    "psnr_edit": 19.194304649313374,
+    "lpips_orig": 0.1566542685031891,
+    "lpips_edit": 0.200991690158844
+  },
+  {
+    "pair": 0,
+    "slot": 0,
+    "edit_type": "Add new scene context/background",
+    "N": 80,
+    "psnr_orig": 21.75391414743043,
+    "psnr_edit": 18.66552508846169,
+    "lpips_orig": 0.17817211151123047,
+    "lpips_edit": 0.22463667392730713
+  },
+  {
+    "pair": 0,
+    "slot": 0,
+    "edit_type": "Add new scene context/background",
+    "N": 160,
+    "psnr_orig": 20.76997486697386,
+    "psnr_edit": 17.833432146516174,
+    "lpips_orig": 0.21288228034973145,
+    "lpips_edit": 0.2614784836769104
+  },
+  {
+    "pair": 1,
+    "slot": 1,
+    "edit_type": "Add a new object to the scene",
+    "N": 1,
+    "psnr_orig": 37.446211302321295,
+    "psnr_edit": 35.52901600919679,
+    "lpips_orig": 0.05477312579751015,
+    "lpips_edit": 0.06344307959079742
+  },
+  {
+    "pair": 1,
+    "slot": 1,
+    "edit_type": "Add a new object to the scene",
+    "N": 5,
+    "psnr_orig": 37.35762027767671,
+    "psnr_edit": 35.34384922768358,
+    "lpips_orig": 0.05978499352931976,
+    "lpips_edit": 0.07070256024599075
+  },
+  {
+    "pair": 1,
+    "slot": 1,
+    "edit_type": "Add a new object to the scene",
+    "N": 10,
+    "psnr_orig": 37.23348928069106,
+    "psnr_edit": 35.180523380422045,
+    "lpips_orig": 0.06291890144348145,
+    "lpips_edit": 0.07689123600721359
+  },
+  {
+    "pair": 1,
+    "slot": 1,
+    "edit_type": "Add a new object to the scene",
+    "N": 20,
+    "psnr_orig": 37.08987765439158,
+    "psnr_edit": 34.87137034321367,
+    "lpips_orig": 0.06820505112409592,
+    "lpips_edit": 0.08368045091629028
+  },
+  {
+    "pair": 1,
+    "slot": 1,
+    "edit_type": "Add a new object to the scene",
+    "N": 40,
+    "psnr_orig": 36.76926289525939,
+    "psnr_edit": 34.38546026794715,
+    "lpips_orig": 0.07810413837432861,
+    "lpips_edit": 0.09587284922599792
+  },
+  {
+    "pair": 1,
+    "slot": 1,
+    "edit_type": "Add a new object to the scene",
+    "N": 80,
+    "psnr_orig": 36.22446793617392,
+    "psnr_edit": 33.595433270645216,
+    "lpips_orig": 0.09296099841594696,
+    "lpips_edit": 0.1153702437877655
+  },
+  {
+    "pair": 1,
+    "slot": 1,
+    "edit_type": "Add a new object to the scene",
+    "N": 160,
+    "psnr_orig": 35.113668924682536,
+    "psnr_edit": 32.28883358727912,
+    "lpips_orig": 0.11655080318450928,
+    "lpips_edit": 0.14589425921440125
+  },
+  {
+    "pair": 2,
+    "slot": 2,
+    "edit_type": "Remove an existing object",
+    "N": 1,
+    "psnr_orig": 31.23181540785893,
+    "psnr_edit": 32.18149071664629,
+    "lpips_orig": 0.08601433038711548,
+    "lpips_edit": 0.0924324244260788
+  },
+  {
+    "pair": 2,
+    "slot": 2,
+    "edit_type": "Remove an existing object",
+    "N": 5,
+    "psnr_orig": 30.891317975837744,
+    "psnr_edit": 31.794642527475332,
+    "lpips_orig": 0.09395964443683624,
+    "lpips_edit": 0.10113633424043655
+  },
+  {
+    "pair": 2,
+    "slot": 2,
+    "edit_type": "Remove an existing object",
+    "N": 10,
+    "psnr_orig": 30.553292074175342,
+    "psnr_edit": 31.43261856814243,
+    "lpips_orig": 0.10073710232973099,
+    "lpips_edit": 0.10867889970541
+  },
+  {
+    "pair": 2,
+    "slot": 2,
+    "edit_type": "Remove an existing object",
+    "N": 20,
+    "psnr_orig": 30.055499468159766,
+    "psnr_edit": 30.90636724624868,
+    "lpips_orig": 0.11161823570728302,
+    "lpips_edit": 0.11780230700969696
+  },
+  {
+    "pair": 2,
+    "slot": 2,
+    "edit_type": "Remove an existing object",
+    "N": 40,
+    "psnr_orig": 29.26709192879749,
+    "psnr_edit": 30.071798640453974,
+    "lpips_orig": 0.12936455011367798,
+    "lpips_edit": 0.13245204091072083
+  },
+  {
+    "pair": 2,
+    "slot": 2,
+    "edit_type": "Remove an existing object",
+    "N": 80,
+    "psnr_orig": 28.141815075621768,
+    "psnr_edit": 28.896109706380614,
+    "lpips_orig": 0.1541580855846405,
+    "lpips_edit": 0.1550089418888092
+  },
+  {
+    "pair": 2,
+    "slot": 2,
+    "edit_type": "Remove an existing object",
+    "N": 160,
+    "psnr_orig": 26.473979623988452,
+    "psnr_edit": 27.220691740544602,
+    "lpips_orig": 0.19262251257896423,
+    "lpips_edit": 0.1934225708246231
+  },
+  {
+    "pair": 3,
+    "slot": 6,
+    "edit_type": "Change an object's attribute (e.g., color/material)",
+    "N": 1,
+    "psnr_orig": 25.238426486732553,
+    "psnr_edit": 32.19718092242297,
+    "lpips_orig": 0.1305191069841385,
+    "lpips_edit": 0.10518167912960052
+  },
+  {
+    "pair": 3,
+    "slot": 6,
+    "edit_type": "Change an object's attribute (e.g., color/material)",
+    "N": 5,
+    "psnr_orig": 25.137938944143976,
+    "psnr_edit": 32.01042296359009,
+    "lpips_orig": 0.1353641301393509,
+    "lpips_edit": 0.11208443343639374
+  },
+  {
+    "pair": 3,
+    "slot": 6,
+    "edit_type": "Change an object's attribute (e.g., color/material)",
+    "N": 10,
+    "psnr_orig": 25.040116259152075,
+    "psnr_edit": 31.831145051787985,
+    "lpips_orig": 0.14110372960567474,
+    "lpips_edit": 0.11793524026870728
+  },
+  {
+    "pair": 3,
+    "slot": 6,
+    "edit_type": "Change an object's attribute (e.g., color/material)",
+    "N": 20,
+    "psnr_orig": 24.882345527457367,
+    "psnr_edit": 31.5623422266439,
+    "lpips_orig": 0.14990419149398804,
+    "lpips_edit": 0.12588028609752655
+  },
+  {
+    "pair": 3,
+    "slot": 6,
+    "edit_type": "Change an object's attribute (e.g., color/material)",
+    "N": 40,
+    "psnr_orig": 24.627674697465736,
+    "psnr_edit": 31.1103266497299,
+    "lpips_orig": 0.16112284362316132,
+    "lpips_edit": 0.13938190042972565
+  },
+  {
+    "pair": 3,
+    "slot": 6,
+    "edit_type": "Change an object's attribute (e.g., color/material)",
+    "N": 80,
+    "psnr_orig": 24.222449367044817,
+    "psnr_edit": 30.438822153293298,
+    "lpips_orig": 0.17953351140022278,
+    "lpips_edit": 0.1632157266139984
+  },
+  {
+    "pair": 3,
+    "slot": 6,
+    "edit_type": "Change an object's attribute (e.g., color/material)",
+    "N": 160,
+    "psnr_orig": 23.5543427625612,
+    "psnr_edit": 29.363794990563278,
+    "lpips_orig": 0.2069413661956787,
+    "lpips_edit": 0.19269628822803497
+  },
+  {
+    "pair": 4,
+    "slot": 7,
+    "edit_type": "Adjust global lighting (golden hour/fluorescent)",
+    "N": 1,
+    "psnr_orig": 25.226486964098342,
+    "psnr_edit": 25.93353721272117,
+    "lpips_orig": 0.15980184078216553,
+    "lpips_edit": 0.1443609595298767
+  },
+  {
+    "pair": 4,
+    "slot": 7,
+    "edit_type": "Adjust global lighting (golden hour/fluorescent)",
+    "N": 5,
+    "psnr_orig": 24.95899382669598,
+    "psnr_edit": 25.651382079220312,
+    "lpips_orig": 0.16789761185646057,
+    "lpips_edit": 0.15309642255306244
+  },
+  {
+    "pair": 4,
+    "slot": 7,
+    "edit_type": "Adjust global lighting (golden hour/fluorescent)",
+    "N": 10,
+    "psnr_orig": 24.699972186614705,
+    "psnr_edit": 25.384525094015377,
+    "lpips_orig": 0.17540451884269714,
+    "lpips_edit": 0.16044697165489197
+  },
+  {
+    "pair": 4,
+    "slot": 7,
+    "edit_type": "Adjust global lighting (golden hour/fluorescent)",
+    "N": 20,
+    "psnr_orig": 24.323447859002243,
+    "psnr_edit": 24.987102768754873,
+    "lpips_orig": 0.1860455572605133,
+    "lpips_edit": 0.17246060073375702
+  },
+  {
+    "pair": 4,
+    "slot": 7,
+    "edit_type": "Adjust global lighting (golden hour/fluorescent)",
+    "N": 40,
+    "psnr_orig": 23.718408804645698,
+    "psnr_edit": 24.360324597934184,
+    "lpips_orig": 0.20350074768066406,
+    "lpips_edit": 0.1909279227256775
+  },
+  {
+    "pair": 4,
+    "slot": 7,
+    "edit_type": "Adjust global lighting (golden hour/fluorescent)",
+    "N": 80,
+    "psnr_orig": 22.833614211057082,
+    "psnr_edit": 23.465969486311117,
+    "lpips_orig": 0.2297264039516449,
+    "lpips_edit": 0.21719402074813843
+  },
+  {
+    "pair": 4,
+    "slot": 7,
+    "edit_type": "Adjust global lighting (golden hour/fluorescent)",
+    "N": 160,
+    "psnr_orig": 21.598765945670763,
+    "psnr_edit": 22.15977439569572,
+    "lpips_orig": 0.2682853043079376,
+    "lpips_edit": 0.2571675181388855
+  },
+  {
+    "pair": 5,
+    "slot": 11,
+    "edit_type": "Change weather conditions (sunny/rainy/snowy)",
+    "N": 1,
+    "psnr_orig": 20.698520754760473,
+    "psnr_edit": 21.56436762617163,
+    "lpips_orig": 0.041473813354969025,
+    "lpips_edit": 0.09209217876195908
+  },
+  {
+    "pair": 5,
+    "slot": 11,
+    "edit_type": "Change weather conditions (sunny/rainy/snowy)",
+    "N": 5,
+    "psnr_orig": 20.561674308187186,
+    "psnr_edit": 21.437005940358063,
+    "lpips_orig": 0.04298827797174454,
+    "lpips_edit": 0.09681721776723862
+  },
+  {
+    "pair": 5,
+    "slot": 11,
+    "edit_type": "Change weather conditions (sunny/rainy/snowy)",
+    "N": 10,
+    "psnr_orig": 20.44868842617102,
+    "psnr_edit": 21.317045373130725,
+    "lpips_orig": 0.04452025517821312,
+    "lpips_edit": 0.10106819868087769
+  },
+  {
+    "pair": 5,
+    "slot": 11,
+    "edit_type": "Change weather conditions (sunny/rainy/snowy)",
+    "N": 20,
+    "psnr_orig": 20.29608479751797,
+    "psnr_edit": 21.142593792452136,
+    "lpips_orig": 0.04645124077796936,
+    "lpips_edit": 0.10644589364528656
+  },
+  {
+    "pair": 5,
+    "slot": 11,
+    "edit_type": "Change weather conditions (sunny/rainy/snowy)",
+    "N": 40,
+    "psnr_orig": 20.0549285825703,
+    "psnr_edit": 20.860654969542004,
+    "lpips_orig": 0.050569020211696625,
+    "lpips_edit": 0.11445281654596329
+  },
+  {
+    "pair": 5,
+    "slot": 11,
+    "edit_type": "Change weather conditions (sunny/rainy/snowy)",
+    "N": 80,
+    "psnr_orig": 19.68035906634608,
+    "psnr_edit": 20.441057887953846,
+    "lpips_orig": 0.05582698807120323,
+    "lpips_edit": 0.12680639326572418
+  },
+  {
+    "pair": 5,
+    "slot": 11,
+    "edit_type": "Change weather conditions (sunny/rainy/snowy)",
+    "N": 160,
+    "psnr_orig": 18.96533149007578,
+    "psnr_edit": 19.748360943881625,
+    "lpips_orig": 0.06494884192943573,
+    "lpips_edit": 0.14949020743370056
+  },
+  {
+    "pair": 6,
+    "slot": 13,
+    "edit_type": "Change overall color tone (warm \u2194 cool)",
+    "N": 1,
+    "psnr_orig": 27.80234626621498,
+    "psnr_edit": 27.007213060327775,
+    "lpips_orig": 0.12331537902355194,
+    "lpips_edit": 0.1284807026386261
+  },
+  {
+    "pair": 6,
+    "slot": 13,
+    "edit_type": "Change overall color tone (warm \u2194 cool)",
+    "N": 5,
+    "psnr_orig": 27.65361308550068,
+    "psnr_edit": 26.83898286510095,
+    "lpips_orig": 0.13093483448028564,
+    "lpips_edit": 0.13666340708732605
+  },
+  {
+    "pair": 6,
+    "slot": 13,
+    "edit_type": "Change overall color tone (warm \u2194 cool)",
+    "N": 10,
+    "psnr_orig": 27.494667388725706,
+    "psnr_edit": 26.665978883042577,
+    "lpips_orig": 0.13789699971675873,
+    "lpips_edit": 0.14461444318294525
+  },
+  {
+    "pair": 6,
+    "slot": 13,
+    "edit_type": "Change overall color tone (warm \u2194 cool)",
+    "N": 20,
+    "psnr_orig": 27.247202897323998,
+    "psnr_edit": 26.415703476141662,
+    "lpips_orig": 0.14563053846359253,
+    "lpips_edit": 0.15555372834205627
+  },
+  {
+    "pair": 6,
+    "slot": 13,
+    "edit_type": "Change overall color tone (warm \u2194 cool)",
+    "N": 40,
+    "psnr_orig": 26.868507372790095,
+    "psnr_edit": 26.01167266228164,
+    "lpips_orig": 0.16009297966957092,
+    "lpips_edit": 0.17356987297534943
+  },
+  {
+    "pair": 6,
+    "slot": 13,
+    "edit_type": "Change overall color tone (warm \u2194 cool)",
+    "N": 80,
+    "psnr_orig": 26.307025536548593,
+    "psnr_edit": 25.39447898046831,
+    "lpips_orig": 0.181980699300766,
+    "lpips_edit": 0.198531374335289
+  },
+  {
+    "pair": 6,
+    "slot": 13,
+    "edit_type": "Change overall color tone (warm \u2194 cool)",
+    "N": 160,
+    "psnr_orig": 25.354526828161212,
+    "psnr_edit": 24.441651643966367,
+    "lpips_orig": 0.21583279967308044,
+    "lpips_edit": 0.23654845356941223
+  },
+  {
+    "pair": 7,
+    "slot": 15,
+    "edit_type": "Replace one object category with another",
+    "N": 1,
+    "psnr_orig": 26.389758056309955,
+    "psnr_edit": 26.346129672113378,
+    "lpips_orig": 0.14411814510822296,
+    "lpips_edit": 0.1423501968383789
+  },
+  {
+    "pair": 7,
+    "slot": 15,
+    "edit_type": "Replace one object category with another",
+    "N": 5,
+    "psnr_orig": 26.086145551463243,
+    "psnr_edit": 26.054645555111122,
+    "lpips_orig": 0.15093639492988586,
+    "lpips_edit": 0.1503688395023346
+  },
+  {
+    "pair": 7,
+    "slot": 15,
+    "edit_type": "Replace one object category with another",
+    "N": 10,
+    "psnr_orig": 25.792066787658925,
+    "psnr_edit": 25.76533658971277,
+    "lpips_orig": 0.15838222205638885,
+    "lpips_edit": 0.15802520513534546
+  },
+  {
+    "pair": 7,
+    "slot": 15,
+    "edit_type": "Replace one object category with another",
+    "N": 20,
+    "psnr_orig": 25.35635431546554,
+    "psnr_edit": 25.329008865766237,
+    "lpips_orig": 0.16929304599761963,
+    "lpips_edit": 0.16978414356708527
+  },
+  {
+    "pair": 7,
+    "slot": 15,
+    "edit_type": "Replace one object category with another",
+    "N": 40,
+    "psnr_orig": 24.680590561677977,
+    "psnr_edit": 24.645620363206948,
+    "lpips_orig": 0.18855500221252441,
+    "lpips_edit": 0.18924793601036072
+  },
+  {
+    "pair": 7,
+    "slot": 15,
+    "edit_type": "Replace one object category with another",
+    "N": 80,
+    "psnr_orig": 23.700570553570152,
+    "psnr_edit": 23.672734578364047,
+    "lpips_orig": 0.21794632077217102,
+    "lpips_edit": 0.2191789448261261
+  },
+  {
+    "pair": 7,
+    "slot": 15,
+    "edit_type": "Replace one object category with another",
+    "N": 160,
+    "psnr_orig": 22.248964959029674,
+    "psnr_edit": 22.21956898182137,
+    "lpips_orig": 0.2633710503578186,
+    "lpips_edit": 0.2701511085033417
+  }
+]

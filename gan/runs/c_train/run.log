@@ -1,0 +1,132 @@
+splits: train=2947  val=200  test=300 (pairs)
+single examples: train=5894  val=400  test=600
+  epoch  0 step    0/92  loss=0.8255
+  epoch  0 step   20/92  loss=0.7734
+  epoch  0 step   40/92  loss=0.7675
+  epoch  0 step   60/92  loss=0.7662
+/home/trabbani/WAVES/venv/lib/python3.10/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Truncated File Read
+  warnings.warn(str(msg))
+  epoch  0 step   80/92  loss=0.7587
+epoch  0  val_acc=0.6250  val_loss=0.6578  (97s)
+  saved best to /home/trabbani/WAVES/gan/runs/c_train/best.pt
+  epoch  1 step    0/92  loss=0.5930
+  epoch  1 step   20/92  loss=0.5988
+/home/trabbani/WAVES/venv/lib/python3.10/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Truncated File Read
+  warnings.warn(str(msg))
+  epoch  1 step   40/92  loss=0.5960
+  epoch  1 step   60/92  loss=0.6017
+  epoch  1 step   80/92  loss=0.6008
+epoch  1  val_acc=0.6750  val_loss=0.6105  (192s)
+  saved best to /home/trabbani/WAVES/gan/runs/c_train/best.pt
+  epoch  2 step    0/92  loss=0.4256
+  epoch  2 step   20/92  loss=0.3975
+  epoch  2 step   40/92  loss=0.3902
+  epoch  2 step   60/92  loss=0.3865
+/home/trabbani/WAVES/venv/lib/python3.10/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Truncated File Read
+  warnings.warn(str(msg))
+  epoch  2 step   80/92  loss=0.3940
+epoch  2  val_acc=0.6925  val_loss=0.6620  (287s)
+  saved best to /home/trabbani/WAVES/gan/runs/c_train/best.pt
+  epoch  3 step    0/92  loss=0.1410
+  epoch  3 step   20/92  loss=0.1990
+  epoch  3 step   40/92  loss=0.1811
+  epoch  3 step   60/92  loss=0.1879
+/home/trabbani/WAVES/venv/lib/python3.10/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Truncated File Read
+  warnings.warn(str(msg))
+  epoch  3 step   80/92  loss=0.1856
+epoch  3  val_acc=0.8325  val_loss=0.3717  (382s)
+  saved best to /home/trabbani/WAVES/gan/runs/c_train/best.pt
+  epoch  4 step    0/92  loss=0.1013
+  epoch  4 step   20/92  loss=0.0855
+  epoch  4 step   40/92  loss=0.0945
+  epoch  4 step   60/92  loss=0.0967
+/home/trabbani/WAVES/venv/lib/python3.10/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Truncated File Read
+  warnings.warn(str(msg))
+  epoch  4 step   80/92  loss=0.0998
+epoch  4  val_acc=0.7525  val_loss=0.7727  (477s)
+/home/trabbani/WAVES/venv/lib/python3.10/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Truncated File Read
+  warnings.warn(str(msg))
+  epoch  5 step    0/92  loss=0.0427
+  epoch  5 step   20/92  loss=0.0550
+  epoch  5 step   40/92  loss=0.0521
+  epoch  5 step   60/92  loss=0.0506
+  epoch  5 step   80/92  loss=0.0517
+epoch  5  val_acc=0.8475  val_loss=0.4943  (574s)
+  saved best to /home/trabbani/WAVES/gan/runs/c_train/best.pt
+/home/trabbani/WAVES/venv/lib/python3.10/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Truncated File Read
+  warnings.warn(str(msg))
+  epoch  6 step    0/92  loss=0.0261
+  epoch  6 step   20/92  loss=0.0348
+  epoch  6 step   40/92  loss=0.0343
+  epoch  6 step   60/92  loss=0.0302
+  epoch  6 step   80/92  loss=0.0276
+epoch  6  val_acc=0.8250  val_loss=0.6714  (670s)
+  epoch  7 step    0/92  loss=0.0323
+  epoch  7 step   20/92  loss=0.0136
+  epoch  7 step   40/92  loss=0.0139
+/home/trabbani/WAVES/venv/lib/python3.10/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Truncated File Read
+  warnings.warn(str(msg))
+  epoch  7 step   60/92  loss=0.0143
+  epoch  7 step   80/92  loss=0.0153
+epoch  7  val_acc=0.8875  val_loss=0.3254  (766s)
+  saved best to /home/trabbani/WAVES/gan/runs/c_train/best.pt
+  epoch  8 step    0/92  loss=0.0037
+/home/trabbani/WAVES/venv/lib/python3.10/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Truncated File Read
+  warnings.warn(str(msg))
+  epoch  8 step   20/92  loss=0.0068
+  epoch  8 step   40/92  loss=0.0067
+  epoch  8 step   60/92  loss=0.0070
+  epoch  8 step   80/92  loss=0.0090
+epoch  8  val_acc=0.8975  val_loss=0.2925  (864s)
+  saved best to /home/trabbani/WAVES/gan/runs/c_train/best.pt
+  epoch  9 step    0/92  loss=0.0136
+/home/trabbani/WAVES/venv/lib/python3.10/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Truncated File Read
+  warnings.warn(str(msg))
+  epoch  9 step   20/92  loss=0.0043
+  epoch  9 step   40/92  loss=0.0043
+  epoch  9 step   60/92  loss=0.0041
+  epoch  9 step   80/92  loss=0.0039
+epoch  9  val_acc=0.8975  val_loss=0.2799  (956s)
+  epoch 10 step    0/92  loss=0.0011
+  epoch 10 step   20/92  loss=0.0039
+/home/trabbani/WAVES/venv/lib/python3.10/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Truncated File Read
+  warnings.warn(str(msg))
+  epoch 10 step   40/92  loss=0.0037
+  epoch 10 step   60/92  loss=0.0033
+  epoch 10 step   80/92  loss=0.0037
+epoch 10  val_acc=0.9075  val_loss=0.2579  (1055s)
+  saved best to /home/trabbani/WAVES/gan/runs/c_train/best.pt
+  epoch 11 step    0/92  loss=0.0024
+  epoch 11 step   20/92  loss=0.0023
+  epoch 11 step   40/92  loss=0.0033
+/home/trabbani/WAVES/venv/lib/python3.10/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Truncated File Read
+  warnings.warn(str(msg))
+  epoch 11 step   60/92  loss=0.0031
+  epoch 11 step   80/92  loss=0.0036
+epoch 11  val_acc=0.9000  val_loss=0.2864  (1148s)
+/home/trabbani/WAVES/venv/lib/python3.10/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Truncated File Read
+  warnings.warn(str(msg))
+  epoch 12 step    0/92  loss=0.0015
+  epoch 12 step   20/92  loss=0.0040
+  epoch 12 step   40/92  loss=0.0032
+  epoch 12 step   60/92  loss=0.0028
+  epoch 12 step   80/92  loss=0.0029
+epoch 12  val_acc=0.9050  val_loss=0.2683  (1247s)
+  epoch 13 step    0/92  loss=0.0021
+  epoch 13 step   20/92  loss=0.0031
+/home/trabbani/WAVES/venv/lib/python3.10/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Truncated File Read
+  warnings.warn(str(msg))
+  epoch 13 step   40/92  loss=0.0032
+  epoch 13 step   60/92  loss=0.0034
+  epoch 13 step   80/92  loss=0.0031
+epoch 13  val_acc=0.9025  val_loss=0.2689  (1339s)
+  epoch 14 step    0/92  loss=0.0013
+  epoch 14 step   20/92  loss=0.0050
+/home/trabbani/WAVES/venv/lib/python3.10/site-packages/PIL/TiffImagePlugin.py:949: UserWarning: Truncated File Read
+  warnings.warn(str(msg))
+  epoch 14 step   40/92  loss=0.0036
+  epoch 14 step   60/92  loss=0.0033
+  epoch 14 step   80/92  loss=0.0031
+epoch 14  val_acc=0.9075  val_loss=0.2753  (1433s)
+
+test_acc=0.8733  test_loss=0.4049  (best epoch=10  val=0.9075)

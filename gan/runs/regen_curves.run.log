@@ -1,0 +1,79 @@
+selected 8 pairs (one per edit_type):
+  0  slot=    0  Add new scene context/background
+  1  slot=    1  Add a new object to the scene
+  2  slot=    2  Remove an existing object
+  3  slot=    6  Change an object's attribute (e.g., color/material)
+  4  slot=    7  Adjust global lighting (golden hour/fluorescent)
+  5  slot=   11  Change weather conditions (sunny/rainy/snowy)
+  6  slot=   13  Change overall color tone (warm ↔ cool)
+  7  slot=   15  Replace one object category with another
+safety_checker/model.safetensors not found
+Loading pipeline components...:   0%|          | 0/7 [00:00<?, ?it/s]Loading pipeline components...:  29%|██▊       | 2/7 [00:01<00:03,  1.54it/s]Loading pipeline components...:  57%|█████▋    | 4/7 [00:01<00:01,  2.92it/s]Loading pipeline components...:  71%|███████▏  | 5/7 [00:02<00:00,  2.67it/s]`text_config_dict` is provided which will be used to initialize `CLIPTextConfig`. The value `text_config["id2label"]` will be overriden.
+`text_config_dict` is provided which will be used to initialize `CLIPTextConfig`. The value `text_config["bos_token_id"]` will be overriden.
+`text_config_dict` is provided which will be used to initialize `CLIPTextConfig`. The value `text_config["eos_token_id"]` will be overriden.
+Loading pipeline components...:  86%|████████▌ | 6/7 [00:02<00:00,  1.80it/s]/home/trabbani/WAVES/venv/lib/python3.10/site-packages/transformers/models/clip/feature_extraction_clip.py:28: FutureWarning: The class CLIPFeatureExtractor is deprecated and will be removed in version 5 of Transformers. Please use CLIPImageProcessor instead.
+  warnings.warn(
+Loading pipeline components...: 100%|██████████| 7/7 [00:02<00:00,  2.34it/s]
+/home/trabbani/WAVES/venv/lib/python3.10/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/home/trabbani/WAVES/venv/lib/python3.10/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=VGG16_Weights.IMAGENET1K_V1`. You can also use `weights=VGG16_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+  pair 0 N=  1  PSNR orig=23.34 edit=20.04  |  LPIPS orig=0.123 edit=0.166  (    1s)
+  pair 0 N=  5  PSNR orig=23.17 edit=19.90  |  LPIPS orig=0.130 edit=0.172  (    2s)
+  pair 0 N= 10  PSNR orig=23.00 edit=19.76  |  LPIPS orig=0.135 edit=0.178  (    3s)
+  pair 0 N= 20  PSNR orig=22.75 edit=19.54  |  LPIPS orig=0.143 edit=0.186  (    5s)
+  pair 0 N= 40  PSNR orig=22.35 edit=19.19  |  LPIPS orig=0.157 edit=0.201  (    9s)
+  pair 0 N= 80  PSNR orig=21.75 edit=18.67  |  LPIPS orig=0.178 edit=0.225  (   16s)
+  pair 0 N=160  PSNR orig=20.77 edit=17.83  |  LPIPS orig=0.213 edit=0.261  (   31s)
+  pair 1 N=  1  PSNR orig=37.45 edit=35.53  |  LPIPS orig=0.055 edit=0.063  (   31s)
+  pair 1 N=  5  PSNR orig=37.36 edit=35.34  |  LPIPS orig=0.060 edit=0.071  (   32s)
+  pair 1 N= 10  PSNR orig=37.23 edit=35.18  |  LPIPS orig=0.063 edit=0.077  (   33s)
+  pair 1 N= 20  PSNR orig=37.09 edit=34.87  |  LPIPS orig=0.068 edit=0.084  (   35s)
+  pair 1 N= 40  PSNR orig=36.77 edit=34.39  |  LPIPS orig=0.078 edit=0.096  (   39s)
+  pair 1 N= 80  PSNR orig=36.22 edit=33.60  |  LPIPS orig=0.093 edit=0.115  (   46s)
+  pair 1 N=160  PSNR orig=35.11 edit=32.29  |  LPIPS orig=0.117 edit=0.146  (   61s)
+  pair 2 N=  1  PSNR orig=31.23 edit=32.18  |  LPIPS orig=0.086 edit=0.092  (   61s)
+  pair 2 N=  5  PSNR orig=30.89 edit=31.79  |  LPIPS orig=0.094 edit=0.101  (   62s)
+  pair 2 N= 10  PSNR orig=30.55 edit=31.43  |  LPIPS orig=0.101 edit=0.109  (   63s)
+  pair 2 N= 20  PSNR orig=30.06 edit=30.91  |  LPIPS orig=0.112 edit=0.118  (   65s)
+  pair 2 N= 40  PSNR orig=29.27 edit=30.07  |  LPIPS orig=0.129 edit=0.132  (   69s)
+  pair 2 N= 80  PSNR orig=28.14 edit=28.90  |  LPIPS orig=0.154 edit=0.155  (   76s)
+  pair 2 N=160  PSNR orig=26.47 edit=27.22  |  LPIPS orig=0.193 edit=0.193  (   91s)
+  pair 3 N=  1  PSNR orig=25.24 edit=32.20  |  LPIPS orig=0.131 edit=0.105  (   91s)
+  pair 3 N=  5  PSNR orig=25.14 edit=32.01  |  LPIPS orig=0.135 edit=0.112  (   92s)
+  pair 3 N= 10  PSNR orig=25.04 edit=31.83  |  LPIPS orig=0.141 edit=0.118  (   93s)
+  pair 3 N= 20  PSNR orig=24.88 edit=31.56  |  LPIPS orig=0.150 edit=0.126  (   95s)
+  pair 3 N= 40  PSNR orig=24.63 edit=31.11  |  LPIPS orig=0.161 edit=0.139  (   99s)
+  pair 3 N= 80  PSNR orig=24.22 edit=30.44  |  LPIPS orig=0.180 edit=0.163  (  106s)
+  pair 3 N=160  PSNR orig=23.55 edit=29.36  |  LPIPS orig=0.207 edit=0.193  (  120s)
+  pair 4 N=  1  PSNR orig=25.23 edit=25.93  |  LPIPS orig=0.160 edit=0.144  (  121s)
+  pair 4 N=  5  PSNR orig=24.96 edit=25.65  |  LPIPS orig=0.168 edit=0.153  (  121s)
+  pair 4 N= 10  PSNR orig=24.70 edit=25.38  |  LPIPS orig=0.175 edit=0.160  (  123s)
+  pair 4 N= 20  PSNR orig=24.32 edit=24.99  |  LPIPS orig=0.186 edit=0.172  (  124s)
+  pair 4 N= 40  PSNR orig=23.72 edit=24.36  |  LPIPS orig=0.204 edit=0.191  (  128s)
+  pair 4 N= 80  PSNR orig=22.83 edit=23.47  |  LPIPS orig=0.230 edit=0.217  (  136s)
+  pair 4 N=160  PSNR orig=21.60 edit=22.16  |  LPIPS orig=0.268 edit=0.257  (  150s)
+  pair 5 N=  1  PSNR orig=20.70 edit=21.56  |  LPIPS orig=0.041 edit=0.092  (  150s)
+  pair 5 N=  5  PSNR orig=20.56 edit=21.44  |  LPIPS orig=0.043 edit=0.097  (  151s)
+  pair 5 N= 10  PSNR orig=20.45 edit=21.32  |  LPIPS orig=0.045 edit=0.101  (  152s)
+  pair 5 N= 20  PSNR orig=20.30 edit=21.14  |  LPIPS orig=0.046 edit=0.106  (  154s)
+  pair 5 N= 40  PSNR orig=20.05 edit=20.86  |  LPIPS orig=0.051 edit=0.114  (  158s)
+  pair 5 N= 80  PSNR orig=19.68 edit=20.44  |  LPIPS orig=0.056 edit=0.127  (  166s)
+  pair 5 N=160  PSNR orig=18.97 edit=19.75  |  LPIPS orig=0.065 edit=0.149  (  180s)
+  pair 6 N=  1  PSNR orig=27.80 edit=27.01  |  LPIPS orig=0.123 edit=0.128  (  181s)
+  pair 6 N=  5  PSNR orig=27.65 edit=26.84  |  LPIPS orig=0.131 edit=0.137  (  182s)
+  pair 6 N= 10  PSNR orig=27.49 edit=26.67  |  LPIPS orig=0.138 edit=0.145  (  183s)
+  pair 6 N= 20  PSNR orig=27.25 edit=26.42  |  LPIPS orig=0.146 edit=0.156  (  185s)
+  pair 6 N= 40  PSNR orig=26.87 edit=26.01  |  LPIPS orig=0.160 edit=0.174  (  189s)
+  pair 6 N= 80  PSNR orig=26.31 edit=25.39  |  LPIPS orig=0.182 edit=0.199  (  196s)
+  pair 6 N=160  PSNR orig=25.35 edit=24.44  |  LPIPS orig=0.216 edit=0.237  (  210s)
+  pair 7 N=  1  PSNR orig=26.39 edit=26.35  |  LPIPS orig=0.144 edit=0.142  (  211s)
+  pair 7 N=  5  PSNR orig=26.09 edit=26.05  |  LPIPS orig=0.151 edit=0.150  (  211s)
+  pair 7 N= 10  PSNR orig=25.79 edit=25.77  |  LPIPS orig=0.158 edit=0.158  (  213s)
+  pair 7 N= 20  PSNR orig=25.36 edit=25.33  |  LPIPS orig=0.169 edit=0.170  (  215s)
+  pair 7 N= 40  PSNR orig=24.68 edit=24.65  |  LPIPS orig=0.189 edit=0.189  (  219s)
+  pair 7 N= 80  PSNR orig=23.70 edit=23.67  |  LPIPS orig=0.218 edit=0.219  (  226s)
+  pair 7 N=160  PSNR orig=22.25 edit=22.22  |  LPIPS orig=0.263 edit=0.270  (  240s)
+
+saved curves to /home/trabbani/WAVES/gan/runs/regen_curves/curves.png
+data: /home/trabbani/WAVES/gan/runs/regen_curves/results.json  (56 rows)
