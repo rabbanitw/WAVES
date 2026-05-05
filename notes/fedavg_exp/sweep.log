@@ -1,0 +1,67 @@
+# classes=50, total_train=5522, total_test=2500, head_count=500, tail_count=5
+[K=1] client sizes: [5522]
+[K=1 r=  5] train_acc_mean=0.083  test_acc_mean=0.074  head5_train=0.444  head5_test=0.412  tail5_train=0.000  tail5_test=0.000
+[K=1 r= 10] train_acc_mean=0.115  test_acc_mean=0.103  head5_train=0.511  head5_test=0.488  tail5_train=0.000  tail5_test=0.000
+[K=1 r= 15] train_acc_mean=0.211  test_acc_mean=0.155  head5_train=0.583  head5_test=0.508  tail5_train=0.000  tail5_test=0.000
+[K=1 r= 20] train_acc_mean=0.279  test_acc_mean=0.165  head5_train=0.702  head5_test=0.488  tail5_train=0.000  tail5_test=0.000
+[K=1 r= 25] train_acc_mean=0.384  test_acc_mean=0.176  head5_train=0.852  head5_test=0.488  tail5_train=0.000  tail5_test=0.000
+[K=1 r= 30] train_acc_mean=0.597  test_acc_mean=0.191  head5_train=0.942  head5_test=0.508  tail5_train=0.166  tail5_test=0.000
+[K=1 r= 35] train_acc_mean=0.709  test_acc_mean=0.198  head5_train=0.968  head5_test=0.476  tail5_train=0.216  tail5_test=0.000
+[K=1 r= 40] train_acc_mean=0.841  test_acc_mean=0.203  head5_train=0.983  head5_test=0.524  tail5_train=0.462  tail5_test=0.000
+[K=1] wrote /home/trabbani/fedavg_exp/runs/K01.json
+  elapsed: 305.2s
+[K=2] client sizes: [2911, 2611]
+[K=2 r=  5] train_acc_mean=0.041  test_acc_mean=0.031  head5_train=0.264  head5_test=0.192  tail5_train=0.000  tail5_test=0.000
+[K=2 r= 10] train_acc_mean=0.064  test_acc_mean=0.058  head5_train=0.217  head5_test=0.196  tail5_train=0.000  tail5_test=0.000
+[K=2 r= 15] train_acc_mean=0.096  test_acc_mean=0.084  head5_train=0.327  head5_test=0.276  tail5_train=0.000  tail5_test=0.000
+[K=2 r= 20] train_acc_mean=0.122  test_acc_mean=0.102  head5_train=0.434  head5_test=0.360  tail5_train=0.000  tail5_test=0.000
+[K=2 r= 25] train_acc_mean=0.167  test_acc_mean=0.135  head5_train=0.448  head5_test=0.400  tail5_train=0.000  tail5_test=0.000
+[K=2 r= 30] train_acc_mean=0.175  test_acc_mean=0.130  head5_train=0.474  head5_test=0.380  tail5_train=0.000  tail5_test=0.000
+[K=2 r= 35] train_acc_mean=0.255  test_acc_mean=0.169  head5_train=0.617  head5_test=0.488  tail5_train=0.000  tail5_test=0.000
+[K=2 r= 40] train_acc_mean=0.295  test_acc_mean=0.174  head5_train=0.667  head5_test=0.472  tail5_train=0.000  tail5_test=0.000
+[K=2] wrote /home/trabbani/fedavg_exp/runs/K02.json
+  elapsed: 625.8s
+[K=4] client sizes: [858, 1575, 1664, 1425]
+[K=4 r=  5] train_acc_mean=0.021  test_acc_mean=0.020  head5_train=0.205  head5_test=0.196  tail5_train=0.000  tail5_test=0.000
+[K=4 r= 10] train_acc_mean=0.033  test_acc_mean=0.032  head5_train=0.186  head5_test=0.188  tail5_train=0.000  tail5_test=0.000
+[K=4 r= 15] train_acc_mean=0.055  test_acc_mean=0.056  head5_train=0.260  head5_test=0.280  tail5_train=0.000  tail5_test=0.000
+[K=4 r= 20] train_acc_mean=0.083  test_acc_mean=0.078  head5_train=0.371  head5_test=0.348  tail5_train=0.000  tail5_test=0.000
+[K=4 r= 25] train_acc_mean=0.093  test_acc_mean=0.091  head5_train=0.424  head5_test=0.420  tail5_train=0.000  tail5_test=0.000
+[K=4 r= 30] train_acc_mean=0.111  test_acc_mean=0.102  head5_train=0.423  head5_test=0.420  tail5_train=0.000  tail5_test=0.000
+[K=4 r= 35] train_acc_mean=0.132  test_acc_mean=0.121  head5_train=0.421  head5_test=0.412  tail5_train=0.000  tail5_test=0.000
+[K=4 r= 40] train_acc_mean=0.139  test_acc_mean=0.119  head5_train=0.456  head5_test=0.420  tail5_train=0.000  tail5_test=0.000
+[K=4] wrote /home/trabbani/fedavg_exp/runs/K04.json
+  elapsed: 980.6s
+[K=6] client sizes: [1047, 1051, 840, 643, 1376, 565]
+[K=6 r=  5] train_acc_mean=0.024  test_acc_mean=0.022  head5_train=0.202  head5_test=0.192  tail5_train=0.000  tail5_test=0.000
+[K=6 r= 10] train_acc_mean=0.038  test_acc_mean=0.036  head5_train=0.328  head5_test=0.312  tail5_train=0.000  tail5_test=0.000
+[K=6 r= 15] train_acc_mean=0.046  test_acc_mean=0.040  head5_train=0.383  head5_test=0.356  tail5_train=0.000  tail5_test=0.000
+[K=6 r= 20] train_acc_mean=0.052  test_acc_mean=0.044  head5_train=0.398  head5_test=0.372  tail5_train=0.000  tail5_test=0.000
+[K=6 r= 25] train_acc_mean=0.067  test_acc_mean=0.060  head5_train=0.387  head5_test=0.376  tail5_train=0.000  tail5_test=0.000
+[K=6 r= 30] train_acc_mean=0.068  test_acc_mean=0.062  head5_train=0.401  head5_test=0.388  tail5_train=0.000  tail5_test=0.000
+[K=6 r= 35] train_acc_mean=0.078  test_acc_mean=0.069  head5_train=0.415  head5_test=0.396  tail5_train=0.000  tail5_test=0.000
+[K=6 r= 40] train_acc_mean=0.081  test_acc_mean=0.072  head5_train=0.413  head5_test=0.404  tail5_train=0.000  tail5_test=0.000
+[K=6] wrote /home/trabbani/fedavg_exp/runs/K06.json
+  elapsed: 1364.0s
+[K=8] client sizes: [772, 1000, 558, 687, 555, 688, 653, 609]
+[K=8 r=  5] train_acc_mean=0.020  test_acc_mean=0.020  head5_train=0.200  head5_test=0.200  tail5_train=0.000  tail5_test=0.000
+[K=8 r= 10] train_acc_mean=0.022  test_acc_mean=0.022  head5_train=0.225  head5_test=0.220  tail5_train=0.000  tail5_test=0.000
+[K=8 r= 15] train_acc_mean=0.025  test_acc_mean=0.026  head5_train=0.252  head5_test=0.256  tail5_train=0.000  tail5_test=0.000
+[K=8 r= 20] train_acc_mean=0.027  test_acc_mean=0.028  head5_train=0.269  head5_test=0.280  tail5_train=0.000  tail5_test=0.000
+[K=8 r= 25] train_acc_mean=0.051  test_acc_mean=0.049  head5_train=0.363  head5_test=0.332  tail5_train=0.000  tail5_test=0.000
+[K=8 r= 30] train_acc_mean=0.057  test_acc_mean=0.058  head5_train=0.371  head5_test=0.340  tail5_train=0.000  tail5_test=0.000
+[K=8 r= 35] train_acc_mean=0.068  test_acc_mean=0.070  head5_train=0.376  head5_test=0.360  tail5_train=0.000  tail5_test=0.000
+[K=8 r= 40] train_acc_mean=0.076  test_acc_mean=0.074  head5_train=0.391  head5_test=0.380  tail5_train=0.000  tail5_test=0.000
+[K=8] wrote /home/trabbani/fedavg_exp/runs/K08.json
+  elapsed: 1783.1s
+[K=10] client sizes: [691, 610, 741, 310, 571, 843, 401, 351, 522, 482]
+[K=10 r=  5] train_acc_mean=0.020  test_acc_mean=0.020  head5_train=0.200  head5_test=0.200  tail5_train=0.000  tail5_test=0.000
+[K=10 r= 10] train_acc_mean=0.020  test_acc_mean=0.020  head5_train=0.200  head5_test=0.200  tail5_train=0.000  tail5_test=0.000
+[K=10 r= 15] train_acc_mean=0.024  test_acc_mean=0.023  head5_train=0.198  head5_test=0.188  tail5_train=0.000  tail5_test=0.000
+[K=10 r= 20] train_acc_mean=0.044  test_acc_mean=0.043  head5_train=0.238  head5_test=0.240  tail5_train=0.000  tail5_test=0.000
+[K=10 r= 25] train_acc_mean=0.052  test_acc_mean=0.046  head5_train=0.259  head5_test=0.216  tail5_train=0.000  tail5_test=0.000
+[K=10 r= 30] train_acc_mean=0.064  test_acc_mean=0.052  head5_train=0.372  head5_test=0.316  tail5_train=0.000  tail5_test=0.000
+[K=10 r= 35] train_acc_mean=0.073  test_acc_mean=0.062  head5_train=0.375  head5_test=0.308  tail5_train=0.000  tail5_test=0.000
+[K=10 r= 40] train_acc_mean=0.082  test_acc_mean=0.077  head5_train=0.415  head5_test=0.384  tail5_train=0.000  tail5_test=0.000
+[K=10] wrote /home/trabbani/fedavg_exp/runs/K10.json
+  elapsed: 2235.5s
