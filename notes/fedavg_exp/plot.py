@@ -148,36 +148,105 @@ def fig3_summary(cfg, runs):
 
 
 def fig4_client_heatmap(cfg, runs):
-    """For K=10 (or largest K), heatmap of per-client train acc by class
-    (global model eval'd on each client's local train data, by class)."""
+    """Per-client per-class heatmaps for the largest K: global model train acc,
+    test acc, and the train/test gap. Cells with no samples shown grey."""
     Ks = sorted(runs.keys())
     K = max(Ks)
     h = runs[K]
     counts = np.array(cfg["counts"])
     order = np.argsort(-counts)
-    grid = np.array(h["client_train_acc_by_class_final"])[:, order]
-    client_class_counts = np.array(h.get("client_class_counts", [[0]]))[
-        :, order] if h.get("client_class_counts") else None
 
-    fig, axes = plt.subplots(1, 2, figsize=(13, 4))
-    im0 = axes[0].imshow(grid, aspect="auto", vmin=0, vmax=1, cmap="magma")
+    tr = np.array(h["client_train_acc_by_class_final"])[:, order]
+    te_key = "client_test_acc_by_class_final"
+    has_test = te_key in h and h[te_key] is not None
+    te = np.array(h[te_key])[:, order] if has_test else None
+    tr_n = np.array(h.get("client_train_class_counts", [[0]] * K))[:, order]
+    te_n = np.array(h.get("client_test_class_counts",  [[0]] * K))[:, order]
+
+    # mask cells with no examples (so missing != black)
+    tr_masked = np.ma.masked_where(tr_n == 0, tr)
+    te_masked = np.ma.masked_where(te_n == 0, te) if te is not None else None
+
+    cmap = plt.cm.magma.copy()
+    cmap.set_bad("0.7")
+
+    ncols = 3 if has_test else 2
+    fig, axes = plt.subplots(1, ncols, figsize=(5.5 * ncols, 4.2))
+    im0 = axes[0].imshow(tr_masked, aspect="auto", vmin=0, vmax=1, cmap=cmap)
     axes[0].set_xlabel("class rank (head $\\rightarrow$ tail)")
-    axes[0].set_ylabel("client index")
-    axes[0].set_title(f"Global model train accuracy on each client's data (K={K})")
+    axes[0].set_ylabel("client")
+    axes[0].set_title(f"Per-client train acc (K={K})")
     fig.colorbar(im0, ax=axes[0], label="accuracy")
 
-    if client_class_counts is not None:
-        im1 = axes[1].imshow(client_class_counts, aspect="auto", cmap="Blues",
-                             norm=plt.matplotlib.colors.LogNorm(
-                                 vmin=max(1, client_class_counts[client_class_counts > 0].min()
-                                          if (client_class_counts > 0).any() else 1),
-                                 vmax=max(1, client_class_counts.max())))
+    if has_test:
+        im1 = axes[1].imshow(te_masked, aspect="auto", vmin=0, vmax=1, cmap=cmap)
         axes[1].set_xlabel("class rank (head $\\rightarrow$ tail)")
-        axes[1].set_ylabel("client index")
-        axes[1].set_title("# samples per (client, class)")
-        fig.colorbar(im1, ax=axes[1], label="count (log)")
+        axes[1].set_ylabel("client")
+        axes[1].set_title(f"Per-client test acc (K={K})")
+        fig.colorbar(im1, ax=axes[1], label="accuracy")
+
+        gap = np.where((tr_n > 0) & (te_n > 0), tr - te, np.nan)
+        gap_masked = np.ma.masked_invalid(gap)
+        gcmap = plt.cm.RdBu_r.copy()
+        gcmap.set_bad("0.7")
+        im2 = axes[-1].imshow(gap_masked, aspect="auto", vmin=-0.6, vmax=0.6, cmap=gcmap)
+        axes[-1].set_xlabel("class rank (head $\\rightarrow$ tail)")
+        axes[-1].set_ylabel("client")
+        axes[-1].set_title(f"Memorization gap (train $-$ test), K={K}")
+        fig.colorbar(im2, ax=axes[-1], label="gap")
     fig.tight_layout()
     fig.savefig(OUT / "fig4_client_heatmap.png", dpi=150, bbox_inches="tight")
+    plt.close(fig)
+
+
+def fig6_per_client_summary(cfg, runs):
+    """For each K, the distribution of per-client (own-train, own-test) accuracy
+    and per-client gap. Boxplots over clients."""
+    Ks = sorted(runs.keys())
+    have_test = all("client_test_acc_by_class_final" in runs[K] and
+                    runs[K]["client_test_acc_by_class_final"] is not None for K in Ks)
+    if not have_test:
+        return
+    fig, axes = plt.subplots(1, 3, figsize=(15, 4))
+
+    def per_client_means(h, key, counts_key):
+        accs = np.array(h[key])              # K x C
+        ns   = np.array(h[counts_key])       # K x C
+        # weighted mean over classes (weight by sample count) per client
+        w = ns
+        denom = w.sum(axis=1).clip(min=1)
+        return (accs * w).sum(axis=1) / denom
+
+    box_train, box_test, box_gap = [], [], []
+    for K in Ks:
+        h = runs[K]
+        tr = per_client_means(h, "client_train_acc_by_class_final",
+                              "client_train_class_counts")
+        te = per_client_means(h, "client_test_acc_by_class_final",
+                              "client_test_class_counts")
+        box_train.append(tr)
+        box_test.append(te)
+        box_gap.append(tr - te)
+
+    positions = list(range(1, len(Ks) + 1))
+    for ax, data, ttl, ylab in (
+        (axes[0], box_train, "Per-client train accuracy", "accuracy"),
+        (axes[1], box_test,  "Per-client test accuracy",  "accuracy"),
+        (axes[2], box_gap,   "Per-client memorization gap", "train $-$ test"),
+    ):
+        ax.boxplot(data, positions=positions, widths=0.55, showfliers=True,
+                   patch_artist=True,
+                   boxprops=dict(facecolor="#cfd8dc"),
+                   medianprops=dict(color="black"))
+        for i, vals in enumerate(data):
+            ax.scatter([positions[i]] * len(vals), vals, s=14, alpha=0.6,
+                       color="#1f77b4")
+        ax.set_xticks(positions); ax.set_xticklabels([f"K={K}" for K in Ks])
+        ax.set_title(ttl); ax.set_ylabel(ylab); ax.grid(True, alpha=0.3)
+        if ax is axes[2]:
+            ax.axhline(0, color="k", lw=0.5)
+    fig.tight_layout()
+    fig.savefig(OUT / "fig6_per_client_box.png", dpi=150, bbox_inches="tight")
     plt.close(fig)
 
 
@@ -214,6 +283,7 @@ def main():
     fig3_summary(cfg, runs)
     fig4_client_heatmap(cfg, runs)
     fig5_progression(cfg, runs)
+    fig6_per_client_summary(cfg, runs)
     print("figures written to", OUT)
 
 

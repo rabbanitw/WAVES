@@ -85,31 +85,42 @@ def build_long_tailed(num_classes, head_count, tail_count, seed=0):
     return train_samples, test_samples, wnids, counts
 
 
-def dirichlet_partition(train_samples, num_clients, alpha, num_classes, seed=0):
-    """Return list of K lists of indices into train_samples."""
+def dirichlet_partition_synced(train_samples, test_samples, num_clients, alpha,
+                                num_classes, seed=0):
+    """Partition train and test indices with the *same* per-class Dirichlet
+    proportions, so each client receives an i.i.d. (train_k, test_k) pair from
+    the client-specific class distribution. Returns (client_train, client_test).
+    """
     rng = np.random.default_rng(seed)
-    by_class = defaultdict(list)
+    train_by_class, test_by_class = defaultdict(list), defaultdict(list)
     for idx, (_, y) in enumerate(train_samples):
-        by_class[y].append(idx)
-    client_indices = [[] for _ in range(num_clients)]
+        train_by_class[y].append(idx)
+    for idx, (_, y) in enumerate(test_samples):
+        test_by_class[y].append(idx)
+    client_train = [[] for _ in range(num_clients)]
+    client_test = [[] for _ in range(num_clients)]
     for c in range(num_classes):
-        idxs = by_class[c]
-        rng.shuffle(idxs)
-        if not idxs:
-            continue
         if num_clients == 1:
-            client_indices[0].extend(idxs)
+            client_train[0].extend(train_by_class[c])
+            client_test[0].extend(test_by_class[c])
             continue
         proportions = rng.dirichlet([alpha] * num_clients)
-        # cumulative split
-        proportions = (np.cumsum(proportions) * len(idxs)).astype(int)[:-1]
-        chunks = np.split(np.array(idxs), proportions)
-        for k, chunk in enumerate(chunks):
-            client_indices[k].extend(chunk.tolist())
-    # shuffle each client's index list for SGD ordering
-    for ci in client_indices:
+        for samples_by_class, client_lists in (
+            (train_by_class, client_train), (test_by_class, client_test)
+        ):
+            idxs = list(samples_by_class[c])
+            if not idxs:
+                continue
+            rng.shuffle(idxs)
+            cuts = (np.cumsum(proportions) * len(idxs)).astype(int)[:-1]
+            chunks = np.split(np.array(idxs), cuts)
+            for k, chunk in enumerate(chunks):
+                client_lists[k].extend(chunk.tolist())
+    for ci in client_train:
         rng.shuffle(ci)
-    return client_indices
+    for ci in client_test:
+        rng.shuffle(ci)
+    return client_train, client_test
 
 
 # ---------------------- model ----------------------
@@ -200,24 +211,31 @@ def run_one(args, K, train_samples, test_samples, num_classes, counts, device, o
     train_eval_ds = TinyImageNetSubset(train_samples, eval_tf)
     test_ds = TinyImageNetSubset(test_samples, eval_tf)
 
-    client_indices = dirichlet_partition(train_samples, K, args.dirichlet_alpha,
-                                         num_classes, seed=seed)
-    print(f"[K={K}] client sizes:", [len(c) for c in client_indices])
+    client_train_idx, client_test_idx = dirichlet_partition_synced(
+        train_samples, test_samples, K, args.dirichlet_alpha, num_classes, seed=seed)
+    print(f"[K={K}] client train sizes:", [len(c) for c in client_train_idx])
+    print(f"[K={K}] client  test sizes:", [len(c) for c in client_test_idx])
 
     test_loader = DataLoader(test_ds, batch_size=256, shuffle=False, num_workers=2,
                              pin_memory=True)
     train_eval_loader = DataLoader(train_eval_ds, batch_size=256, shuffle=False,
                                    num_workers=2, pin_memory=True)
-    client_eval_loaders = [
+    client_train_eval_loaders = [
         DataLoader(Subset(train_eval_ds, idx), batch_size=256, shuffle=False,
                    num_workers=1, pin_memory=True) if len(idx) > 0 else None
-        for idx in client_indices
+        for idx in client_train_idx
+    ]
+    client_test_loaders = [
+        DataLoader(Subset(test_ds, idx), batch_size=256, shuffle=False,
+                   num_workers=1, pin_memory=True) if len(idx) > 0 else None
+        for idx in client_test_idx
     ]
 
     global_model = make_model(num_classes).to(device)
     history = {"K": K, "rounds": [],
                "test_acc_by_class": [], "train_acc_by_class": [],
                "client_train_acc_by_class_final": None,
+               "client_test_acc_by_class_final": None,
                "counts": counts}
 
     for r in range(args.rounds):
@@ -225,7 +243,7 @@ def run_one(args, K, train_samples, test_samples, num_classes, counts, device, o
         agg_delta = torch.zeros_like(global_flat)
         active = 0
         for k in range(K):
-            idx = client_indices[k]
+            idx = client_train_idx[k]
             if len(idx) == 0:
                 continue
             local_model = make_model(num_classes).to(device)
@@ -261,20 +279,27 @@ def run_one(args, K, train_samples, test_samples, num_classes, counts, device, o
                   f"head5_train={tr_acc[:5].mean():.3f}  head5_test={te_acc[:5].mean():.3f}  "
                   f"tail5_train={tr_acc[-5:].mean():.3f}  tail5_test={te_acc[-5:].mean():.3f}")
 
-    # final per-client per-class train accuracy of the *global* model
-    client_grid = []
-    for k, ldr in enumerate(client_eval_loaders):
-        if ldr is None:
-            client_grid.append([float("nan")] * num_classes)
-            continue
-        acc, _ = per_class_acc(global_model, ldr, num_classes, device)
-        client_grid.append(acc.tolist())
-    history["client_train_acc_by_class_final"] = client_grid
-    history["client_indices_sizes"] = [len(c) for c in client_indices]
-    history["client_class_counts"] = [
-        [sum(1 for i in idx if train_samples[i][1] == c) for c in range(num_classes)]
-        for idx in client_indices
-    ]
+    # final per-client per-class train and test accuracy of the *global* model
+    def grid(loaders):
+        out_grid, totals = [], []
+        for ldr in loaders:
+            if ldr is None:
+                out_grid.append([float("nan")] * num_classes)
+                totals.append([0] * num_classes)
+                continue
+            acc, tot = per_class_acc(global_model, ldr, num_classes, device)
+            out_grid.append(acc.tolist())
+            totals.append(tot.tolist())
+        return out_grid, totals
+
+    tr_grid, tr_totals = grid(client_train_eval_loaders)
+    te_grid, te_totals = grid(client_test_loaders)
+    history["client_train_acc_by_class_final"] = tr_grid
+    history["client_test_acc_by_class_final"] = te_grid
+    history["client_train_class_counts"] = tr_totals
+    history["client_test_class_counts"] = te_totals
+    history["client_train_sizes"] = [len(c) for c in client_train_idx]
+    history["client_test_sizes"] = [len(c) for c in client_test_idx]
 
     out = out_dir / f"K{K:02d}.json"
     out.write_text(json.dumps(history))
