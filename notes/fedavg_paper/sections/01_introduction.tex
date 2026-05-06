@@ -1,0 +1,25 @@
+\section{Introduction}\label{sec:intro}
+
+In federated learning a central server coordinates training across \(K\) clients without collecting raw data. The canonical differentially private federated averaging algorithm (DP-FedAvg) of \citet{McMahan2018DPFedAvg} (see also \citealt{Geyer2017DPFedAvg}) proceeds round-by-round: each client returns a clipped update, the server averages the clipped updates, adds Gaussian noise, and broadcasts the new iterate. This is the federated counterpart of central differentially private stochastic gradient descent (DP-SGD; \citealt{Abadi2016DPSGD,DworkRoth2014Foundations}). We write \(\noised\) for the noised average released in a single round and \(\transcript=(\noised^{(0)},\dots,\noised^{(T-1)})\) for the full \(T\)-round transcript of releases (formal definitions in \S\ref{sec:setup} and \S\ref{sec:multi-setup}).
+
+\citet{Brown2021Memorization} introduced an information-theoretic metric of memorization,
+\[
+\Mem(A;q)\;=\;I\bigl(X;\,A(X)\,\big|\,P\bigr),
+\]
+where \(P\sim q\) is a problem instance drawn from a meta-distribution \(q\), \(X\sim P^{\otimes n}\) is the dataset, and \(A(X)\) is the model. They showed that, on natural learning tasks, every sufficiently accurate algorithm must satisfy \(I(X;A(X)\mid P)=\Omega(nd)\). Their definition is precisely the conditional mutual information given the data distribution, not a per-record or worst-case quantity (cf.\ \citealp[Theorem~1.1, Section~1.1]{Brown2021Memorization}).
+
+Translating this metric to the federated setting raises a natural question: in DP-FedAvg, how does the per-client memorization \(I(X_k; M\mid P)\) depend on \(K\), the clip bound \(C\), and the noise scale \(\sigma\)?
+
+\paragraph{Contributions.} We give a fully explicit answer:
+\begin{itemize}
+\setlength\itemsep{2pt}
+\item \textbf{One-round bound (Theorem~\ref{thm:one-round}).} For one round of DP-FedAvg, \(I(X_k;\noised \mid P)\le C^2/(2K^2\sigma^2)\). The proof uses only the Gaussian differential-entropy maximization inequality together with the data-processing inequality, and we make every conditional-independence step explicit.
+\item \textbf{Multi-round bound (Theorem~\ref{thm:multi-round}).} For a \(T\)-round adaptive transcript \(\transcript = (\noised^{(0)},\dots,\noised^{(T-1)})\), \(I(X_k;\transcript\mid P)\le \sum_{t=0}^{T-1} C^2/(2K^2\sigma_t^2)\). Section~\ref{sec:gap} explains why the naive ``apply Theorem~\ref{thm:one-round} round-by-round and use the chain rule'' argument has a gap, and how a telescoping argument repairs it.
+\item \textbf{Refinements (\S\ref{sec:refine}).} A variance-form bound replacing the worst-case clip \(C^2\) by the conditional update variance \(\tr\Cov(U_k\mid P)\), and a partial-participation analysis that yields a multiplicative \(q\) amplification when each client takes part in each round with probability \(q\), composing with the averaging factor \(1/K^2\) to give \(I(X_k;\transcript\mid P)\le qTC^2/(2K^2\sigma^2)\) over \(T\) rounds.
+\item \textbf{Empirical confirmation (\S\ref{sec:experiments}).} On a long-tailed Tiny-ImageNet image-classification task with a Dirichlet client partition, we measure per-client and community-wise train/test accuracy as the number of clients grows. The empirical memorization gap collapses from roughly 75 percentage points at \(K=1\) to about 15 points at \(K=10\)---a monotone decrease consistent with the \(O(1/K^2)\) bound.
+\item \textbf{Quantitative comparisons (\S\ref{sec:discuss}).} The per-client bound is a factor of \(K^2\) tighter than (i)~the whole-dataset bound \(I(X;\noised\mid P)\le C^2/(2\sigma^2)\), and (ii)~the per-client bound when each client's clipped + noised update is released without averaging. Averaging \emph{before} adding noise is therefore the active ingredient.
+\end{itemize}
+
+We deliberately avoid the chain ``Gaussian mechanism \(\Rightarrow\) \((\varepsilon,\delta)\)-differential privacy \(\Rightarrow\) per-record conditional mutual information (CMI)'' \citep[e.g.][]{BunSteinke2016,SteinkeUllman2017,Bassily2018ConcurrentCMI}. The direct route is shorter, gives explicit constants, and exposes \emph{why} averaging helps: each client's signal vector is scaled by \(1/K\) inside the average, so its squared energy by \(1/K^2\), and Lemma~\ref{lem:gauss-mi} converts squared signal energy into mutual information linearly.
+
+\paragraph{Relation to prior work.} The mutual-information memorization measure dates to \citet{Bassily2018ConcurrentCMI,Russo2016ControllingBias}; \citet{Brown2021Memorization} sharpened it to the conditional form \(I(X;M\mid P)\) used here. DP-FedAvg analysis traditionally proceeds via \((\varepsilon,\delta)\)-differential privacy accounting (R\'enyi differential privacy or the moments accountant; see \citealt{Abadi2016DPSGD,KairouzMcMahan2021Practical}); we instead bound the CMI directly. Our proof for the multi-round case parallels classic adaptive composition arguments but operates on the CMI directly via a telescoping chain rule, which sidesteps the mismatch between marginal and conditional independence after seeing past releases.

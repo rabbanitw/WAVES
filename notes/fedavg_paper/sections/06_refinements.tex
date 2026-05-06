@@ -1,0 +1,91 @@
+\section{Refinements: variance form and partial participation}\label{sec:refine}
+
+The proofs of Theorems~\ref{thm:one-round} and~\ref{thm:multi-round} discard two pieces of structure that are present in real DP-FedAvg deployments and that tighten the bound substantively. First, the worst-case clip bound \(\|U_k^{(t)}\|_2\le C\) replaces \(\E\|S-\E S\|_2^2\) in Lemma~\ref{lem:gauss-mi}, which is loose whenever client updates concentrate around a population mean. Second, deployed DP-FedAvg almost never has every client participate in every round; instead, an independent random subset of clients is selected per round. We now give a single combined refinement that captures both effects.
+
+\subsection{Variance-form bound (full participation)}
+
+\begin{theorem}[Variance-form one-round bound]\label{thm:var-one-round}
+Under the conditions of Theorem~\ref{thm:one-round},
+\begin{equation}\label{eq:var-one-round}
+I(X_k;\noised\mid P)\;\le\;\frac{\E\!\left[\tr\Cov(U_k\mid P)\right]}{2K^2\sigma^2}\;\le\;\frac{C^2}{2K^2\sigma^2},
+\end{equation}
+where \(\Cov(U_k\mid P)\) denotes the covariance matrix of \(U_k\) under the conditional distribution given \(P\), and the outer expectation is over \(P\sim q\).
+\end{theorem}
+
+\begin{proof}
+Replace the last inequality \(\E\|\tfrac{1}{K}U_k\|_2^2\le C^2/K^2\) in~\eqref{eq:lemma1-step} with the conditional version of Lemma~\ref{lem:gauss-mi} stated as~\eqref{eq:gauss-mi-cond}, applied with \(S=\tfrac{1}{K}U_k\) and conditioning variable \(P\):
+\[
+I\!\left(\tfrac{1}{K}U_k;\,\tfrac{1}{K}U_k+Z\,\middle|\,P\right)\;\le\;\frac{1}{2\sigma^2}\,\E\!\left[\bigl\|\tfrac{1}{K}U_k-\E[\tfrac{1}{K}U_k\mid P]\bigr\|_2^2\right]\;=\;\frac{\E[\tr\Cov(U_k\mid P)]}{2K^2\sigma^2}.
+\]
+The remaining inequality follows from \(\tr\Cov(U_k\mid P)\le\E[\|U_k\|_2^2\mid P]\le C^2\).
+\end{proof}
+
+\subsection{Combined: variance form under partial participation}
+
+We now extend the multi-round model of \S\ref{sec:multi-setup} to allow partial participation. For each round \(t\) and each client \(k\), let \(A_k^{(t)}\sim\mathrm{Bernoulli}(q)\) with \(q\in(0,1]\) be a fresh participation indicator, drawn independently across \(k\) and \(t\) and independently of all data and other algorithmic randomness. The released update is
+\begin{equation}\label{eq:release-t-pp}
+\noised^{(t)} \;:=\; \frac{1}{K}\sum_{k=1}^{K} A_k^{(t)}\,U_k^{(t)} \;+\; Z^{(t)},\qquad Z^{(t)}\sim\NN(0,\sigma_t^2 I_d).
+\end{equation}
+We refer to this as DP-FedAvg with Bernoulli participation rate \(q\); \(q=1\) is the full-participation model of~\eqref{eq:release-t}.
+
+For each \((k,t)\), define the conditional update variance
+\begin{equation}\label{eq:vkt}
+v_k^{(t)} \;:=\; \E\!\left[\tr\Cov\!\left(U_k^{(t)}\,\Big|\,P,X_{-k},\hist^{(t)}\right)\right].
+\end{equation}
+Since \(\|U_k^{(t)}\|_2\le C\) by construction, we have \(v_k^{(t)}\le C^2\) for every \(k,t\).
+
+\begin{theorem}[Variance-form transcript bound under partial participation]\label{thm:var-pp}
+Under Assumption~\ref{ass:indep} extended by independent Bernoulli participation indicators as above, with \((R_k^{(t)})_{k,t}\), \((Z^{(t)})_t\), and \((A_k^{(t)})_{k,t}\) mutually independent fresh randomness independent of \((X,P)\),
+\begin{equation}\label{eq:var-pp}
+I(X_k;\transcript\mid P)\;\le\;\sum_{t=0}^{T-1}\frac{q\,v_k^{(t)}}{2K^2\sigma_t^2}\;\le\;q\sum_{t=0}^{T-1}\frac{C^2}{2K^2\sigma_t^2}.
+\end{equation}
+The same bound applies, by data processing, to any deterministic post-processing of \(\transcript\), e.g.\ the final iterate \(\theta^{(T)}\).
+\end{theorem}
+
+\begin{proof}
+Steps~A and~B of the proof of Theorem~\ref{thm:multi-round} are unchanged: \(I(X_k;\transcript\mid P)\le I(X_k;\transcript\mid P,X_{-k})=\sum_t I(X_k;\noised^{(t)}\mid P,X_{-k},\hist^{(t)})\). We modify Step~C.
+
+\textbf{Step C': augmented conditioning by the participation pattern.}
+Fix a round \(t\) and condition on \(\mathcal C_t:=(P,X_{-k},\hist^{(t)})\). Let \(A^{(t)}:=(A_1^{(t)},\dots,A_K^{(t)})\) denote the round-\(t\) participation pattern. Since \(A^{(t)}\) is fresh randomness independent of all data, \(A^{(t)}\indep X_k\mid\mathcal C_t\); equivalently \(I(X_k;A^{(t)}\mid\mathcal C_t)=0\). Applying the chain-rule sandwich identical to~\eqref{eq:remove-W} (with \(A^{(t)}\) in the role of \(W_k\)),
+\begin{equation}\label{eq:augment-A}
+I(X_k;\noised^{(t)}\mid\mathcal C_t)\;\le\;I(X_k;\noised^{(t)}\mid\mathcal C_t,A^{(t)}).
+\end{equation}
+
+\textbf{Step C'': bound conditional on the realized pattern.}
+Decompose \(\noised^{(t)}=(1/K)\,A_k^{(t)}\,U_k^{(t)}+\widetilde W_k^{(t)}+Z^{(t)}\) where \(\widetilde W_k^{(t)}:=(1/K)\sum_{j\ne k}A_j^{(t)}U_j^{(t)}\). Conditional on \((\mathcal C_t,A^{(t)})\), the quantities \(X_{-k}\), \(\theta^{(t)}\), and \(A^{(t)}\) are fixed; \(\widetilde W_k^{(t)}\) is a measurable function of the fresh randomness \(R_{-k}^{(t)}\) only, and is therefore independent of \((X_k,U_k^{(t)},Z^{(t)})\) given \((\mathcal C_t,A^{(t)})\).
+
+\emph{Subcase \(A_k^{(t)}=0\).} Then \((1/K)\,A_k^{(t)}\,U_k^{(t)}=0\) and \(\noised^{(t)}=\widetilde W_k^{(t)}+Z^{(t)}\) is a measurable function of objects conditionally independent of \(X_k\); hence
+\(I(X_k;\noised^{(t)}\mid\mathcal C_t,A^{(t)},A_k^{(t)}=0)=0\).
+
+\emph{Subcase \(A_k^{(t)}=1\).} The signal is \((1/K)U_k^{(t)}+\widetilde W_k^{(t)}+Z^{(t)}\), to which Steps~2--4 of the proof of Theorem~\ref{thm:one-round} apply with conditioning variable \((\mathcal C_t,A^{(t)})\) replacing \(P\):
+\[
+I\!\left(X_k;\,\noised^{(t)}\,\middle|\,\mathcal C_t,A^{(t)},A_k^{(t)}=1\right)\;\le\;\frac{\tr\Cov\!\left(U_k^{(t)}\mid\mathcal C_t,A^{(t)}\right)}{2K^2\sigma_t^2}\,.
+\]
+Since \(U_k^{(t)}=U_k^{(t)}(X_k,\theta^{(t)},R_k^{(t)})\) does not depend on \(A^{(t)}\), and \(A^{(t)}\) is independent of \((X_k,R_k^{(t)})\) given \(\mathcal C_t\), the conditional covariance is unchanged by augmenting with \(A^{(t)}\):
+\[
+\Cov\!\left(U_k^{(t)}\mid\mathcal C_t,A^{(t)}\right)\;=\;\Cov\!\left(U_k^{(t)}\mid\mathcal C_t\right).
+\]
+
+\textbf{Step C''': marginalize over \(A_k^{(t)}\) and over \(\mathcal C_t\).}
+Combining the two subcases and using \(\Pr[A_k^{(t)}=1]=q\),
+\[
+I(X_k;\noised^{(t)}\mid\mathcal C_t,A^{(t)})\;\le\;q\cdot\frac{\tr\Cov(U_k^{(t)}\mid\mathcal C_t)}{2K^2\sigma_t^2}.
+\]
+Substituting into~\eqref{eq:augment-A} and taking expectation over \(\mathcal C_t\),
+\[
+I(X_k;\noised^{(t)}\mid P,X_{-k},\hist^{(t)})\;\le\;\frac{q\,v_k^{(t)}}{2K^2\sigma_t^2}.
+\]
+Summing over \(t\) and combining with Steps~A, B yields~\eqref{eq:var-pp}.
+\end{proof}
+
+\begin{remark}[Special cases]\label{rem:special}
+Setting \(q=1\) in Theorem~\ref{thm:var-pp} recovers a variance-form strengthening of Theorem~\ref{thm:multi-round}: \(I(X_k;\transcript\mid P)\le\sum_t v_k^{(t)}/(2K^2\sigma_t^2)\). Setting \(\sigma_t\equiv\sigma\) and \(v_k^{(t)}\le C^2\) gives the headline bound \(I(X_k;\transcript\mid P)\le qTC^2/(2K^2\sigma^2)\): partial participation contributes a multiplicative factor \(q\) on top of the averaging factor \(1/K^2\). The two amplifications combine cleanly because the participation indicator \(A_k^{(t)}\) is independent of the data and acts as an independent zero-out of the per-client signal.
+\end{remark}
+
+\begin{remark}[Cohort sampling without replacement]\label{rem:cohort}
+The same proof handles the common ``sample a cohort of \(m\) clients without replacement at each round'' protocol, where client \(k\) participates with marginal probability \(m/K\). The bound becomes \(I(X_k;\transcript\mid P)\le\sum_t (m/K)\,v_k^{(t)}/(2K^2\sigma_t^2)\); the fact that participation indicators \(A_k^{(t)}\) are now negatively correlated across \(k\) at fixed \(t\) does not affect the argument, which only used the marginal independence \(A_k^{(t)}\indep X_k\mid\mathcal C_t\).
+\end{remark}
+
+\begin{remark}[When does the variance form help?]\label{rem:variance-help}
+Whenever client updates concentrate around a conditional mean given \(P\)---a regime that is empirically common when the optimization landscape has a stable population minimizer---we have \(\tr\Cov(U_k\mid P)\ll C^2\), and~\eqref{eq:var-pp} is strictly tighter than \(qTC^2/(2K^2\sigma^2)\). In particular, near a fixed point of the population objective, the conditional variance scales with the per-client mini-batch noise rather than with the worst-case clip.
+\end{remark}

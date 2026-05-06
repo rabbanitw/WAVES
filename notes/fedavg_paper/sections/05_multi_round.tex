@@ -1,0 +1,72 @@
+\section{Multi-round transcript bound}\label{sec:multi-round}
+
+\subsection{Multi-round release model}\label{sec:multi-setup}
+For \(t=0,1,\dots,T-1\), at round \(t\) the server holds an iterate \(\theta^{(t)}\) (a deterministic function of past releases\footnote{If the server uses additional randomness to update \(\theta^{(t)}\), independent of all data, simply augment the conditioning by that randomness; the proof is unchanged.}). Each client \(k\) draws fresh \(R_k^{(t)}\), produces a raw update \(V_k^{(t)}=V_k^{(t)}(X_k,\theta^{(t)},R_k^{(t)})\), and clips it: \(U_k^{(t)} := \mathrm{clip}_C(V_k^{(t)})\), so \(\|U_k^{(t)}\|_2\le C\) by construction. The server releases
+\begin{equation}\label{eq:release-t}
+\noised^{(t)} \;:=\; \frac{1}{K}\sum_{k=1}^{K}U_k^{(t)} \;+\; Z^{(t)}, \qquad Z^{(t)}\sim\NN\!\bigl(0,\sigma_t^2 I_d\bigr),
+\end{equation}
+with \(\{Z^{(t)}\}_t\) and \(\{R_k^{(t)}\}_{k,t}\) mutually independent and independent of \((X,P)\). Let \(\transcript:=(\noised^{(0)},\dots,\noised^{(T-1)})\) and \(\hist^{(t)}:=(\noised^{(0)},\dots,\noised^{(t-1)})\), with \(\hist^{(0)}=\varnothing\).
+
+\subsection{Why the one-round argument does not directly compose}\label{sec:gap}
+A natural attempt is the chain rule
+\(I(X_k;\transcript\mid P) = \sum_t I(X_k;\noised^{(t)}\mid P,\hist^{(t)})\) followed by the one-round proof at each \(t\), with the conditioning augmented by \(\hist^{(t)}\). \emph{This argument has a gap.}
+The one-round proof crucially used \(X_k\indep W_k\mid P\) (Step~1 of Theorem~\ref{thm:one-round}). After conditioning on \(\hist^{(t)}\), this fails: observing \(\noised^{(0)},\dots,\noised^{(t-1)}\) couples \(X_k\) with \(X_{-k}\) (an explaining-away effect), so in general
+\(X_k\not\indep W_k^{(t)}\mid P,\hist^{(t)}\). The chain-rule sandwich~\eqref{eq:remove-W} is no longer available with \(W_k^{(t)}\) playing the role of \(W_k\). We repair the argument by conditioning on the \emph{full} \(X_{-k}\) instead of on \(W_k^{(t)}\), exploiting that \(X_k\indep X_{-k}\mid P\) marginally.
+
+\subsection{Theorem and proof}
+
+\begin{theorem}[Multi-round transcript memorization]\label{thm:multi-round}
+Fix \(C>0\) and a noise schedule \(\{\sigma_t\}_{t=0}^{T-1}\), and let \(\transcript\) be the \(T\)-round DP-FedAvg transcript defined by~\eqref{eq:release-t}. Under Assumption~\ref{ass:indep}, with \((R_k^{(t)})_{k,t}\) and \((Z^{(t)})_t\) mutually independent fresh randomness, for every \(k\in\{1,\dots,K\}\),
+\begin{equation}\label{eq:multi-round}
+I(X_k;\transcript\mid P) \;\le\; \sum_{t=0}^{T-1} \frac{C^2}{2K^2\sigma_t^2}.
+\end{equation}
+In particular, with \(\sigma_t\equiv\sigma\), \(I(X_k;\transcript\mid P)\le \nicefrac{TC^2}{(2K^2\sigma^2)}\). Moreover, for any deterministic post-processing of the transcript---in particular, for the final iterate \(\theta^{(T)}\), which is a deterministic function of \(\transcript\)---the data-processing inequality yields
+\begin{equation}\label{eq:final-iterate}
+    I\!\left(X_k;\,\theta^{(T)}\,\middle|\,P\right) \;\le\; I(X_k;\transcript\mid P) \;\le\; \sum_{t=0}^{T-1}\frac{C^2}{2K^2\sigma_t^2}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+\textbf{Step A: lift the conditioning to \(X_{-k}\).}
+Mutual information is monotone under augmenting the second argument: for any random variables \(A,B,C,D\), the chain rule \(I(A;B,C\mid D) = I(A;B\mid D) + I(A;C\mid D,B)\) and non-negativity of conditional MI give \(I(A;B\mid D)\le I(A;B,C\mid D)\). Apply this with \(A=X_k\), \(B=\transcript\), \(C=X_{-k}\), \(D=P\), then expand the right-hand side by the chain rule the other way and use \(I(X_k;X_{-k}\mid P)=0\) (Assumption~\ref{ass:indep}):
+\begin{align}
+I(X_k;\transcript\mid P)
+&\;\le\;I(X_k;\transcript,X_{-k}\mid P)\notag\\
+&\;=\;I(X_k;X_{-k}\mid P)+I(X_k;\transcript\mid P,X_{-k})\notag\\
+&\;=\;I(X_k;\transcript\mid P,X_{-k}). \label{eq:lift}
+\end{align}
+
+\textbf{Step B: chain-rule expansion of the lifted MI.}
+Applying the chain rule for conditional MI to \(\transcript=(\noised^{(0)},\dots,\noised^{(T-1)})\) given \((P,X_{-k})\):
+\begin{equation}\label{eq:chain-T}
+I(X_k;\transcript\mid P,X_{-k}) \;=\; \sum_{t=0}^{T-1} I\!\left(X_k;\,\noised^{(t)}\,\middle|\,P,X_{-k},\hist^{(t)}\right).
+\end{equation}
+
+\textbf{Step C: bound each round under full \(X_{-k}\) conditioning.}
+Fix a round \(t\) and condition on \(\mathcal C_t := (P,X_{-k},\hist^{(t)})\). The random variable
+\[
+W_k^{(t)} \;=\; \tfrac{1}{K}\sum_{j\ne k}U_j^{(t)}\!\left(X_j,\theta^{(t)},R_j^{(t)}\right)
+\]
+is, in general, a measurable function of \((X_{-k},\theta^{(t)},R_{-k}^{(t)})\), where \(R_{-k}^{(t)}:=\{R_j^{(t)}\}_{j\ne k}\). Conditioning on \(\mathcal C_t\) fixes \(X_{-k}\), and \(\theta^{(t)}\) is a deterministic function of \(\hist^{(t)}\subseteq\mathcal C_t\) and is hence also fixed. Therefore, under the conditional measure \(P(\,\cdot\mid\mathcal C_t)\), the only stochastic input to \(W_k^{(t)}\) is \(R_{-k}^{(t)}\), which is fresh randomness independent of \((X_k,R_k^{(t)},Z^{(t)})\). Consequently:
+\begin{equation}\label{eq:multi-indep}
+W_k^{(t)} \indep X_k \mid \mathcal C_t, \qquad Z^{(t)}\indep(X_k,U_k^{(t)},W_k^{(t)})\mid \mathcal C_t.
+\end{equation}
+Now repeat Steps 2--4 of the one-round proof with conditioning variable \(\mathcal C_t\) in place of \(P\):
+\begin{align*}
+I(X_k;\noised^{(t)}\mid\mathcal C_t)
+&\;\stackrel{(*)}{\le}\; I(X_k;\noised^{(t)}\mid\mathcal C_t,W_k^{(t)})\\
+&\;=\;I\!\left(X_k;\,\tfrac{1}{K}U_k^{(t)}+Z^{(t)}\,\middle|\,\mathcal C_t,W_k^{(t)}\right)\\
+&\;=\;I\!\left(X_k;\,\tfrac{1}{K}U_k^{(t)}+Z^{(t)}\,\middle|\,\mathcal C_t\right)\\
+&\;\le\; I\!\left(\tfrac{1}{K}U_k^{(t)};\,\tfrac{1}{K}U_k^{(t)}+Z^{(t)}\,\middle|\,\mathcal C_t\right) \\
+&\;\le\;\frac{1}{2\sigma_t^2}\E\!\left[\bigl\|\tfrac{1}{K}U_k^{(t)}\bigr\|_2^2\right]
+\;\le\;\frac{C^2}{2K^2\sigma_t^2},
+\end{align*}
+where \((*)\) uses~\eqref{eq:multi-indep} with the same chain-rule sandwich as~\eqref{eq:remove-W}; the second equality uses \(W_k^{(t)}\indep(X_k,U_k^{(t)},Z^{(t)})\mid\mathcal C_t\) (which is the conjunction of~\eqref{eq:multi-indep} and the freshness of \(Z^{(t)}\)); the data-processing step uses the Markov chain \(X_k\to U_k^{(t)}\to \tfrac{1}{K}U_k^{(t)}+Z^{(t)}\) given \(\mathcal C_t\); and the last inequality is Lemma~\ref{lem:gauss-mi} applied conditionally together with \(\|U_k^{(t)}\|_2\le C\) by construction.
+
+\textbf{Step D: combine.}
+Plugging Step~C into~\eqref{eq:chain-T} and combining with~\eqref{eq:lift} gives~\eqref{eq:multi-round}. The post-processing claim is the data-processing inequality applied to the deterministic map \(\transcript\mapsto\theta^{(T)}\).
+\end{proof}
+
+\begin{remark}[Why the lift to \(X_{-k}\) is free]
+Step~A uses only \(I(X_k;X_{-k}\mid P)=0\), the cleanest consequence of Assumption~\ref{ass:indep}. Lifting the conditioning to \(X_{-k}\) (rather than to \(W_k^{(t)}\) round-by-round) sidesteps the explaining-away dependence created by past releases entirely.
+\end{remark}

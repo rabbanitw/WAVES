@@ -1,0 +1,31 @@
+\section{Preliminaries}\label{sec:prelim}
+
+\subsection{Memorization in the sense of Brown et al.}\label{sec:mem-def}
+We use the framework of \citet[\S1]{Brown2021Memorization}. Fix a meta-distribution \(q\) over problem instances \(P\), each itself a distribution on labeled examples. A learning algorithm \(A\) takes a dataset \(X\) of \(n\) i.i.d.\ examples from \(P\) and outputs \(M=A(X)\). The (conditional) memorization is
+\begin{equation}\label{eq:mem-def}
+\Mem(A;q) \;:=\; I\!\left(X;\,M\,\middle|\,P\right),
+\end{equation}
+computed in the joint model \(P\sim q,\;X\sim P^{\otimes n},\;M=A(X)\). Equation~\eqref{eq:mem-def} measures how much the model reduces uncertainty about the realized training set beyond what is implied by knowing the data distribution.
+
+\subsection{Federated release model}\label{sec:setup}
+We extend \citet{Brown2021Memorization} to a partitioned dataset. There are \(K\ge 2\) clients. For \(P\sim q\), client \(k\) holds local dataset \(X_k\); we write \(X=(X_1,\dots,X_K)\) and \(X_{-k}\) for everything except client~\(k\). One round of DP-FedAvg, parametrized by the clip bound \(C>0\) and the noise scale \(\sigma>0\), proceeds as follows.
+Given the current iterate \(\theta\), each client computes a (possibly randomized) raw update
+\[
+V_k \;=\; V_k(X_k,\theta,R_k) \;\in\; \R^d,
+\]
+using fresh client randomness \(R_k\), and clips it to the ball of radius \(C\):
+\begin{equation}\label{eq:clip}
+U_k \;:=\; \mathrm{clip}_C(V_k) \;=\; V_k \cdot \min\!\Bigl\{1,\ \frac{C}{\|V_k\|_2}\Bigr\}, \qquad\text{so } \|U_k\|_2 \le C \text{ by construction.}
+\end{equation}
+The server averages the clipped updates and adds Gaussian noise:
+\begin{equation}\label{eq:release}
+    \noised \;:=\; \frac{1}{K}\sum_{k=1}^{K} U_k \;+\; Z, \qquad Z\sim\NN\!\left(0,\sigma^2 I_d\right),
+\end{equation}
+with \(Z\) drawn independently of all data and client randomness. The bound \(\|U_k\|_2\le C\) is part of the algorithm specification, not a hypothesis on \(V_k\); the analysis goes through for any choice of raw update map \(V_k\).
+We make one assumption on the data-generating process:
+
+\begin{assumption}[Conditional independence given \(P\)]\label{ass:indep}
+Conditional on \(P\), the client datasets \(X_1,\dots,X_K\) are mutually independent. The client randomness \((R_1,\dots,R_K)\) is mutually independent and independent of \((X_1,\dots,X_K)\) and of \(P\). The server noise \(Z\) is drawn fresh, independent of \((X,R_1,\dots,R_K,P)\).
+\end{assumption}
+
+Assumption~\ref{ass:indep} matches the Brown et al.\ generative model (i.i.d.\ examples from \(P\)) and is the natural extension to a partitioned dataset. It is the same independence model used implicitly in standard DP-FedAvg analyses.

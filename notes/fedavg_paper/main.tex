@@ -1,0 +1,78 @@
+\documentclass{article}
+
+% Use the official NeurIPS 2026 style file. We compile in `preprint` mode for a
+% readable draft; switch to `\usepackage{neurips_2026}` (default) for anonymous
+% submission, or `\usepackage[final]{neurips_2026}` for camera-ready.
+\usepackage[preprint]{neurips_2026}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{nicefrac}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\tr}{tr}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\NN}{\mathcal{N}}
+\newcommand{\Mem}{\mathrm{Mem}}
+\newcommand{\hist}{\mathcal{H}}
+\newcommand{\transcript}{\mathcal{T}}
+\newcommand{\noised}{\widetilde{\Delta}}
+\newcommand{\indep}{\perp\!\!\!\perp}
+
+\title{Averaging Lowers Memorization in DP-FedAvg:\\
+A Self-Contained Conditional-Mutual-Information Analysis}
+
+\author{%
+  Anonymous Author(s) \\
+  Affiliation \\
+  Address \\
+  \texttt{email}
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We study per-client memorization in differentially private federated averaging using the conditional mutual information measure introduced by \citet{Brown2021Memorization}. In one round of the protocol, each of \(K\) clients clips a local model update to Euclidean norm \(C\), and the server releases the average of the clipped updates with additive Gaussian noise of scale \(\sigma\). For every client \(k\) we prove \(I(X_k;\noised\mid P)\le C^2/(2K^2\sigma^2)\), where \(X_k\) denotes client \(k\)'s local dataset, \(\noised\) is the released averaged update, and \(P\) is the underlying data distribution. The proof applies a Gaussian-channel mutual information inequality directly to the per-client signal, without appealing to a differential-privacy guarantee as an intermediate step. We extend the bound to a \(T\)-round adaptive transcript \(\transcript\) via a telescoping chain-rule argument that correctly handles the dependences that past releases induce between \(X_k\) and the other clients' data, yielding \(I(X_k;\transcript\mid P)\le \sum_{t=0}^{T-1}C^2/(2K^2\sigma_t^2)\). The per-client bound is sharper, by a factor of \(K^2\), than both the whole-dataset bound \(I(X;\noised\mid P)\le C^2/(2\sigma^2)\) and the bound for the alternative protocol in which each client's clipped update is released individually with its own Gaussian noise of scale \(\sigma\), rather than averaged before the noise is added. We further refine the bound in two ways: a variance form replacing the worst-case clip \(C^2\) with the conditional update variance \(\tr\Cov(U_k\mid P)\), and a partial-participation analysis that yields a multiplicative \(q\) amplification when each client takes part in each round with probability \(q\), composing with the averaging factor \(1/K^2\) to give \(I(X_k;\transcript\mid P)\le qTC^2/(2K^2\sigma^2)\) over \(T\) rounds. Empirically, on a long-tailed Tiny-ImageNet benchmark with a Dirichlet client partition, the per-client train--test memorization gap collapses from approximately 75 percentage points at \(K=1\) to 15 points at \(K=10\). Averaging across clients before the noise is added---not the noise alone---is therefore the mechanism that suppresses individual-client memorization in this protocol.
+\end{abstract}
+
+\input{sections/01_introduction}
+\input{sections/02_preliminaries}
+\input{sections/03_lemma}
+\input{sections/04_one_round}
+\input{sections/05_multi_round}
+\input{sections/06_refinements}
+\input{sections/07_experiments}
+\input{sections/08_discussion}
+
+\section*{Acknowledgments}
+% Anonymized for submission.
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
+
+\end{document}

@@ -1,0 +1,37 @@
+\section{A direct Gaussian-channel mutual-information bound}\label{sec:lemma}
+
+The only information-theoretic ingredient we need is the following standard bound; see, e.g., \citet[\S9]{CoverThomas2006}.
+
+\begin{lemma}[Bounded-energy MI through additive Gaussian noise]\label{lem:gauss-mi}
+Let \(S\) be an \(\R^d\)-valued random variable with \(\E\|S\|_2^2<\infty\), and let \(Z\sim\NN(0,\sigma^2 I_d)\) be independent of \(S\). Then
+\begin{equation}\label{eq:gauss-mi}
+I(S;\,S+Z) \;\le\; \tfrac{1}{2}\log\det\!\Bigl(I_d+\tfrac{1}{\sigma^2}\Cov(S)\Bigr)
+\;\le\; \frac{1}{2\sigma^2}\,\tr\Cov(S) \;=\; \frac{1}{2\sigma^2}\,\E\|S-\E S\|_2^2 \;\le\; \frac{1}{2\sigma^2}\,\E\|S\|_2^2.
+\end{equation}
+Moreover, for any random variable \(W\) such that the joint pair \((S,W)\) is independent of \(Z\), the same chain holds conditionally; in particular,
+\begin{equation}\label{eq:gauss-mi-cond}
+I(S;\,S+Z\mid W) \;\le\; \frac{1}{2\sigma^2}\,\E\!\bigl[\,\|S-\E[S\mid W]\|_2^2\,\bigr] \;\le\; \frac{1}{2\sigma^2}\,\E\|S\|_2^2.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+We use \(I(S;S+Z) = h(S+Z) - h(S+Z\mid S) = h(S+Z) - h(Z)\), since conditional on \(S\) the random variable \(S+Z\) has the same density as \(Z\). Among all distributions on \(\R^d\) with a fixed second-moment matrix, the Gaussian maximizes differential entropy \citep[Theorem 8.6.5]{CoverThomas2006}, so
+\[
+h(S+Z)\;\le\;\tfrac{1}{2}\log\!\left((2\pi e)^d \det\!\bigl(\Cov(S)+\sigma^2 I_d\bigr)\right),
+\]
+where we used \(\Cov(S+Z)=\Cov(S)+\sigma^2 I_d\) by independence of \(S\) and \(Z\). Combining with \(h(Z)=\tfrac{1}{2}\log\!\bigl((2\pi e)^d \det(\sigma^2 I_d)\bigr)\) yields
+\[
+I(S;S+Z)\;\le\;\tfrac{1}{2}\log\det\!\Bigl(I_d+\tfrac{1}{\sigma^2}\Cov(S)\Bigr).
+\]
+The eigenvalue inequality \(\log(1+\lambda)\le\lambda\) gives \(\log\det(I_d+M)\le \tr(M)\) for PSD \(M\), so
+\[
+I(S;S+Z)\;\le\;\tfrac{1}{2\sigma^2}\,\tr\Cov(S)\;=\;\tfrac{1}{2\sigma^2}\,\E\|S-\E S\|_2^2.
+\]
+The final inequality in~\eqref{eq:gauss-mi} is \(\E\|S-\E S\|_2^2 = \E\|S\|^2-\|\E S\|^2 \le \E\|S\|^2\).
+
+For the conditional version, condition on \(W=w\). Since \(Z\indep(S,W)\), conditional on \(W=w\) the noise \(Z\) is still \(\NN(0,\sigma^2 I_d)\) and independent of \(S\mid W=w\). Apply~\eqref{eq:gauss-mi} to the conditional distribution and integrate against \(P_W\) using the tower property and Jensen's inequality on the variance to obtain~\eqref{eq:gauss-mi-cond}.
+\end{proof}
+
+\begin{remark}[Tightness of the bounds in Lemma~\ref{lem:gauss-mi}]\label{rem:variance}
+The first inequality in~\eqref{eq:gauss-mi} is the Gaussian channel capacity expression and is \emph{tight}: equality holds iff \(S\) is Gaussian, in which case \(S+Z\) is also Gaussian and the differential-entropy maximization step is exact. The second inequality, \(\log\det(I+M)\le\tr(M)\), uses \(\log(1+\lambda)\le\lambda\) eigenvalue-wise and is loose unless the eigenvalues of \(\Cov(S)/\sigma^2\) are all small (low-SNR regime); when \(\Cov(S) = c\cdot I_d\) with \(c\ll\sigma^2\), the gap is \(O(c^2/\sigma^4)\) per coordinate. The variance form \(\tfrac{1}{2\sigma^2}\E\|S-\E S\|^2\) is sharper than the often-quoted \(\tfrac{1}{2\sigma^2}\E\|S\|^2\) by \(\|\E S\|^2/(2\sigma^2)\); both can be much smaller than the worst-case clip when client updates concentrate.
+\end{remark}

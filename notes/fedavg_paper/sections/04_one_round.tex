@@ -1,0 +1,58 @@
+\section{One-round per-client memorization bound}\label{sec:one-round}
+
+\begin{theorem}[One-round]\label{thm:one-round}
+Fix \(C>0\) and \(\sigma>0\) and let \(\noised\) be the one-round DP-FedAvg release defined by~\eqref{eq:clip}--\eqref{eq:release}. Under Assumption~\ref{ass:indep}, for every \(k\in\{1,\dots,K\}\),
+\begin{equation}\label{eq:one-round}
+I(X_k;\,\noised \mid P) \;\le\; \frac{C^2}{2 K^2 \sigma^2}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Fix \(k\). Decompose
+\[
+\noised \;=\; \tfrac{1}{K}U_k \;+\; W_k \;+\; Z, \qquad W_k \;:=\; \tfrac{1}{K}\sum_{j\ne k}U_j.
+\]
+
+\textbf{Step 1: \(X_k\indep W_k\mid P\).}
+By Assumption~\ref{ass:indep}, conditional on \(P\) the pair \((X_k,R_k)\) is independent of \((X_{-k},R_{-k})\); since \(U_k=\mathrm{clip}_C(V_k(X_k,\theta,R_k))\) is a measurable function of \((X_k,R_k,\theta)\) and \(W_k\) is a measurable function of \((X_{-k},R_{-k},\theta)\) (with \(\theta\) constant in this round), this gives \((X_k,U_k)\indep W_k\mid P\). Also, \(Z\indep(X,R_1,\dots,R_K,P)\), so \(Z\indep(X_k,U_k,W_k)\mid P\) as well.
+
+\textbf{Step 2: a chain-rule sandwich.}
+Apply the chain rule for conditional MI two ways:
+\begin{align*}
+I(X_k;\,\noised,W_k\mid P)
+&\;=\;I(X_k;W_k\mid P)+I(X_k;\noised\mid P,W_k)\\
+&\;=\;0+I(X_k;\noised\mid P,W_k)
+&\text{(using Step 1)}\\
+I(X_k;\,\noised,W_k\mid P)
+&\;=\;I(X_k;\noised\mid P)+I(X_k;W_k\mid P,\noised).
+\end{align*}
+Since \(I(X_k;W_k\mid P,\noised)\ge 0\), the two equalities give
+\begin{equation}\label{eq:remove-W}
+I(X_k;\noised\mid P) \;\le\; I(X_k;\noised\mid P,W_k).
+\end{equation}
+
+\textbf{Step 3: subtract the known shift.}
+Conditional on \((P,W_k)\), \(W_k\) is a fixed quantity, so \(\noised - W_k = \tfrac{1}{K}U_k+Z\) is a measurable bijection of \(\noised\). Hence
+\begin{equation}\label{eq:bijection-step}
+I(X_k;\noised\mid P,W_k) \;=\; I\!\left(X_k;\,\tfrac{1}{K}U_k+Z\,\middle|\,P,W_k\right).
+\end{equation}
+By Step~1, \(W_k\indep(X_k,U_k,Z)\mid P\), so conditioning further on \(W_k\) does not change the joint distribution of \((X_k,\tfrac{1}{K}U_k+Z)\) given \(P\):
+\begin{equation}\label{eq:condition-out-W}
+I\!\left(X_k;\,\tfrac{1}{K}U_k+Z\,\middle|\,P,W_k\right) \;=\; I\!\left(X_k;\,\tfrac{1}{K}U_k+Z\,\middle|\,P\right).
+\end{equation}
+
+\textbf{Step 4: data processing and Gaussian channel.}
+Conditional on \(P\), we have the Markov chain \(X_k\to U_k\to \tfrac{1}{K}U_k+Z\) (the second arrow uses fresh \(R_k\) and \(Z\), independent of everything else given \(P\)). Conditional data processing gives
+\begin{equation}\label{eq:dpi}
+I\!\left(X_k;\,\tfrac{1}{K}U_k+Z\,\middle|\,P\right)\;\le\;I\!\left(U_k;\,\tfrac{1}{K}U_k+Z\,\middle|\,P\right)\;=\;I\!\left(\tfrac{1}{K}U_k;\,\tfrac{1}{K}U_k+Z\,\middle|\,P\right),
+\end{equation}
+using that multiplication by \(K\) is a bijection. Apply the conditional Gaussian-channel bound~\eqref{eq:gauss-mi-cond} with \(S=\tfrac{1}{K}U_k\) and conditioning variable \(P\) (recalling that \(Z\indep(S,P)\)):
+\begin{equation}\label{eq:lemma1-step}
+I\!\left(\tfrac{1}{K}U_k;\,\tfrac{1}{K}U_k+Z\,\middle|\,P\right)\;\le\;\frac{1}{2\sigma^2}\,\E\!\left[\big\|\tfrac{1}{K}U_k\big\|_2^2\right]\;\le\;\frac{C^2}{2K^2\sigma^2},
+\end{equation}
+where the last inequality uses \(\|U_k\|_2\le C\) by construction~\eqref{eq:clip}. Chaining \eqref{eq:remove-W}--\eqref{eq:lemma1-step} yields~\eqref{eq:one-round}.
+\end{proof}
+
+\begin{remark}[Sharpening via variance]
+Replacing the last inequality in~\eqref{eq:lemma1-step} by \(\tfrac{1}{2\sigma^2}\E\|\tfrac{1}{K}U_k-\E[\tfrac{1}{K}U_k\mid P]\|_2^2\) gives a strictly sharper bound when client updates concentrate (Remark~\ref{rem:variance}); the form~\eqref{eq:one-round} uses only the worst-case clip.
+\end{remark}

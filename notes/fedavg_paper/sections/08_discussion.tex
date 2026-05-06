@@ -1,0 +1,21 @@
+\section{Discussion}\label{sec:discuss}
+
+\subsection{Quantitative interpretation}
+For fixed clip \(C\) and noise \(\sigma\), Theorem~\ref{thm:one-round} gives a per-client memorization that decays as \(O(1/K^2)\). On a Brown et al.\ task that requires the whole-dataset memorization \(I(X;M\mid P)=\Omega(nd)\), the average per-client memorization is \(\Omega(nd/K)\), and Theorem~\ref{thm:one-round} therefore implies
+\[
+\sigma^2 \;=\; \Omega\!\left(\frac{C^2}{K\cdot nd}\right)
+\]
+as a necessary noise scale for one-round release on such tasks. The \(T\)-round version of the same calculation gives \(T\cdot C^2/(2K^2\sigma^2)\ge \Omega(nd/K)\), i.e., \(\sigma^2 \;=\; \Omega\!\bigl(T C^2/(K\cdot nd)\bigr)\).
+
+\subsection{Comparison: averaging vs.\ no averaging}
+If each client's clipped update were instead released with independent Gaussian noise of the same scale, Lemma~\ref{lem:gauss-mi} gives \(I(X_k;U_k+Z_k\mid P)\le C^2/(2\sigma^2)\). Theorem~\ref{thm:one-round} is a factor of \(K^2\) tighter. Averaging \emph{before} adding noise at the same per-coordinate scale therefore strictly improves per-client memorization by \(K^2\). The improvement is information-theoretic; it is not a privacy-accounting artifact.
+
+\subsection{Comparison: whole-dataset bound}
+Applying Lemma~\ref{lem:gauss-mi} directly to \(S=\tfrac{1}{K}\sum_k U_k\) and using the triangle inequality \(\|S\|\le C\) gives the whole-dataset bound \(I(X;\noised\mid P)\le C^2/(2\sigma^2)\). Theorem~\ref{thm:one-round} is sharper for individual clients by a factor of \(K^2\), because each client's signal is scaled by \(1/K\) within the average even though the average's overall norm need not shrink.
+
+\subsection{From per-client to per-record memorization}
+If client \(k\)'s data is \(X_k=(X_{k,1},\dots,X_{k,n_k})\), the data-processing inequality gives
+\(I(X_{k,i};M\mid P) \le I(X_k;M\mid P) \le C^2/(2K^2\sigma^2)\) (one-round) and the analogous transcript bound. Per-record memorization is therefore at most the per-client bound. The bound makes no assumption about how \(U_k\) is computed from \(X_k\), so it applies whether \(U_k\) is a one-step gradient, a multi-step local update, a model delta, or a more complex client-side optimization output.
+
+\subsection{What this paper does not say}
+We make no claim about plain (non-private) FedAvg, where the released signal is \(\Delta=\tfrac{1}{K}\sum_k U_k\) with no noise. The mutual information \(I(X_k;\Delta\mid P)\) can be \(\Omega(1)\)---or even saturate \(H(X_k\mid P)\)---without further structural assumptions, since \(\Delta\) is a deterministic function of \((X,R)\) and high-dimensional models do not offer an inherent contraction. Establishing strong data-processing-style contractions for vanilla averaging in realistic regimes is an interesting open direction.
