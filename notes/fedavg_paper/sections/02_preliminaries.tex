@@ -8,7 +8,11 @@ We use the framework of \citet[\S1]{Brown2021Memorization}. Fix a meta-distribut
 computed in the joint model \(P\sim q,\;X\sim P^{\otimes n},\;M=A(X)\). Equation~\eqref{eq:mem-def} measures how much the model reduces uncertainty about the realized training set beyond what is implied by knowing the data distribution.
 
 \subsection{Federated release model}\label{sec:setup}
-We extend \citet{Brown2021Memorization} to a partitioned dataset. There are \(K\ge 2\) clients. For \(P\sim q\), client \(k\) holds local dataset \(X_k\); we write \(X=(X_1,\dots,X_K)\) and \(X_{-k}\) for everything except client~\(k\). One round of DP-FedAvg, parametrized by the clip bound \(C>0\) and the noise scale \(\sigma>0\), proceeds as follows.
+We extend \citet{Brown2021Memorization} to a partitioned, \emph{potentially non-IID} dataset. There are \(K\ge 2\) clients, and we let the meta-distribution \(q\) sample a \emph{joint problem instance}
+\[
+P\;=\;(P_1,\dots,P_K),
+\]
+where each \(P_k\) is a distribution over labeled examples. Conditional on \(P\), client \(k\) draws its local dataset \(X_k\sim P_k^{\otimes n_k}\), independently across \(k\); we write \(X=(X_1,\dots,X_K)\) and \(X_{-k}\) for everything except client~\(k\). The original single-distribution setting of \citet{Brown2021Memorization} is the IID-FL special case in which \(q\) is supported on the diagonal \(P_1=\dots=P_K\); when we refer below to ``conditioning on \(P\)'' we mean conditioning on the entire tuple. Cross-client heterogeneity is therefore part of the model from the outset, not an extension. One round of DP-FedAvg, parametrized by the clip bound \(C>0\) and the noise scale \(\sigma>0\), proceeds as follows.
 Given the current iterate \(\theta\), each client computes a (possibly randomized) raw update
 \[
 V_k \;=\; V_k(X_k,\theta,R_k) \;\in\; \R^d,
@@ -24,8 +28,8 @@ The server averages the clipped updates and adds Gaussian noise:
 with \(Z\) drawn independently of all data and client randomness. The bound \(\|U_k\|_2\le C\) is part of the algorithm specification, not a hypothesis on \(V_k\); the analysis goes through for any choice of raw update map \(V_k\).
 We make one assumption on the data-generating process:
 
-\begin{assumption}[Conditional independence given \(P\)]\label{ass:indep}
-Conditional on \(P\), the client datasets \(X_1,\dots,X_K\) are mutually independent. The client randomness \((R_1,\dots,R_K)\) is mutually independent and independent of \((X_1,\dots,X_K)\) and of \(P\). The server noise \(Z\) is drawn fresh, independent of \((X,R_1,\dots,R_K,P)\).
+\begin{assumption}[Conditional independence given the joint instance]\label{ass:indep}
+Conditional on \(P=(P_1,\dots,P_K)\), the client datasets \(X_1,\dots,X_K\) are mutually independent, with \(X_k\sim P_k^{\otimes n_k}\) drawn from the \(k\)-th component. The client randomness \((R_1,\dots,R_K)\) is mutually independent and independent of \((X_1,\dots,X_K)\) and of \(P\). The server noise \(Z\) is drawn fresh, independent of \((X,R_1,\dots,R_K,P)\).
 \end{assumption}
 
-Assumption~\ref{ass:indep} matches the Brown et al.\ generative model (i.i.d.\ examples from \(P\)) and is the natural extension to a partitioned dataset. It is the same independence model used implicitly in standard DP-FedAvg analyses.
+Assumption~\ref{ass:indep} generalizes the Brown et al.\ generative model from a single distribution to a tuple of per-client distributions, and is the independence model used implicitly in standard FL analyses (e.g., \citealt{Bornstein2022SWIFT}). The IID-FL special case (\(P_1=\dots=P_K\)) is recovered when \(q\) is concentrated on the diagonal; the non-IID case is the generic one and is what we have in mind throughout. The assumption restricts only the joint generation of client datasets given \(P\); it does \emph{not} restrict the per-client distributions \(P_k\) themselves, which may have arbitrarily different supports, label balance, or label-conditional structure across \(k\). All of the per-client memorization bounds below condition on the full tuple \(P\), so the inter-client heterogeneity is integrated into the conditioning rather than treated as adversarial perturbation.
