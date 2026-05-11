@@ -89,3 +89,81 @@ The same proof handles the common ``sample a cohort of \(m\) clients without rep
 \begin{remark}[When does the variance form help?]\label{rem:variance-help}
 Whenever client updates concentrate around a conditional mean given \(P\)---a regime that is empirically common when the optimization landscape has a stable population minimizer---we have \(\tr\Cov(U_k\mid P)\ll C^2\), and~\eqref{eq:var-pp} is strictly tighter than \(qTC^2/(2K^2\sigma^2)\). In particular, near a fixed point of the population objective, the conditional variance scales with the per-client mini-batch noise rather than with the worst-case clip.
 \end{remark}
+
+\subsection{Non-IID clients via stochastic-gradient variance}\label{sec:non-iid}
+
+The analysis so far has assumed a single meta-distribution \(P\) common to all clients (Assumption~\ref{ass:indep}). In practice, federated clients hold data from different distributions, and the standard FL analysis assumes a bound on the per-client stochastic-gradient variance and (separately) on the inter-client gradient heterogeneity; see, e.g., \citet[Assumption~3]{Bornstein2022SWIFT}. We now show that the inter-client heterogeneity constant does not enter the per-client memorization bound at all, and that the intra-client stochastic-gradient variance gives a strict tightening of Theorem~\ref{thm:var-pp}.
+
+\paragraph{Non-IID release model.} Let the meta-distribution \(q\) sample a joint instance \(\mathbf{P}:=(P_1,\dots,P_K)\), where each \(P_k\) is a distribution over labeled examples. Conditional on \(\mathbf{P}\), the client datasets \(X_1,\dots,X_K\) are mutually independent, with \(X_k\sim P_k^{\otimes n_k}\). All other independence statements in Assumption~\ref{ass:indep} are kept: client randomness \((R_k^{(t)})_{k,t}\), server noise \((Z^{(t)})_t\), and participation indicators \((A_k^{(t)})_{k,t}\) are mutually independent fresh randomness, independent of \((X,\mathbf{P})\). We replace Assumption~\ref{ass:indep} by this generalized version for the remainder of \S\ref{sec:non-iid}.
+
+We additionally restrict the per-round client update to be a single stochastic-gradient step:
+\begin{equation}\label{eq:sg-update}
+V_k^{(t)} \;=\; -\eta\,g\!\left(\theta^{(t)};\,\xi_k^{(t)}\right),\qquad U_k^{(t)}=\mathrm{clip}_C\bigl(V_k^{(t)}\bigr),
+\end{equation}
+where \(\eta>0\) is a fixed step-size, \(\xi_k^{(t)}\sim P_k\) independently across \(k,t\) and of all other randomness, and \(g(\theta;\xi)\) is an unbiased estimator of the local population gradient \(\nabla f_k(\theta):=\nabla_\theta\E_{\xi\sim P_k}[\ell(\theta;\xi)]\), i.e., \(\E_{\xi\sim P_k}[g(\theta;\xi)\mid P_k]=\nabla f_k(\theta)\). Extensions to mini-batches and to multi-step local SGD are discussed in the remarks after the theorem.
+
+\begin{assumption}[Bounded stochastic-gradient variance; cf.\ {\citealt[Assumption 3]{Bornstein2022SWIFT}}]\label{ass:sgv}
+There exists \(\sigma_g^2\ge0\) such that, for every \(k\) and every iterate \(\theta\) in the support of the algorithm,
+\[
+\E_{\xi\sim P_k}\!\left[\bigl\|g(\theta;\xi)-\nabla f_k(\theta)\bigr\|_2^2\,\Big|\,P_k\right] \;\le\; \sigma_g^2.
+\]
+\end{assumption}
+
+\noindent We deliberately do \emph{not} impose any bound on the inter-client gradient drift \(\E_k\|\nabla f_k(\theta)-\nabla f(\theta)\|^2\); the corresponding constant \(\zeta^2\) of \citet[Assumption~3]{Bornstein2022SWIFT} does not appear in the result below.
+
+\begin{theorem}[Non-IID variance-form transcript bound]\label{thm:non-iid}
+Under the non-IID release model above and Assumption~\ref{ass:sgv}, with Bernoulli participation rate \(q\in(0,1]\) as in~\eqref{eq:release-t-pp},
+\begin{equation}\label{eq:non-iid-bd}
+I(X_k;\transcript\mid\mathbf{P}) \;\le\; \sum_{t=0}^{T-1}\frac{q\,\eta^2\sigma_g^2}{2K^2\sigma_t^2}\;=\;\frac{qT\eta^2\sigma_g^2}{2K^2\sigma^2}\quad(\sigma_t\equiv\sigma).
+\end{equation}
+The same bound applies, by data processing, to any deterministic post-processing of \(\transcript\) such as the final iterate \(\theta^{(T)}\).
+\end{theorem}
+
+\begin{proof}
+We carry the proof of Theorem~\ref{thm:var-pp} through with \(\mathbf{P}\) in place of \(P\); the only modification is in bounding the per-round conditional update variance.
+
+\textbf{Step A--B.} Steps A and B of the proof of Theorem~\ref{thm:multi-round} go through verbatim with \(P\) replaced by \(\mathbf{P}\): conditional independence \(X_k\indep X_{-k}\mid\mathbf{P}\) is the very definition of the non-IID release model, so
+\[
+I(X_k;\transcript\mid\mathbf{P})\;\le\;I(X_k;\transcript\mid\mathbf{P},X_{-k})\;=\;\sum_{t=0}^{T-1}I\!\left(X_k;\,\noised^{(t)}\,\middle|\,\mathbf{P},X_{-k},\hist^{(t)}\right).
+\]
+
+\textbf{Step C', C''.} Steps C' and C'' of the proof of Theorem~\ref{thm:var-pp} likewise go through with \(\mathbf{P}\) in place of \(P\), yielding
+\begin{equation}\label{eq:non-iid-pre}
+I(X_k;\transcript\mid\mathbf{P})\;\le\;\sum_{t=0}^{T-1}\frac{q\,v_k^{(t)}}{2K^2\sigma_t^2},
+\qquad
+v_k^{(t)}\;:=\;\E\!\left[\tr\Cov\!\left(U_k^{(t)}\,\Big|\,\mathbf{P},X_{-k},\hist^{(t)}\right)\right].
+\end{equation}
+
+\textbf{Step E: bound \(v_k^{(t)}\) by \(\eta^2\sigma_g^2\).}
+Fix \(t\) and condition on \(\mathcal C_t:=(\mathbf{P},X_{-k},\hist^{(t)})\). Under \(\mathcal C_t\):
+(i) \(\theta^{(t)}\) is a deterministic function of \(\hist^{(t)}\subseteq\mathcal C_t\) and is therefore fixed;
+(ii) \(P_k\) is fixed (it is a component of \(\mathbf{P}\subseteq\mathcal C_t\)), so \(\nabla f_k(\theta^{(t)})\) is a deterministic function of \(\mathcal C_t\);
+(iii) \(\xi_k^{(t)}\) is sampled fresh from \(P_k\), independently of every other variable.
+
+For any random vector \(Y\) and any \(\mathcal C_t\)-measurable constant \(c\), \(\tr\Cov(Y\mid\mathcal C_t)=\E[\|Y-\E[Y\mid\mathcal C_t]\|_2^2\mid\mathcal C_t]\le\E[\|Y-c\|_2^2\mid\mathcal C_t]\). Apply this with \(Y=U_k^{(t)}=\mathrm{clip}_C(-\eta g(\theta^{(t)};\xi_k^{(t)}))\) and \(c=\mathrm{clip}_C(-\eta\nabla f_k(\theta^{(t)}))\). Since the Euclidean clip operator \(\mathrm{clip}_C\) is \(1\)-Lipschitz on \(\R^d\),
+\[
+\bigl\|U_k^{(t)}-c\bigr\|_2 \;=\; \bigl\|\mathrm{clip}_C(-\eta g)-\mathrm{clip}_C(-\eta\nabla f_k)\bigr\|_2 \;\le\; \eta\,\bigl\|g(\theta^{(t)};\xi_k^{(t)})-\nabla f_k(\theta^{(t)})\bigr\|_2.
+\]
+Squaring and taking conditional expectation,
+\[
+\tr\Cov\!\left(U_k^{(t)}\mid\mathcal C_t\right) \;\le\; \eta^2\,\E\!\left[\bigl\|g(\theta^{(t)};\xi_k^{(t)})-\nabla f_k(\theta^{(t)})\bigr\|_2^2\,\Big|\,\mathcal C_t\right] \;\le\; \eta^2\sigma_g^2,
+\]
+where the last inequality is Assumption~\ref{ass:sgv} applied conditional on \(\mathcal C_t\): under \(\mathcal C_t\), \(\xi_k^{(t)}\) is a fresh draw from \(P_k\) and \(\theta^{(t)}\) is fixed, so the conditional expectation equals \(\E_{\xi\sim P_k}[\|g(\theta^{(t)};\xi)-\nabla f_k(\theta^{(t)})\|^2\mid P_k]\), which is at most \(\sigma_g^2\). Taking outer expectation gives \(v_k^{(t)}\le\eta^2\sigma_g^2\). Substituting in~\eqref{eq:non-iid-pre} yields~\eqref{eq:non-iid-bd}. The post-processing claim is the data-processing inequality.
+\end{proof}
+
+\begin{remark}[Mini-batches]\label{rem:minibatch}
+If \(\xi_k^{(t)}\) is a mini-batch of \(m\) iid draws from \(P_k\) and \(g\) is the mini-batch average, then \(\E[\|g(\theta;\xi)-\nabla f_k(\theta)\|^2\mid P_k]\le\sigma_g^2/m\), and the bound improves to \(I(X_k;\transcript\mid\mathbf{P})\le qT\eta^2\sigma_g^2/(2K^2 m\sigma^2)\).
+\end{remark}
+
+\begin{remark}[Multi-step local updates]\label{rem:multistep}
+For \(E\)-step local stochastic gradient descent with fresh per-step samples and an \(L\)-smooth per-client objective, a standard recursion \citep[e.g.][Lemma~5]{Koloskova2020Unified} gives
+\(\tr\Cov(U_k^{(t)}\mid\mathcal C_t)\le E\eta^2\sigma_g^2(1+L\eta)^{2(E-1)}\), so~\eqref{eq:non-iid-bd} acquires the factor \(E(1+L\eta)^{2(E-1)}\). For \(\eta L\ll 1\) this reduces to a clean \(E\eta^2\sigma_g^2\) factor. The argument uses only Assumption~\ref{ass:sgv}; the inter-client heterogeneity \(\zeta^2\) of \citet{Bornstein2022SWIFT} does not enter at any step.
+\end{remark}
+
+\begin{remark}[Why heterogeneity is invisible to memorization]\label{rem:het-invisible}
+We condition on the entire tuple \(\mathbf{P}=(P_1,\dots,P_K)\) throughout, so the inter-client drift \(\nabla f_k(\theta)-\nabla f(\theta)\) is a \(\mathcal C_t\)-measurable constant: it shifts \(\E[U_k\mid\mathcal C_t]\) but contributes nothing to \(\tr\Cov(U_k\mid\mathcal C_t)\). The convergence-utility role of \(\zeta^2\) and the memorization role of \(\sigma_g^2\) are thus decoupled, in contrast to the central-vs-federated comparison in privacy accounting where heterogeneity routinely couples with the privacy budget.
+\end{remark}
+
+\begin{remark}[Comparison to the worst-case clip bound]\label{rem:noniid-vs-clip}
+Theorem~\ref{thm:non-iid} replaces the \(C^2\) factor of Theorem~\ref{thm:var-pp} by \(\eta^2\sigma_g^2\). The replacement is a strict improvement whenever \(\eta^2\sigma_g^2 < C^2\)---i.e., whenever the step-size times the stochastic-gradient noise is below the clip threshold. Near a fixed point of the per-client population objective, both factors are typically much smaller than the clip; far from a fixed point, \(\|\nabla f_k(\theta)\|\) can be large enough that clipping is active, in which case \(C^2\) is the right benchmark and the bounds coincide.
+\end{remark}
