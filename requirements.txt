@@ -1,0 +1,20 @@
+# Minimal pin set for the diffusive-regeneration + v1 GAN code in this branch.
+# Versions are the ones we verified work together end-to-end. Newer diffusers
+# (>0.22) changes the StableDiffusionPipeline call signature and breaks the
+# vendored ReSDPipeline in regeneration/resd_pipeline.py; if you upgrade,
+# update the pipeline to match.
+#
+# Install order (CUDA 11.8 / A100 stack):
+#   pip install torch==2.1.0 torchvision==0.16.0 --index-url https://download.pytorch.org/whl/cu118
+#   pip install -r requirements.txt
+
+diffusers==0.21.4
+transformers==4.35.0
+accelerate==0.24.1
+huggingface-hub==0.17.3
+safetensors==0.7.0
+
+numpy<2
+Pillow>=10.0
+matplotlib>=3.8
+lpips>=0.1.4
