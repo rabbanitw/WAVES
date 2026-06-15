@@ -10,12 +10,12 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 
 
-SOURCE_DIR = "valid_512"
+SOURCE_DIR = "images"
 REGEN_DIRS = {
-    10: "dev_test/regen_N010",
-    20: "dev_test/regen_N020",
-    40: "dev_test/regen_N040_valid512",
-    80: "dev_test/regen_N080_valid512",
+    10: "regen_outputs/N010",
+    20: "regen_outputs/N020",
+    40: "regen_outputs/N040",
+    80: "regen_outputs/N080",
 }
 PANEL = 384  # downscale 512 -> 384 to keep collage size reasonable
 LABEL_H = 40

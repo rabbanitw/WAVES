@@ -1,85 +1,115 @@
-# WAVES — minimal SynthID-robustness repro
+# SynthID Regen Kit
 
-Stripped-down branch of `umd-huang-lab/WAVES` containing just what's needed to:
+**A hands-on kit for stress-testing Google DeepMind's SynthID image watermark — built for the DEFCON 34 AI Village.**
 
-1. Run the **diffusive-regeneration** attack on the 104-image SynthID test set (`valid_512/`).
-2. Train and evaluate the **v1 watermark-removal GAN** (Pix2Pix-style U-Net generator + PatchGAN discriminator with LPIPS edit-preservation).
-3. Inspect what each attack does visually (`examples/regen_progression/` shows 3 source images at N = 0, 10, 20, 40, 80 regen depths side by side).
+You get a small test set of SynthID-watermarked images, the reference code for the **diffusive-regeneration** attack, an attempted **GAN-based watermark eraser** (which mostly doesn't work — included as a worked negative example), and pre-rendered "before / regen-at-N-steps" comparison strips so you can eyeball what each attack actually costs the image.
 
-Full WAVES paper: arXiv 2401.08573. Upstream repo: <https://github.com/umd-huang-lab/WAVES>.
+If you came here to find a quick way to scrub SynthID off an image, the honest answer is in the table at the bottom of this file: diffusive regen at moderate strength cracks the watermark but visibly degrades the picture, and the GAN approach (which leaves the picture pristine) doesn't actually remove the watermark.
 
 ---
 
-## Repository layout
+## What's in the box
 
 | path | what |
 |---|---|
-| `valid_512/` | 104 Nano-Banana-generated, SynthID-watermarked images at 512×512 (the original WAVES SynthID test set we use as the robustness target) |
-| `regeneration/` | Vendored `ReSDPipeline` (a `StableDiffusionPipeline` subclass that resumes denoising from a pre-noised latent) plus the `DiffWMAttacker` from WAVES that drives it |
-| `gan/` | The v1 watermark-removal GAN: `models.py` (U-Net generator, PatchGAN discriminator, ResNet-18 binary classifier), `data.py` (paired Pico-Banana dataloader with matched-codec preprocessing), `train_gan.py`, `eval.py` |
-| `pico_banana_samples/` | 15 paired (original Open Images photo, Nano-Banana edit) examples from Apple's Pico-Banana-400K, spanning 15 different `edit_type`s — for sanity-checking the data pipeline without downloading the full dataset |
-| `examples/regen_progression/` | Pre-rendered 5-panel collages showing prompts 0, 50, 100 from `valid_512/` at N = 0 (original), 10, 20, 40, 80 symmetric-regen depths |
-| `examples/make_collages.py` | Script that regenerates the collages from `valid_512/` and the four regen-output directories (which are NOT in this branch — see "Reproducing the collages" below) |
-| `requirements.txt` | Minimal pin set, see "Install" |
+| `images/` | **104** SynthID-watermarked Nano-Banana images at 512×512. This is the held-out target set every experiment in here scores against. |
+| `regen/` | The diffusive-regeneration attack. A small, self-contained library: a vendored `ReSDPipeline` (a `StableDiffusionPipeline` subclass that lets you resume denoising from a pre-noised latent) plus the symmetric N-step regen function. |
+| `gan/` | The GAN-based attack attempt. U-Net generator + PatchGAN discriminator + LPIPS edit-preservation. **This is the "GAN that doesn't quite work"** — useful as a worked example of why naive generator-based watermark removal is harder than it looks. |
+| `nano_banana_pairs/` | 15 (real-photo, Nano-Banana-edit) example pairs spanning 15 different edit categories. Sourced from Apple's Pico-Banana-400K. Lets you sanity-check the data pipeline without downloading the 400K-image full set. |
+| `examples/regen_progression/` | Pre-rendered 5-panel "before / after" strips for prompts 0, 50, 100 of the test set. Each strip shows: original \| N=10 regen \| N=20 \| N=40 \| N=80. **Open one and look at it before doing anything else.** |
+| `examples/make_collages.py` | Rebuilds the strips from a regenerated test set. |
+| `requirements.txt` | Verified pin set. The vendored pipeline is tied to a specific `diffusers` version; if you upgrade, you'll break it. |
 
-## Install
+---
 
-The vendored `ReSDPipeline` is wired against an older `diffusers` API; the pins below are the combination we have end-to-end-verified. CUDA 11.8 wheels are what we used:
+## Setup
 
 ```bash
+# CUDA 11.8 wheels — what we tested against
 python3 -m venv venv && source venv/bin/activate
 pip install --upgrade pip
 pip install torch==2.1.0 torchvision==0.16.0 --index-url https://download.pytorch.org/whl/cu118
 pip install -r requirements.txt
 ```
 
-The Stable Diffusion 1.4 weights (used as the surrogate model for regeneration) get auto-downloaded by HuggingFace on first run (~5 GB into your HF cache).
+Stable Diffusion 1.4 (the surrogate model the regen attack runs through) auto-downloads on first call (~5 GB into your HuggingFace cache).
 
-## Reproducing the collages
+A GPU is strongly recommended. CPU works but is ~60× slower; a single N=10 regen takes ~40 s on a 12-core Xeon vs ~0.7 s on an A100.
 
-The collages in `examples/regen_progression/` were rendered from the four regen-output directories below. We don't ship those in this branch because they're large (~50 MB each); regenerate them on your end:
+---
+
+## Quick run — regenerate one image, see the watermark survive or not
+
+```python
+from PIL import Image
+from regen import build_pipeline, regen_symmetric
+
+pipe = build_pipeline("CompVis/stable-diffusion-v1-4", device="cuda")
+src = Image.open("images/prompt_0_attempt_1_img_0_512x512.jpg")
+attacked = regen_symmetric(src, pipe, n_steps=20)  # try 10, 20, 40, 80
+attacked.save("/tmp/attacked.png")
+```
+
+Run the image you actually care about through Google's SynthID Detector (Vertex AI / AI Studio) before and after. At N≈10-20 most images come back as "no watermark detected" but still look close to the original; at N=80 you've destroyed the watermark and most of the image's fine detail too.
+
+---
+
+## Reproducing the comparison strips
+
+The 5-panel strips in `examples/regen_progression/` were generated from regen-attacked copies of the test set at four depths. They're not shipped because they're large; regenerate yourself:
 
 ```bash
-# Generate regen'd versions of valid_512 at N = 10, 20, 40, 80 symmetric DDIM steps.
-# See regeneration/regen.py for the symmetric-regen function (we use
-# DDIMScheduler + num_inference_steps = 1000 + a head_start_step that yields
-# exactly N denoising iterations at training-timestep N-1 noise level).
+# regenerate the test set at each depth
 for N in 10 20 40 80; do
-  python -m regeneration.regen \
-      --src valid_512/ \
-      --dst dev_test/regen_N$(printf %03d $N)/ \
-      --n-steps $N
+  python -m regen --src images/ --dst regen_outputs/N$(printf %03d $N)/ --n-steps $N
 done
 
-# Build the 5-panel collages.
+# build the strips
 python examples/make_collages.py --prompts 0 50 100
 ```
 
-(N=10 takes ~1 sec per image on an A100; N=80 takes ~5 sec/image. CPU is ~60× slower.)
+On an A100 the full sweep takes ~25 min for all four depths × 104 images.
 
-## Quick experiments
+---
 
-**Train the v1 watermark-removal GAN** (requires the full Pico-Banana-400K SFT split — see <https://github.com/apple/pico-banana-400k> — preprocessed under `gan/data.py::DatasetConfig`'s expected layout):
+## The GAN attack (worked negative example)
+
+If you want to try the GAN path:
 
 ```bash
+# Requires the full Pico-Banana-400K SFT split — see https://github.com/apple/pico-banana-400k.
+# Point gan/data.py::DatasetConfig at where you put it.
 python gan/train_gan.py --epochs 40 --batch 16 --lambda-preserve 10
+
+# Score: label-flip rate on a held-out binary classifier + LPIPS edit-fidelity
+python gan/eval.py --gan-ckpt path/to/ckpt.pt --c-eval-ckpt path/to/c_eval.pt
 ```
 
-**Evaluate a trained checkpoint** (computes label-flip rate against a held-out C_eval classifier, edit-fidelity LPIPS, and writes a 24-image visual grid):
+**What you get from this:** the GAN converges, the output looks pixel-perfect (LPIPS ≈ 0.031, perturbations as visible "black blobs" on close inspection), and it only flips **11.3%** of held-out classifier predictions. Run the same outputs through actual SynthID and detection stays high. The GAN learned to fool the classifier, not to remove the watermark.
 
-```bash
-python gan/eval.py --gan-ckpt path/to/ckpt_last.pt --c-eval-ckpt path/to/c_eval.pt
-```
+Why include it then? Because the experiment **is the lesson**: surrogate-classifier-based adversarial attacks don't transfer to a real watermark detector when you don't have decoder access — the same finding the WAVES paper (arXiv 2401.08573, §F.3.2) reports for their AdvCls family. Trying it yourself is faster than reading the paper.
 
-## Reference numbers from our run
+---
 
-The v1 GAN at λ_preserve=10, 40 epochs, on the photoreal-only subset of Pico-Banana:
+## What we actually found
 
-- **label-flip rate on held-out C_eval = 11.3%** (only 11% of NB edits get flipped to "real")
-- **LPIPS(G(edit), edit) = 0.031** (perturbations are small but visually noticeable as localized "black blobs")
+| attack | how visible | held-out classifier detection rate | matches real SynthID behavior? |
+|---|---|---|---|
+| (no attack — baseline) | — | **91.3%** flagged as AI-generated | — |
+| diffusive regen, N=10 (sym DDIM) | mild softening | 64.4% | yes — also breaks real SynthID at ~similar rate |
+| diffusive regen, N=20 | noticeable | 58.7% | yes |
+| diffusive regen, N=40 | obvious blur | 53.8% | yes |
+| diffusive regen, N=80 | heavily degraded | **45.2%** | yes — strongest tested |
+| WAVES-asymmetric N=20 (sparse denoise) | similar to sym N=20 | 60.6% | yes |
+| Pix2Pix-style GAN (this kit, λ=10) | invisible to eye | flips 89% of classifier preds | **no** — bypasses classifier without touching watermark |
 
-This was the experiment that motivated the AdvGAN-style v5 redesign (FlatPerturbator + L∞ ≤ 16/255) which is *not* in this branch — see the parent repo for the full thread.
+Numbers are on the 104-image `images/` set. The "real SynthID" column is qualitative — we ran a handful of attacked images through the actual detector and the regen results lined up with the classifier story; the GAN results did not.
 
-## License
+---
 
-WAVES is MIT-licensed; this branch inherits that. Pico-Banana-400K samples in `pico_banana_samples/` are subject to its CC BY-NC-ND 4.0 license (and the underlying Open Images CC BY 2.0). The 104 SynthID images in `valid_512/` come from the original WAVES paper's evaluation set.
+## License / credits
+
+- The diffusive regeneration pipeline and `ReSDPipeline` are adapted from Zhao et al., "Invisible Image Watermarks Are Provably Removable Using Generative AI" (NeurIPS 2023), as bundled by the WAVES benchmark (UMD Huang Lab, arXiv 2401.08573, MIT). This kit cherry-picks just the relevant attack code, no upstream dependency.
+- Nano-Banana paired samples in `nano_banana_pairs/` are from Apple's Pico-Banana-400K (CC BY-NC-ND 4.0), built on Open Images (CC BY 2.0).
+- The 104 test images in `images/` were produced by Nano-Banana for SynthID stress-testing and are included for research/demo use only.
+- This kit is MIT-licensed.

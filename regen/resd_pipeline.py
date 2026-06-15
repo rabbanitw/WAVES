@@ -1,10 +1,12 @@
 """ReSDPipeline: Stable Diffusion pipeline that can resume denoising from a
 pre-noised latent at an arbitrary scheduler step.
 
-Originally a custom subclass shipped in the WatermarkAttacker repo and used by
-WAVES `regeneration/regen.py` via `from diffusers import ReSDPipeline`. The
-class is not in upstream `diffusers`; we vendor it here and register it onto
-the `diffusers` namespace from `site-packages/diffusers/__init__.py`.
+This is a `StableDiffusionPipeline` subclass that adds two kwargs to its
+`__call__`. The class originated in the WatermarkAttacker repo (Zhao
+et al., 2023) and is the trick that makes diffusive-regen attacks work:
+you noise a real image's latent to some training timestep and resume
+denoising from there instead of starting from pure noise. The class is
+not in upstream `diffusers`; vendored here so the kit is self-contained.
 
 Adds two kwargs on top of `StableDiffusionPipeline.__call__`:
 

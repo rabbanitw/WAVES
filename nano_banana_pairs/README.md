@@ -1,7 +1,8 @@
-# Pico-Banana-400K — sample pairs
+# Nano-Banana sample pairs
 
-8 representative (original, Nano-Banana edit) pairs from our 5,084-pair sample.
-Used here as visual reference for the GAN scaffolding work.
+15 (original Open Images photo, Nano-Banana edit) pairs spanning 15 different `edit_type` categories — sourced from Apple's Pico-Banana-400K SFT split. Included so you can run the data loaders and look at a representative sample without downloading the full ~33 GB dataset.
+
+Pico-Banana-400K source: https://github.com/apple/pico-banana-400k (CC BY-NC-ND 4.0; underlying photos are Open Images CC BY 2.0).
 
 | # | edit_type | instruction | files |
 |---|---|---|---|

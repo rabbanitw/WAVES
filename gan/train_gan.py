@@ -42,7 +42,7 @@ def gan_loss_g(d_fake: torch.Tensor) -> torch.Tensor:
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out-dir", default="/home/trabbani/WAVES/gan/runs/gan_v1")
+    ap.add_argument("--out-dir", default="runs/gan_v1")
     ap.add_argument("--epochs", type=int, default=40)
     ap.add_argument("--batch", type=int, default=16)
     ap.add_argument("--lr", type=float, default=2e-4)

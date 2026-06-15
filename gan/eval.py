@@ -30,9 +30,9 @@ from models import BinaryClassifier, GeneratorUNet
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--c-eval-ckpt", default="/home/trabbani/WAVES/gan/runs/c_eval/best.pt")
-    ap.add_argument("--gan-ckpt", default="/home/trabbani/WAVES/gan/runs/gan_v1/ckpt_last.pt")
-    ap.add_argument("--out-dir", default="/home/trabbani/WAVES/gan/runs/gan_v1/eval")
+    ap.add_argument("--c-eval-ckpt", default="runs/c_eval/best.pt")
+    ap.add_argument("--gan-ckpt", default="runs/gan_v1/ckpt_last.pt")
+    ap.add_argument("--out-dir", default="runs/gan_v1/eval")
     ap.add_argument("--batch", type=int, default=32)
     ap.add_argument("--workers", type=int, default=8)
     args = ap.parse_args()
