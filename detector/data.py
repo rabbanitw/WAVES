@@ -93,39 +93,16 @@ class DatasetConfig:
     # with `slot`, `src_path`, `edit_path`, `edit_type` keys; the
     # download_sample.py reference script in upstream WAVES produces
     # one in this exact layout.
+    # Point at your local copy of Pico-Banana-400K SFT (see
+    # https://github.com/apple/pico-banana-400k for the manifest +
+    # download instructions). The dataloader expects metadata.jsonl
+    # with `slot`, `src_path`, `edit_path`, `edit_type` keys.
     root: str = "/path/to/pico-banana-400k/sample"
     metadata: str = "/path/to/pico-banana-400k/sample/metadata.jsonl"
     image_size: int = 256
     jpeg_q: int = 95
     photoreal_only: bool = True
 
-
-class PicoBananaPaired(Dataset):
-    """Returns dicts: {"orig": [3,H,W] in [-1,1], "edit": [3,H,W], "slot": int}."""
-
-    def __init__(self, items: Iterable[dict], cfg: DatasetConfig):
-        self.items = list(items)
-        self.cfg = cfg
-
-    def __len__(self) -> int:
-        return len(self.items)
-
-    def __getitem__(self, i: int) -> dict:
-        d = self.items[i]
-        orig = _load_and_match_codec(
-            os.path.join(self.cfg.root, d["src_path"]),
-            self.cfg.image_size, self.cfg.jpeg_q,
-        )
-        edit = _load_and_match_codec(
-            os.path.join(self.cfg.root, d["edit_path"]),
-            self.cfg.image_size, self.cfg.jpeg_q,
-        )
-        return {
-            "orig": to_tensor_neg1_1(orig),
-            "edit": to_tensor_neg1_1(edit),
-            "slot": d["slot"],
-            "edit_type": d.get("edit_type", ""),
-        }
 
 
 class PicoBananaSingle(Dataset):
@@ -174,9 +151,9 @@ if __name__ == "__main__":
     train, val, test, _ = make_splits(cfg)
     print(f"photoreal pairs:  total={len(train)+len(val)+len(test)}")
     print(f"  train={len(train)}  val={len(val)}  test={len(test)}")
-    ds = PicoBananaPaired(train[:4], cfg)
+    ds = PicoBananaSingle(train[:2], cfg)
     for i in range(2):
         item = ds[i]
-        print(f"  [{i}] orig={tuple(item['orig'].shape)}  edit={tuple(item['edit'].shape)}  "
-              f"orig.range=[{item['orig'].min():.3f},{item['orig'].max():.3f}]  "
-              f"slot={item['slot']}  edit_type={item['edit_type'][:40]}")
+        print(f"  [{i}] img={tuple(item['img'].shape)}  "
+              f"range=[{item['img'].min():.3f},{item['img'].max():.3f}]  "
+              f"label={item['label']}  slot={item['slot']}")

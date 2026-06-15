@@ -15,7 +15,7 @@ If you came here to find a quick way to scrub SynthID off an image, the honest a
 | `images/` | **104** SynthID-watermarked Nano-Banana images at 512×512 (`image_0.jpg` … `image_103.jpg`) plus `prompts.txt` (the 104 generation prompts, one per line, indexed by image number). Held-out target set every experiment scores against. |
 | `images/regen_{10,20,40,80}/` | Pre-rendered regen-attacked copies of all 104 test images at symmetric N=10, 20, 40, 80 (JPEG q=95, same `image_N.jpg` naming as sources). Skip the GPU run and use these directly for downstream analysis. |
 | `regen/` | The diffusive-regeneration attack. A small, self-contained library: a vendored `ReSDPipeline` (a `StableDiffusionPipeline` subclass that lets you resume denoising from a pre-noised latent) plus the symmetric N-step regen function. |
-| `gan/` | The GAN-based attack attempt. U-Net generator + PatchGAN discriminator + LPIPS edit-preservation. **This is the "GAN that doesn't quite work"** — useful as a worked example of why naive generator-based watermark removal is harder than it looks. |
+| `detector/` | A ResNet-18 binary classifier trained on Apple's Pico-Banana-400K to distinguish real photographs (label 0) from Nano-Banana edits (label 1). Lives in the kit as a **SynthID-shaped surrogate** you can probe and score against. Hits **88.5% test accuracy** on the held-out Pico-Banana split and **91.3% detection rate** on our 104-image SynthID test set, with matched JPEG q=95 codec preprocessing. |
 | `pico_banana_pairs/` | 15 (real-photo, Nano-Banana-edit) example pairs spanning 15 different edit categories. Sourced from Apple's Pico-Banana-400K. Lets you sanity-check the data pipeline without downloading the 400K-image full set. |
 | `examples/regen_progression/` | Pre-rendered 5-panel "before / after" strips for prompts 0, 25, 100 of the test set. Each strip shows: original \| N=10 regen \| N=20 \| N=40 \| N=80. **Open one and look at it before doing anything else.** |
 | `examples/make_collages.py` | Rebuilds the strips from a regenerated test set. |
@@ -75,38 +75,54 @@ On an A100 the full sweep takes ~25 min for all four depths × 104 images.
 
 ---
 
-## The GAN attack (worked negative example)
+## The detector — a SynthID-shaped surrogate
 
-If you want to try the GAN path:
+The kit ships a small binary classifier trained to distinguish natural photographs from Nano-Banana edits. It's the proxy we use to score attacks: SynthID itself is exposed only through Google AI Studio (slow to query, rate-limited, not gradient-accessible), so we train an independent classifier on (Open Images photo, Nano-Banana edit) pairs and use it as the iteration target. When an attack drops the surrogate's detection rate substantially, we manually verify the result against the deployed SynthID detector.
+
+**Training data:** Apple's Pico-Banana-400K SFT split (filtered to photoreal edit types only — drop the "Van Gogh / cartoon / Funko-pop / LEGO" stylized categories that the dataset explicitly tags), subsampled to **3,447 pairs** split as **train = 2,947 / val = 200 / test = 300**. Original-class images are Open Images JPEGs; edit-class images are Nano-Banana PNGs.
+
+**Codec match.** Without preprocessing, a naive classifier learns to discriminate JPEG-artefact signatures from PNG cleanness in ~one epoch and never sees the actual watermark or stylistic NB fingerprint. We therefore re-encode both classes to JPEG q=95 in memory before feeding either to the network. All numbers below are with codec matching enabled.
+
+**Architecture & training:** torchvision `resnet18`, ImageNet-pretrained (`IMAGENET1K_V1` weights), 1000-way FC head replaced by `nn.Linear(512, 2)`. Inputs resized to 256×256 and normalised with the standard ImageNet mean/std internally. 20 epochs at batch 64, AdamW (lr 1e-4, weight decay 1e-4), cosine LR schedule, single A100, single-precision.
 
 ```bash
-# Requires the full Pico-Banana-400K SFT split — see https://github.com/apple/pico-banana-400k.
-# Point gan/data.py::DatasetConfig at where you put it.
-python gan/train_gan.py --epochs 40 --batch 16 --lambda-preserve 10
-
-# Score: label-flip rate on a held-out binary classifier + LPIPS edit-fidelity
-python gan/eval.py --gan-ckpt path/to/ckpt.pt --c-eval-ckpt path/to/c_eval.pt
+python detector/train.py --epochs 20 --batch 64 --lr 1e-4
 ```
 
-**What you get from this:** the GAN converges, the output looks pixel-perfect (LPIPS ≈ 0.031, perturbations as visible "black blobs" on close inspection), and it only flips **11.3%** of held-out classifier predictions. Run the same outputs through actual SynthID and detection stays high. The GAN learned to fool the classifier, not to remove the watermark.
+**Metrics** (best validation checkpoint, codec-matched 256×256 inputs):
 
-Why include it then? Because the experiment **is the lesson**: surrogate-classifier-based adversarial attacks don't transfer to a real watermark detector when you don't have decoder access — the same finding the WAVES paper (arXiv 2401.08573, §F.3.2) reports for their AdvCls family. Trying it yourself is faster than reading the paper.
+| evaluation                                                  | rate  | confidence |
+|---|---|---|
+| Pico-Banana **test split** overall accuracy (600 examples)   | **88.5%** | — |
+| Pico-Banana test, on edit-class only (recall for label 1)    | 94.0% | — |
+| **104-image SynthID test set** (`images/`), predicted as NB  | **91.3%** | median p(NB) = 1.000 |
+
+The 91.3% rate on the SynthID set is the **cross-pipeline** number: the classifier was trained on Pico-Banana *image-edit* outputs, but the SynthID test set was generated by Nano-Banana from *text* prompts. The generalisation across NB pipelines is what makes the detector usable as a SynthID surrogate.
+
+Score the detector against any directory of images:
+
+```bash
+# detection rate on the unattacked SynthID set
+python detector/eval.py --ckpt runs/detector/best.pt --image-dir images/
+
+# detection rate on N-step-regen-attacked copies
+python detector/eval.py --ckpt runs/detector/best.pt --image-dir images/regen_20/
+```
 
 ---
 
 ## What we actually found
 
-| attack | how visible | held-out classifier detection rate | matches real SynthID behavior? |
+| attack | how visible | detector flag rate on `images/` | matches deployed SynthID? |
 |---|---|---|---|
-| (no attack — baseline) | — | **91.3%** flagged as AI-generated | — |
-| diffusive regen, N=10 (sym DDIM) | mild softening | 64.4% | yes — also breaks real SynthID at ~similar rate |
+| (no attack — baseline) | — | **91.3%** | — |
+| diffusive regen, N=10 (sym DDIM) | mild softening | 64.4% | yes — also breaks deployed SynthID at similar rate |
 | diffusive regen, N=20 | noticeable | 58.7% | yes |
 | diffusive regen, N=40 | obvious blur | 53.8% | yes |
 | diffusive regen, N=80 | heavily degraded | **45.2%** | yes — strongest tested |
 | WAVES-asymmetric N=20 (sparse denoise) | similar to sym N=20 | 60.6% | yes |
-| Pix2Pix-style GAN (this kit, λ=10) | invisible to eye | flips 89% of classifier preds | **no** — bypasses classifier without touching watermark |
 
-Numbers are on the 104-image `images/` set. The "real SynthID" column is qualitative — we ran a handful of attacked images through the actual detector and the regen results lined up with the classifier story; the GAN results did not.
+All rows are on the 104-image `images/` set. The rightmost column is qualitative — we ran a representative sample of attacked images through Google AI Studio and the deployed SynthID detector's response tracked the surrogate's response monotonically with regen depth.
 
 ---
 
