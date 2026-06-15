@@ -12,18 +12,19 @@ from PIL import Image, ImageDraw, ImageFont
 
 SOURCE_DIR = "images"
 REGEN_DIRS = {
-    10: "regen_outputs/N010",
-    20: "regen_outputs/N020",
-    40: "regen_outputs/N040",
-    80: "regen_outputs/N080",
+    10: "images/regen_10",
+    20: "images/regen_20",
+    40: "images/regen_40",
+    80: "images/regen_80",
 }
+REGEN_EXT = ".jpg"  # the regen outputs in images/regen_N/ are JPEG q=95
 PANEL = 384  # downscale 512 -> 384 to keep collage size reasonable
 LABEL_H = 40
 
 
 def paths_for(prompt_idx: int):
     src = os.path.join(SOURCE_DIR, f"image_{prompt_idx}.jpg")
-    regens = {n: os.path.join(d, f"image_{prompt_idx}.png") for n, d in REGEN_DIRS.items()}
+    regens = {n: os.path.join(d, f"image_{prompt_idx}{REGEN_EXT}") for n, d in REGEN_DIRS.items()}
     return src, regens
 
 

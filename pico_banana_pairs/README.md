@@ -1,4 +1,4 @@
-# Nano-Banana sample pairs
+# Pico-Banana sample pairs
 
 15 (original Open Images photo, Nano-Banana edit) pairs spanning 15 different `edit_type` categories — sourced from Apple's Pico-Banana-400K SFT split. Included so you can run the data loaders and look at a representative sample without downloading the full ~33 GB dataset.
 

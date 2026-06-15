@@ -12,10 +12,11 @@ If you came here to find a quick way to scrub SynthID off an image, the honest a
 
 | path | what |
 |---|---|
-| `images/` | **104** SynthID-watermarked Nano-Banana images at 512×512 (`image_0.jpg` … `image_103.jpg`) plus `prompts.txt` (the 104 generation prompts, one per line, indexed by image number). This is the held-out target set every experiment in here scores against. |
+| `images/` | **104** SynthID-watermarked Nano-Banana images at 512×512 (`image_0.jpg` … `image_103.jpg`) plus `prompts.txt` (the 104 generation prompts, one per line, indexed by image number). Held-out target set every experiment scores against. |
+| `images/regen_{10,20,40,80}/` | Pre-rendered regen-attacked copies of all 104 test images at symmetric N=10, 20, 40, 80 (JPEG q=95, same `image_N.jpg` naming as sources). Skip the GPU run and use these directly for downstream analysis. |
 | `regen/` | The diffusive-regeneration attack. A small, self-contained library: a vendored `ReSDPipeline` (a `StableDiffusionPipeline` subclass that lets you resume denoising from a pre-noised latent) plus the symmetric N-step regen function. |
 | `gan/` | The GAN-based attack attempt. U-Net generator + PatchGAN discriminator + LPIPS edit-preservation. **This is the "GAN that doesn't quite work"** — useful as a worked example of why naive generator-based watermark removal is harder than it looks. |
-| `nano_banana_pairs/` | 15 (real-photo, Nano-Banana-edit) example pairs spanning 15 different edit categories. Sourced from Apple's Pico-Banana-400K. Lets you sanity-check the data pipeline without downloading the 400K-image full set. |
+| `pico_banana_pairs/` | 15 (real-photo, Nano-Banana-edit) example pairs spanning 15 different edit categories. Sourced from Apple's Pico-Banana-400K. Lets you sanity-check the data pipeline without downloading the 400K-image full set. |
 | `examples/regen_progression/` | Pre-rendered 5-panel "before / after" strips for prompts 0, 25, 100 of the test set. Each strip shows: original \| N=10 regen \| N=20 \| N=40 \| N=80. **Open one and look at it before doing anything else.** |
 | `examples/make_collages.py` | Rebuilds the strips from a regenerated test set. |
 | `requirements.txt` | Verified pin set. The vendored pipeline is tied to a specific `diffusers` version; if you upgrade, you'll break it. |
@@ -59,13 +60,15 @@ Run the image you actually care about through Google's SynthID Detector (Vertex 
 The 5-panel strips in `examples/regen_progression/` were generated from regen-attacked copies of the test set at four depths. They're not shipped because they're large; regenerate yourself:
 
 ```bash
-# regenerate the test set at each depth
-for N in 10 20 40 80; do
-  python -m regen --src images/ --dst regen_outputs/N$(printf %03d $N)/ --n-steps $N
-done
-
-# build the strips
+# the regen attack outputs are already in images/regen_{10,20,40,80}/,
+# so rebuilding the strips is just one step:
 python examples/make_collages.py --prompts 0 25 100
+
+# if you ever want to re-run the attack yourself (with a different model,
+# scheduler, seed, etc.):
+for N in 10 20 40 80; do
+  python -m regen --src images/ --dst /tmp/regen_$N/ --n-steps $N
+done
 ```
 
 On an A100 the full sweep takes ~25 min for all four depths × 104 images.
@@ -110,6 +113,6 @@ Numbers are on the 104-image `images/` set. The "real SynthID" column is qualita
 ## License / credits
 
 - The diffusive regeneration pipeline and `ReSDPipeline` are adapted from Zhao et al., "Invisible Image Watermarks Are Provably Removable Using Generative AI" (NeurIPS 2023), as bundled by the WAVES benchmark (UMD Huang Lab, arXiv 2401.08573, MIT). This kit cherry-picks just the relevant attack code, no upstream dependency.
-- Nano-Banana paired samples in `nano_banana_pairs/` are from Apple's Pico-Banana-400K (CC BY-NC-ND 4.0), built on Open Images (CC BY 2.0).
+- Nano-Banana paired samples in `pico_banana_pairs/` are from Apple's Pico-Banana-400K (CC BY-NC-ND 4.0), built on Open Images (CC BY 2.0).
 - The 104 test images in `images/` were produced by Nano-Banana for SynthID stress-testing and are included for research/demo use only.
 - This kit is MIT-licensed.
