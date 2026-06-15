@@ -22,9 +22,8 @@ LABEL_H = 40
 
 
 def paths_for(prompt_idx: int):
-    base = f"prompt_{prompt_idx}_attempt_1_img_0_512x512"
-    src = os.path.join(SOURCE_DIR, f"{base}.jpg")
-    regens = {n: os.path.join(d, f"{base}.png") for n, d in REGEN_DIRS.items()}
+    src = os.path.join(SOURCE_DIR, f"image_{prompt_idx}.jpg")
+    regens = {n: os.path.join(d, f"image_{prompt_idx}.png") for n, d in REGEN_DIRS.items()}
     return src, regens
 
 

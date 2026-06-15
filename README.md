@@ -12,7 +12,7 @@ If you came here to find a quick way to scrub SynthID off an image, the honest a
 
 | path | what |
 |---|---|
-| `images/` | **104** SynthID-watermarked Nano-Banana images at 512×512. This is the held-out target set every experiment in here scores against. |
+| `images/` | **104** SynthID-watermarked Nano-Banana images at 512×512 (`image_0.jpg` … `image_103.jpg`) plus `prompts.txt` (the 104 generation prompts, one per line, indexed by image number). This is the held-out target set every experiment in here scores against. |
 | `regen/` | The diffusive-regeneration attack. A small, self-contained library: a vendored `ReSDPipeline` (a `StableDiffusionPipeline` subclass that lets you resume denoising from a pre-noised latent) plus the symmetric N-step regen function. |
 | `gan/` | The GAN-based attack attempt. U-Net generator + PatchGAN discriminator + LPIPS edit-preservation. **This is the "GAN that doesn't quite work"** — useful as a worked example of why naive generator-based watermark removal is harder than it looks. |
 | `nano_banana_pairs/` | 15 (real-photo, Nano-Banana-edit) example pairs spanning 15 different edit categories. Sourced from Apple's Pico-Banana-400K. Lets you sanity-check the data pipeline without downloading the 400K-image full set. |
@@ -45,7 +45,7 @@ from PIL import Image
 from regen import build_pipeline, regen_symmetric
 
 pipe = build_pipeline("CompVis/stable-diffusion-v1-4", device="cuda")
-src = Image.open("images/prompt_0_attempt_1_img_0_512x512.jpg")
+src = Image.open("images/image_0.jpg")
 attacked = regen_symmetric(src, pipe, n_steps=20)  # try 10, 20, 40, 80
 attacked.save("/tmp/attacked.png")
 ```
