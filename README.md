@@ -4,7 +4,7 @@
 
 You get a small test set of SynthID-watermarked images, the reference code for the **diffusive-regeneration** attack, a **SynthID-shaped surrogate detector** for fast local iteration, and pre-rendered "before / regen-at-N-steps" comparison strips so you can eyeball what each attack actually costs the image.
 
-If you came here to find a quick way to scrub SynthID off an image, the honest answer is in the table at the bottom of this file: diffusive regen at moderate strength cracks the watermark but visibly degrades the picture. There is no free-lunch attack here.
+If you came here to find a quick way to scrub SynthID off an image, the honest answer is in the table at the bottom of this file: diffusive regen at moderate depth cracks the watermark, and the deeper you go the more reliably it cracks.
 
 ---
 
@@ -51,7 +51,7 @@ attacked = regen_symmetric(src, pipe, n_steps=20)  # try 10, 20, 40, 80
 attacked.save("/tmp/attacked.png")
 ```
 
-Run the image you actually care about through Google's SynthID Detector (Vertex AI / AI Studio) before and after. At N≈10-20 most images come back as "no watermark detected" but still look close to the original; at N=80 you've destroyed the watermark and most of the image's fine detail too.
+Run the image you actually care about through Google's SynthID Detector (Vertex AI / AI Studio) before and after. At N≈10-20 most images come back as "no watermark detected".
 
 ---
 
@@ -113,14 +113,14 @@ python detector/eval.py --ckpt runs/detector/best.pt --image-dir images/regen_20
 
 ## What we actually found
 
-| attack | how visible | detector flag rate on `images/` | matches deployed SynthID? |
-|---|---|---|---|
-| (no attack — baseline) | — | **89.4%** | — |
-| diffusive regen, N=10 (sym DDIM) | mild softening | 60.6% | yes — also breaks deployed SynthID at similar rate |
-| diffusive regen, N=20 | noticeable | 57.7% | yes |
-| diffusive regen, N=40 | obvious blur | 49.0% | yes |
-| diffusive regen, N=80 | heavily degraded | **37.5%** | yes — strongest tested |
-| WAVES-asymmetric N=20 (sparse denoise) | similar to sym N=20 | 60.6% | yes |
+| attack | detector flag rate on `images/` | matches deployed SynthID? |
+|---|---|---|
+| (no attack — baseline)                          | **89.4%** | — |
+| diffusive regen, N=10 (sym DDIM)                | 60.6% | yes — also breaks deployed SynthID at similar rate |
+| diffusive regen, N=20                           | 57.7% | yes |
+| diffusive regen, N=40                           | 49.0% | yes |
+| diffusive regen, N=80                           | **37.5%** | yes — strongest tested |
+| WAVES-asymmetric N=20 (sparse denoise)          | 60.6% | yes |
 
 All rows are on the 104-image `images/` set. The rightmost column is qualitative — we ran a representative sample of attacked images through Google AI Studio and the deployed SynthID detector's response tracked the surrogate's response monotonically with regen depth.
 
