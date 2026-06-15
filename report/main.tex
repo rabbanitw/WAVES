@@ -1,0 +1,368 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{url}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage[breaklinks=true,colorlinks=true,linkcolor=NavyBlue,citecolor=NavyBlue,urlcolor=NavyBlue]{hyperref}
+\usepackage{authblk}
+\usepackage{natbib}
+
+\title{Stress-Testing SynthID:\\[2pt]
+\large A Hands-On Comparison of GAN-Based and Regeneration-Based Attacks on AI-Generated Image Watermarks}
+
+\author[1]{Tahseen Rabbani}
+\author[2]{Thomas Mason}
+\affil[1]{Department of Computer Science, University of Chicago}
+\affil[2]{Coalfire Systems}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+SynthID~\citep{synthid2023} is Google DeepMind's invisible image watermarking
+scheme deployed on the outputs of Gemini's image generators
+(Nano-Banana / Gemini 2.5 Flash Image). It is intended to be robust under
+common image manipulations while remaining imperceptible. We probe its
+robustness through the \emph{diffusive-regeneration} attack of
+Zhao~et~al.~\citep{zhao2023provable} as adapted by the WAVES
+benchmark~\citep{an2024waves}, which round-trips a watermarked image
+through a publicly available Stable Diffusion model at varying noising
+depths. To score the attack at scale without exhausting Google AI Studio
+quota, we train a ResNet-18-based binary classifier on Apple's
+Pico-Banana-400K dataset~\citep{pico-banana-400k} as a SynthID-shaped
+surrogate detector, and use it as a fast iteration target while
+spot-checking attacked images against the deployed SynthID detector for
+ground truth. On a held-out set of $104$ Nano-Banana-generated,
+SynthID-watermarked images the surrogate detector reaches $91.3\%$
+NB-detection rate on un-attacked input and drops monotonically as the
+regen attack depth $N$ grows: $64.4\%$ at $N{=}10$, $58.7\%$ at $N{=}20$,
+$53.8\%$ at $N{=}40$, $45.2\%$ at $N{=}80$. The deployed SynthID detector
+tracks the surrogate's response qualitatively. The full code, the test
+set, the pre-computed regen attack outputs at $N{=}10,20,40,80$, the
+generation prompts, and the detector training pipeline are released as
+a hands-on kit at
+\url{https://github.com/rabbanitw/WAVES/tree/synthid-regen-kit}.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:intro}
+
+Generative image models from Google, OpenAI, and others now ship with
+\emph{invisible watermarks} that are embedded at generation time and
+intended to survive routine image manipulation. The most-deployed example
+is Google DeepMind's SynthID~\citep{synthid2023}, attached to every image
+produced by the Gemini image-generation family (Nano-Banana / Gemini
+2.5 Flash Image; we use these terms interchangeably for the generator that
+produced our test set). SynthID is presented as imperceptible-but-detectable
+even after the kinds of post-processing a typical user applies: cropping,
+mild compression, colour correction. The detector itself is not public; it
+is exposed only through Google's AI Studio.
+
+This work targets the natural follow-up question: \emph{how brittle is
+SynthID against attackers who do not have decoder access}? Our
+methodology combines two pieces:
+
+\paragraph{Diffusive-regeneration attack (Section~\ref{sec:regen}).}
+The adversary feeds the watermarked image into a publicly available
+diffusion model (we use Stable Diffusion 1.4~\citep{rombach2022stable}),
+forward-noises the latent for $N$ scheduler steps, and reverse-denoises
+back to pixel space. The diffusion model has no knowledge of SynthID's
+embedding mechanism, but the round-trip non-trivially perturbs the
+high-frequency structure that any spread-spectrum watermark needs to ride
+on. Zhao et al. introduced this attack in 2023~\citep{zhao2023provable};
+WAVES~\citep{an2024waves} adopted it as their primary benchmarked attack
+under the name \emph{Regen-Diff} and reported it as the most damaging
+single-stage attack against three different academic watermarks
+(Tree-Ring, Stable-Signature, Stega-Stamp). The question this attack
+answers is: does the same attack mechanism continue to work against
+the production SynthID stack?
+
+\paragraph{Surrogate detector (Section~\ref{sec:detector}).}
+The deployed SynthID detector is exposed only via Google AI Studio: slow
+per query, rate-limited, no API for bulk evaluation, no gradient access.
+We therefore train a SynthID-shaped surrogate: an
+ImageNet-pretrained ResNet-18~\citep{he2016resnet} fine-tuned to
+distinguish natural photographs from Nano-Banana edits on Apple's
+Pico-Banana-400K dataset~\citep{pico-banana-400k}. The surrogate is
+\emph{not} a faithful reverse-engineering of SynthID's payload; it is
+a learned ``looks like a Nano-Banana output'' detector that captures
+NB-output statistics (stylistic / micro-textural / watermark-carrier-band)
+which we use as a fast iteration target for the regeneration attack.
+We then qualitatively verify the surrogate's response tracks the deployed
+SynthID detector under regen.
+
+Our contribution is a reproducible empirical pipeline that releases (a)
+a held-out $104$-image SynthID test set with its generation prompts,
+(b) a clean implementation of the symmetric-DDIM regen attack of
+Zhao et al., (c) pre-computed regen outputs at $N \in \{10, 20, 40, 80\}$
+for every test image, and (d) the surrogate detector's training and
+evaluation pipeline. The numbers line up with what the WAVES paper
+predicts at this attack scale: the surrogate detector flags $91.3\%$ of
+unattacked Nano-Banana outputs as NB and drops monotonically as $N$
+grows, reaching $45.2\%$ at $N{=}80$, with spot-checks against the
+deployed SynthID detector confirming the directionality. The released
+kit targets the DEFCON 34 AI Village.
+
+\paragraph{Test set.}
+We curated a held-out set of $\mathbf{104}$ SynthID-watermarked images
+($512{\times}512$ JPEG, generated by Nano-Banana via the Gemini 2.5 Flash
+Image API). The generation prompts (one per image, indexed $0$--$103$)
+were sourced from a list of $150$ short ``camera+lens+subject'' phrases of
+the form: ``\textit{<style prefix>}: Photo shot on camera: \textit{<subject
+description>}'' (e.g.,
+\textit{``Disposable camera flash photo, 1990s style: Photo shot on camera:
+side view of a brown horse wearing a saddle. The number 55 is stamped in
+white on its rear flank.''}). The style-prefix loadout (``Nikon film
+grain'', ``Kodak Portra'', ``Petzval lens'', ``Hyperfocal landscape'', etc.)
+is necessary to coerce Nano-Banana into photoreal output --- without it,
+many prompts default to illustrative or cartoon styles. The 104-image
+test set, the full $150$-line prompt list, and per-image regen outputs at
+$N{=}10,20,40,80$ are all shipped in the released kit.
+
+\section{A SynthID-Shaped Surrogate Detector}
+\label{sec:detector}
+
+To score the regeneration attack at scale we need a callable detector
+that approximates SynthID's behaviour. The deployed SynthID detector
+itself is exposed only through Google AI Studio --- it is slow per
+query, rate-limited, and not gradient-accessible --- so as a stand-in
+we train a binary classifier $C$ on (real photograph, Nano-Banana edit)
+pairs. $C$ is not a faithful reverse engineering of SynthID's
+embedding; it is a learned ``does this look like a Nano-Banana
+output'' detector that captures the stylistic, micro-textural, and
+watermark-carrier-band statistics that distinguish NB outputs from
+natural photography. We will report below that its responses
+\emph{do}, in practice, track the deployed detector's responses under
+distortion-based attacks, which is what makes it useful as a fast
+local evaluator.
+
+\subsection{Training data}
+
+We train $C$ on Apple's Pico-Banana-400K
+dataset~\citep{pico-banana-400k}. Pico-Banana-400K supplies $\sim$$258$K
+(real Open Images photo, Nano-Banana edit) triples in its SFT split,
+each tagged with one of 35 \emph{edit\_type} labels. We filter to the
+$\sim$$174$K \emph{photoreal} edit types --- dropping the $\sim$30\% of
+the dataset tagged with stylized categories like
+``\textit{Van Gogh style}'', ``\textit{cartoonify}'', ``\textit{LEGO
+minifigure}'', etc., because those edits make the NB-side image trivially
+distinguishable from a photograph on stylistic grounds and would teach
+the classifier a shortcut that has nothing to do with the watermark or
+NB's photoreal-output fingerprint. From the photoreal subset we sample
+a $3{,}447$-pair working corpus partitioned as
+$\textbf{train}{=}2{,}947$,~$\textbf{val}{=}200$, $\textbf{test}{=}300$.
+The $104$-image SynthID test set from Section~\ref{sec:intro} serves as a
+\emph{cross-pipeline} OOD evaluation: $C$ has only seen Nano-Banana
+as an instruction-edit generator during training, and the SynthID test
+images come from a text-to-image prompt distribution.
+
+\subsection{Codec-matched preprocessing}
+
+The original-class images come from Open Images and are stored as JPEG;
+the NB-edited images come from Apple's CDN and are stored as PNG. A
+naive classifier picks up this codec mismatch and learns to discriminate
+JPEG-artefact signatures from PNG cleanness in well under one epoch.
+We therefore re-encode both classes through JPEG quality $95$ in memory
+before either class touches the network. All metrics in this paper are
+with codec matching enabled.
+
+\subsection{Architecture and optimisation}
+
+$C$ is a torchvision \texttt{resnet18} pretrained on ImageNet
+(\texttt{IMAGENET1K\_V1} weights)~\citep{he2016resnet} with the original
+$1000$-way \texttt{fc} head replaced by a $2$-way
+\texttt{nn.Linear(512,~2)}. Inputs are resized to $256{\times}256$ and
+ImageNet-normalised internally (registered as forward-time buffers so
+the rest of the kit's data pipeline can hand the model $[-1, 1]$
+tensors directly). Total trainable parameters: $11.2$M.
+
+Training is $20$ epochs at batch $64$ using
+AdamW~\citep{loshchilov2019adamw} (\texttt{lr=1e-4}, \texttt{weight\_decay=1e-4})
+with a cosine LR schedule over the full number of optimiser steps. We
+use a single A100-40GB at fp32; per-epoch wall clock is approximately
+$95$ seconds and dominated by the in-loader JPEG re-encode rather than
+the model compute.
+
+\paragraph{Software stack.}
+PyTorch $2.1.0$ on CUDA 11.8, torchvision $0.16.0$, Pillow~$\ge 10$,
+numpy~$1.26.4$.
+
+\subsection{Detection metrics}
+
+\begin{table}[h]
+\centering
+\caption{Detector metrics. The first three rows are in-distribution
+metrics on the Pico-Banana-400K held-out test split ($600$ single-image
+examples; $300$ real photos with ground-truth label $0$ and $300$
+NB edits with ground-truth label $1$). The fourth row is the
+cross-pipeline metric on the unattacked SynthID test set
+(Section~\ref{sec:intro}); ``predicted as label $1$'' is the
+NB-detection rate.}
+\label{tab:detector_metrics}
+\vskip 0.05in
+\begin{tabular}{lc}
+\toprule
+metric                                                          & rate \\
+\midrule
+overall test accuracy (Pico-Banana, balanced 600-example set)   & $\mathbf{88.5\%}$ \\
+\hspace{1em}recall on real photographs (label 0)                & $83.0\%$ \\
+\hspace{1em}recall on NB edits (label 1)                        & $\mathbf{94.0\%}$ \\
+\midrule
+SynthID test set ($104$ images), predicted as label $1$         & $\mathbf{91.3\%}$ \\
+\hspace{1em} mean confidence $p(\mathrm{NB})$                   & $0.914$ \\
+\hspace{1em} median confidence $p(\mathrm{NB})$                 & $1.000$ \\
+\hspace{1em} \# high-confidence ($p{>}0.9$)                     & $91 / 104$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The detector reaches $88.5\%$ accuracy in-distribution and \emph{also}
+flags $91.3\%$ of the held-out SynthID images as Nano-Banana, despite
+the SynthID images coming from a different prompt distribution
+(text-to-image vs.\ image-edit) than its training data. The classifier
+is highly confident on the SynthID set --- median $p(\mathrm{NB}){=}1.000$
+--- which is the empirical signature of a classifier that has locked
+onto something more durable than a dataset-specific artefact. The
+remaining $8.7\%$ of the SynthID set that the detector misses are
+qualitatively the most ``photographic-looking'' images in the set;
+discriminator failures are concentrated on the easy-cases-for-the-attacker
+end of the test set.
+
+\paragraph{Cross-pipeline transfer as a usability claim.}
+We do \emph{not} claim that $C$ has learned the SynthID payload. What we
+do claim is that, on the unattacked side, $C$'s detection rate on the
+deployed SynthID test set ($91.3\%$) is high enough that the detector
+is informative as a fast iteration target: a regen attack that drops
+$C$'s rate is plausibly disrupting the underlying NB-output fingerprint
+SynthID rides on, and we verify the qualitative directionality of that
+claim by spot-checking attacked images against Google AI Studio's
+deployed detector (Section~\ref{sec:regen}). The deployed detector
+is the ground truth; $C$ is a fast proxy that correlates well enough
+to drive attack development without spending Google's quota.
+
+\section{Diffusive Regeneration Attack}
+\label{sec:regen}
+
+We follow the symmetric-DDIM regen recipe of Zhao
+et~al.~\citep{zhao2023provable}, as used in WAVES Section~F.2: encode the
+image into the VAE latent space of a Stable Diffusion model, add
+scheduler noise at training timestep $N{-}1$, and reverse-denoise through
+the bottom $N$ steps of a 1000-step DDIM schedule back to pixel space.
+Concretely we use the SD-1.4 checkpoint~\citep{rombach2022stable} at fp16,
+the diffusers DDIM scheduler, classifier-free guidance scale $7.5$, and an
+empty text prompt. Because each inference step of our schedule covers
+exactly one training timestep, the attack has a single free parameter $N$
+that controls both how much noise is added and how much budget the
+denoiser has to remove it. This is in contrast to WAVES's published
+asymmetric variant (50-step inference schedule, ${\sim}N/20$ denoising
+iterations), which leaves residual noise in the output.
+
+\paragraph{Outputs.}
+Figure~\ref{fig:regen-progression} shows the
+$\mathrm{original}\to N{=}10\to 20\to 40\to 80$ progression for three
+representative test images. At $N{=}10$ the watermarked image is
+visually unchanged; by $N{=}80$ fine structure is lost and visible
+softening / hallucinated detail starts appearing. Pre-rendered copies of
+all $104 \times 4 = 416$ attacked images are shipped with the kit at
+\texttt{images/regen\_\{10,20,40,80\}/}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.95\linewidth]{figures/image_000_progression.png}\\[4pt]
+\includegraphics[width=0.95\linewidth]{figures/image_025_progression.png}\\[4pt]
+\includegraphics[width=0.95\linewidth]{figures/image_100_progression.png}
+\caption{Symmetric-DDIM diffusive regeneration of three test images at
+$N \in \{10, 20, 40, 80\}$ (left-to-right; the leftmost panel is the
+unattacked original). SD-1.4, fp16, classifier-free guidance $7.5$, empty
+prompt, seed $1024$. By $N{=}80$ the regen has both removed the SynthID
+watermark (verified manually via Google AI Studio) and visibly degraded
+the image's high-frequency structure.}
+\label{fig:regen-progression}
+\end{figure}
+
+\paragraph{Detector response.}
+We score every attacked image with the surrogate detector $C$
+described in Section~\ref{sec:detector} (which flags $91.3\%$ of the
+unattacked Nano-Banana test set as label $1$). Detection collapses
+monotonically with $N$:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+$N$ (sym DDIM regen steps) & $C$ NB-flag rate & $\Delta$ from baseline\\
+\midrule
+$0$ (no attack)             & $91.3\%$ (95/104) & --- \\
+$10$                        & $64.4\%$ (67/104) & $-26.9$ pts \\
+$20$                        & $58.7\%$ (61/104) & $-32.6$ pts \\
+$40$                        & $53.8\%$ (56/104) & $-37.5$ pts \\
+$80$                        & $\mathbf{45.2\%}$ (47/104) & $\mathbf{-46.1}$ pts \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent The trend matches the WAVES-reported curves for SD-1.x and
+Tree-Ring, Stable-Signature, and Stega-Stamp at comparable attack
+depths~\citep[\S5.3]{an2024waves}. Spot-checks against Google's deployed
+SynthID detector confirm the directional agreement: at $N \ge 20$ a
+representative sample of attacked images come back as
+``no watermark detected''. The attack is thus the most reliable
+\emph{decoder-agnostic} channel for SynthID removal we are aware of, and
+its main cost is the image-quality degradation visible in
+Figure~\ref{fig:regen-progression}.
+
+\section{Discussion}
+\label{sec:discussion}
+
+\paragraph{Regeneration trades quality for watermark removal, but it
+works.}
+At $N{=}80$ the deployed detector is fooled with high probability, but the
+image's high-frequency detail is also visibly degraded
+(Figure~\ref{fig:regen-progression}, rightmost column). This is the
+classical robustness/quality tension: SynthID, like any spread-spectrum
+watermark, can be removed by any image processing that disturbs its
+carrier band, but at a quality cost the attacker may not want to pay.
+A natural direction for future work is to stack a quality-restoring
+generator on top of a low-$N$ regen --- give the attacker a
+low-distortion, decoder-agnostic SynthID remover. Existing preliminary
+attempts in this direction (``RinseD-VAE'', ``RegenD-KLVAE'' in
+WAVES~\S F.2.2) suggest the trade-off is achievable but not yet on a
+deployed-watermark scale.
+
+\paragraph{The surrogate detector is a usable iteration target.}
+The $91.3\%$ NB-detection rate on the unattacked SynthID set
+(Table~\ref{tab:detector_metrics}) is high enough that the surrogate is
+a useful proxy for the deployed detector under distortion-based attacks:
+when regen drives the surrogate's response down monotonically as a
+function of $N$ (Table in Section~\ref{sec:regen}), Google AI Studio's
+deployed detector tracks the same directionality on the
+representative subsample we manually evaluated. The surrogate is
+\emph{not} guaranteed to track the deployed detector under gradient-based
+attacks; that decoupling is the WAVES paper's
+finding~\citep[\S F.3.2]{an2024waves} and we do not contest it. For the
+purpose of iterating on distortion-style attacks in a local feedback loop,
+however, the surrogate is the practical tool.
+
+\paragraph{Reproducibility.}
+The release kit ---
+\url{https://github.com/rabbanitw/WAVES/tree/synthid-regen-kit} ---
+contains the 104-image test set, the 104 generation prompts, the
+pre-rendered $416$ attacked images at $N{=}10,20,40,80$, the regeneration
+attack CLI, and the surrogate detector training and evaluation pipeline.
+All numbers above are pinned to deterministic seeds (PyTorch / numpy
+seed $42$ for the detector, seed $1024$ for regen) and re-run identically
+on a single A100-40GB. The pipeline depends on diffusers $0.21.4$ and the
+specifications of the older \texttt{StableDiffusionPipeline} API; newer
+diffusers will require re-wiring the vendored \texttt{ReSDPipeline}
+subclass.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
