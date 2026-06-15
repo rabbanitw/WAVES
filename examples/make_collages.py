@@ -61,7 +61,7 @@ def make_collage(prompt_idx: int, out_path: str):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--prompts", type=int, nargs="+", default=[0, 50, 100])
+    ap.add_argument("--prompts", type=int, nargs="+", default=[0, 25, 100])
     ap.add_argument("--out-dir", default="examples/regen_progression")
     args = ap.parse_args()
     for idx in args.prompts:

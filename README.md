@@ -16,7 +16,7 @@ If you came here to find a quick way to scrub SynthID off an image, the honest a
 | `regen/` | The diffusive-regeneration attack. A small, self-contained library: a vendored `ReSDPipeline` (a `StableDiffusionPipeline` subclass that lets you resume denoising from a pre-noised latent) plus the symmetric N-step regen function. |
 | `gan/` | The GAN-based attack attempt. U-Net generator + PatchGAN discriminator + LPIPS edit-preservation. **This is the "GAN that doesn't quite work"** — useful as a worked example of why naive generator-based watermark removal is harder than it looks. |
 | `nano_banana_pairs/` | 15 (real-photo, Nano-Banana-edit) example pairs spanning 15 different edit categories. Sourced from Apple's Pico-Banana-400K. Lets you sanity-check the data pipeline without downloading the 400K-image full set. |
-| `examples/regen_progression/` | Pre-rendered 5-panel "before / after" strips for prompts 0, 50, 100 of the test set. Each strip shows: original \| N=10 regen \| N=20 \| N=40 \| N=80. **Open one and look at it before doing anything else.** |
+| `examples/regen_progression/` | Pre-rendered 5-panel "before / after" strips for prompts 0, 25, 100 of the test set. Each strip shows: original \| N=10 regen \| N=20 \| N=40 \| N=80. **Open one and look at it before doing anything else.** |
 | `examples/make_collages.py` | Rebuilds the strips from a regenerated test set. |
 | `requirements.txt` | Verified pin set. The vendored pipeline is tied to a specific `diffusers` version; if you upgrade, you'll break it. |
 
@@ -65,7 +65,7 @@ for N in 10 20 40 80; do
 done
 
 # build the strips
-python examples/make_collages.py --prompts 0 50 100
+python examples/make_collages.py --prompts 0 25 100
 ```
 
 On an A100 the full sweep takes ~25 min for all four depths × 104 images.
