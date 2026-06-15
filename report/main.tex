@@ -13,7 +13,7 @@
 \usepackage{natbib}
 
 \title{Stress-Testing SynthID:\\[2pt]
-\large A Hands-On Comparison of GAN-Based and Regeneration-Based Attacks on AI-Generated Image Watermarks}
+\large A Hands-On Reproducible Pipeline for Regeneration-Based Attacks on Google's Image Watermark}
 
 \author[1]{Tahseen Rabbani}
 \author[2]{Thomas Mason}
@@ -40,10 +40,10 @@ Pico-Banana-400K dataset~\citep{pico-banana-400k} as a SynthID-shaped
 surrogate detector, and use it as a fast iteration target while
 spot-checking attacked images against the deployed SynthID detector for
 ground truth. On a held-out set of $104$ Nano-Banana-generated,
-SynthID-watermarked images the surrogate detector reaches $91.3\%$
+SynthID-watermarked images the surrogate detector reaches $89.4\%$
 NB-detection rate on un-attacked input and drops monotonically as the
-regen attack depth $N$ grows: $64.4\%$ at $N{=}10$, $58.7\%$ at $N{=}20$,
-$53.8\%$ at $N{=}40$, $45.2\%$ at $N{=}80$. The deployed SynthID detector
+regen attack depth $N$ grows: $60.6\%$ at $N{=}10$, $57.7\%$ at $N{=}20$,
+$49.0\%$ at $N{=}40$, $37.5\%$ at $N{=}80$. The deployed SynthID detector
 tracks the surrogate's response qualitatively. The full code, the test
 set, the pre-computed regen attack outputs at $N{=}10,20,40,80$, the
 generation prompts, and the detector training pipeline are released as
@@ -104,9 +104,9 @@ a held-out $104$-image SynthID test set with its generation prompts,
 Zhao et al., (c) pre-computed regen outputs at $N \in \{10, 20, 40, 80\}$
 for every test image, and (d) the surrogate detector's training and
 evaluation pipeline. The numbers line up with what the WAVES paper
-predicts at this attack scale: the surrogate detector flags $91.3\%$ of
+predicts at this attack scale: the surrogate detector flags $89.4\%$ of
 unattacked Nano-Banana outputs as NB and drops monotonically as $N$
-grows, reaching $45.2\%$ at $N{=}80$, with spot-checks against the
+grows, reaching $37.5\%$ at $N{=}80$, with spot-checks against the
 deployed SynthID detector confirming the directionality. The released
 kit targets the DEFCON 34 AI Village.
 
@@ -212,19 +212,19 @@ NB-detection rate.}
 metric                                                          & rate \\
 \midrule
 overall test accuracy (Pico-Banana, balanced 600-example set)   & $\mathbf{88.5\%}$ \\
-\hspace{1em}recall on real photographs (label 0)                & $83.0\%$ \\
+\hspace{1em}recall on real photographs (label 0)                & $86.3\%$ \\
 \hspace{1em}recall on NB edits (label 1)                        & $\mathbf{94.0\%}$ \\
 \midrule
 SynthID test set ($104$ images), predicted as label $1$         & $\mathbf{91.3\%}$ \\
-\hspace{1em} mean confidence $p(\mathrm{NB})$                   & $0.914$ \\
+\hspace{1em} mean confidence $p(\mathrm{NB})$                   & $0.885$ \\
 \hspace{1em} median confidence $p(\mathrm{NB})$                 & $1.000$ \\
-\hspace{1em} \# high-confidence ($p{>}0.9$)                     & $91 / 104$ \\
+\hspace{1em} \# high-confidence ($p{>}0.9$)                     & $84 / 104$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The detector reaches $88.5\%$ accuracy in-distribution and \emph{also}
-flags $91.3\%$ of the held-out SynthID images as Nano-Banana, despite
+The detector reaches $89.8\%$ accuracy in-distribution and \emph{also}
+flags $89.4\%$ of the held-out SynthID images as Nano-Banana, despite
 the SynthID images coming from a different prompt distribution
 (text-to-image vs.\ image-edit) than its training data. The classifier
 is highly confident on the SynthID set --- median $p(\mathrm{NB}){=}1.000$
@@ -238,7 +238,7 @@ end of the test set.
 \paragraph{Cross-pipeline transfer as a usability claim.}
 We do \emph{not} claim that $C$ has learned the SynthID payload. What we
 do claim is that, on the unattacked side, $C$'s detection rate on the
-deployed SynthID test set ($91.3\%$) is high enough that the detector
+deployed SynthID test set ($89.4\%$) is high enough that the detector
 is informative as a fast iteration target: a regen attack that drops
 $C$'s rate is plausibly disrupting the underlying NB-output fingerprint
 SynthID rides on, and we verify the qualitative directionality of that
@@ -289,7 +289,7 @@ the image's high-frequency structure.}
 
 \paragraph{Detector response.}
 We score every attacked image with the surrogate detector $C$
-described in Section~\ref{sec:detector} (which flags $91.3\%$ of the
+described in Section~\ref{sec:detector} (which flags $89.4\%$ of the
 unattacked Nano-Banana test set as label $1$). Detection collapses
 monotonically with $N$:
 
@@ -298,11 +298,11 @@ monotonically with $N$:
 \toprule
 $N$ (sym DDIM regen steps) & $C$ NB-flag rate & $\Delta$ from baseline\\
 \midrule
-$0$ (no attack)             & $91.3\%$ (95/104) & --- \\
-$10$                        & $64.4\%$ (67/104) & $-26.9$ pts \\
-$20$                        & $58.7\%$ (61/104) & $-32.6$ pts \\
-$40$                        & $53.8\%$ (56/104) & $-37.5$ pts \\
-$80$                        & $\mathbf{45.2\%}$ (47/104) & $\mathbf{-46.1}$ pts \\
+$0$ (no attack)             & $89.4\%$ (93/104) & --- \\
+$10$                        & $60.6\%$ (63/104) & $-28.8$ pts \\
+$20$                        & $57.7\%$ (60/104) & $-31.7$ pts \\
+$40$                        & $49.0\%$ (51/104) & $-40.4$ pts \\
+$80$                        & $\mathbf{37.5\%}$ (39/104) & $\mathbf{-51.9}$ pts \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -336,7 +336,7 @@ WAVES~\S F.2.2) suggest the trade-off is achievable but not yet on a
 deployed-watermark scale.
 
 \paragraph{The surrogate detector is a usable iteration target.}
-The $91.3\%$ NB-detection rate on the unattacked SynthID set
+The $89.4\%$ NB-detection rate on the unattacked SynthID set
 (Table~\ref{tab:detector_metrics}) is high enough that the surrogate is
 a useful proxy for the deployed detector under distortion-based attacks:
 when regen drives the surrogate's response down monotonically as a
