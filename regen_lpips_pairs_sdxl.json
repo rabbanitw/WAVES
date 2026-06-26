@@ -1,0 +1,1602 @@
+[
+  {
+    "slot": 0,
+    "edit_type": "Add new scene context/background",
+    "size": [
+      1024,
+      1024
+    ],
+    "lpips_orig_N10": 0.2195492535829544,
+    "lpips_edit_N10": 0.2322586178779602,
+    "lpips_orig_N20": 0.2295554131269455,
+    "lpips_edit_N20": 0.24278904497623444,
+    "lpips_orig_N40": 0.24799522757530212,
+    "lpips_edit_N40": 0.26191702485084534,
+    "lpips_orig_N60": 0.2614206373691559,
+    "lpips_edit_N60": 0.27615344524383545
+  },
+  {
+    "slot": 1,
+    "edit_type": "Add a new object to the scene",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.11376385390758514,
+    "lpips_edit_N10": 0.13136287033557892,
+    "lpips_orig_N20": 0.11477924138307571,
+    "lpips_edit_N20": 0.1362985372543335,
+    "lpips_orig_N40": 0.1218779981136322,
+    "lpips_edit_N40": 0.1484101414680481,
+    "lpips_orig_N60": 0.1267387866973877,
+    "lpips_edit_N60": 0.15578404068946838
+  },
+  {
+    "slot": 2,
+    "edit_type": "Remove an existing object",
+    "size": [
+      864,
+      1184
+    ],
+    "lpips_orig_N10": 0.2890738248825073,
+    "lpips_edit_N10": 0.17405511438846588,
+    "lpips_orig_N20": 0.3006398677825928,
+    "lpips_edit_N20": 0.18376633524894714,
+    "lpips_orig_N40": 0.32255250215530396,
+    "lpips_edit_N40": 0.20286376774311066,
+    "lpips_orig_N60": 0.33590060472488403,
+    "lpips_edit_N60": 0.21309268474578857
+  },
+  {
+    "slot": 3,
+    "edit_type": "Apply seasonal transformation (summer \u2194 winter)",
+    "size": [
+      1344,
+      768
+    ],
+    "lpips_orig_N10": 0.2251652032136917,
+    "lpips_edit_N10": 0.20207519829273224,
+    "lpips_orig_N20": 0.23504741489887238,
+    "lpips_edit_N20": 0.2126757800579071,
+    "lpips_orig_N40": 0.254277765750885,
+    "lpips_edit_N40": 0.2314152717590332,
+    "lpips_orig_N60": 0.2666327953338623,
+    "lpips_edit_N60": 0.24598239362239838
+  },
+  {
+    "slot": 4,
+    "edit_type": "Apply seasonal transformation (summer \u2194 winter)",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.25227633118629456,
+    "lpips_edit_N10": 0.22860801219940186,
+    "lpips_orig_N20": 0.2651281952857971,
+    "lpips_edit_N20": 0.2415638267993927,
+    "lpips_orig_N40": 0.2854568660259247,
+    "lpips_edit_N40": 0.2640685737133026,
+    "lpips_orig_N60": 0.3001844584941864,
+    "lpips_edit_N60": 0.28057941794395447
+  },
+  {
+    "slot": 6,
+    "edit_type": "Change an object's attribute (e.g., color/material)",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.24644093215465546,
+    "lpips_edit_N10": 0.2042817622423172,
+    "lpips_orig_N20": 0.26115578413009644,
+    "lpips_edit_N20": 0.2136109173297882,
+    "lpips_orig_N40": 0.2841202914714813,
+    "lpips_edit_N40": 0.23183684051036835,
+    "lpips_orig_N60": 0.30022743344306946,
+    "lpips_edit_N60": 0.2446763813495636
+  },
+  {
+    "slot": 10,
+    "edit_type": "Adjust global lighting (golden hour/fluorescent)",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.3303988575935364,
+    "lpips_edit_N10": 0.2859528362751007,
+    "lpips_orig_N20": 0.3410152792930603,
+    "lpips_edit_N20": 0.30059558153152466,
+    "lpips_orig_N40": 0.36378201842308044,
+    "lpips_edit_N40": 0.3267527222633362,
+    "lpips_orig_N60": 0.37832435965538025,
+    "lpips_edit_N60": 0.3411150276660919
+  },
+  {
+    "slot": 13,
+    "edit_type": "Change overall color tone (warm \u2194 cool)",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.22656279802322388,
+    "lpips_edit_N10": 0.26420560479164124,
+    "lpips_orig_N20": 0.23952384293079376,
+    "lpips_edit_N20": 0.26821237802505493,
+    "lpips_orig_N40": 0.2628694772720337,
+    "lpips_edit_N40": 0.2853458523750305,
+    "lpips_orig_N60": 0.2802257537841797,
+    "lpips_edit_N60": 0.2926613390445709
+  },
+  {
+    "slot": 15,
+    "edit_type": "Replace one object category with another",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.22167827188968658,
+    "lpips_edit_N10": 0.19354361295700073,
+    "lpips_orig_N20": 0.23955771327018738,
+    "lpips_edit_N20": 0.206729918718338,
+    "lpips_orig_N40": 0.2672175168991089,
+    "lpips_edit_N40": 0.22934922575950623,
+    "lpips_orig_N60": 0.2885691225528717,
+    "lpips_edit_N60": 0.24635252356529236
+  },
+  {
+    "slot": 18,
+    "edit_type": "Add a new object to the scene",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.23444820940494537,
+    "lpips_edit_N10": 0.18000778555870056,
+    "lpips_orig_N20": 0.24926134943962097,
+    "lpips_edit_N20": 0.19515326619148254,
+    "lpips_orig_N40": 0.2687590718269348,
+    "lpips_edit_N40": 0.22124207019805908,
+    "lpips_orig_N60": 0.2836835980415344,
+    "lpips_edit_N60": 0.23803280293941498
+  },
+  {
+    "slot": 21,
+    "edit_type": "Add new scene context/background",
+    "size": [
+      1536,
+      672
+    ],
+    "lpips_orig_N10": 0.3134368062019348,
+    "lpips_edit_N10": 0.23928555846214294,
+    "lpips_orig_N20": 0.32552653551101685,
+    "lpips_edit_N20": 0.25120633840560913,
+    "lpips_orig_N40": 0.34869715571403503,
+    "lpips_edit_N40": 0.2738920748233795,
+    "lpips_orig_N60": 0.361780047416687,
+    "lpips_edit_N60": 0.289736807346344
+  },
+  {
+    "slot": 23,
+    "edit_type": "Photo to cartoon/sketch/comic",
+    "size": [
+      864,
+      1184
+    ],
+    "lpips_orig_N10": 0.21405372023582458,
+    "lpips_edit_N10": 0.08642906695604324,
+    "lpips_orig_N20": 0.22485466301441193,
+    "lpips_edit_N20": 0.08967195451259613,
+    "lpips_orig_N40": 0.24404138326644897,
+    "lpips_edit_N40": 0.09687937051057816,
+    "lpips_orig_N60": 0.2564299702644348,
+    "lpips_edit_N60": 0.10149462521076202
+  },
+  {
+    "slot": 24,
+    "edit_type": "Change weather conditions (sunny/rainy/snowy)",
+    "size": [
+      1024,
+      1024
+    ],
+    "lpips_orig_N10": 0.2583591043949127,
+    "lpips_edit_N10": 0.24261939525604248,
+    "lpips_orig_N20": 0.27917036414146423,
+    "lpips_edit_N20": 0.25467342138290405,
+    "lpips_orig_N40": 0.31095966696739197,
+    "lpips_edit_N40": 0.27504754066467285,
+    "lpips_orig_N60": 0.32969215512275696,
+    "lpips_edit_N60": 0.29116207361221313
+  },
+  {
+    "slot": 26,
+    "edit_type": "Change weather conditions (sunny/rainy/snowy)",
+    "size": [
+      1024,
+      1024
+    ],
+    "lpips_orig_N10": 0.21279668807983398,
+    "lpips_edit_N10": 0.2257588654756546,
+    "lpips_orig_N20": 0.22810734808444977,
+    "lpips_edit_N20": 0.2316376268863678,
+    "lpips_orig_N40": 0.2494470775127411,
+    "lpips_edit_N40": 0.2435021698474884,
+    "lpips_orig_N60": 0.26597070693969727,
+    "lpips_edit_N60": 0.25179558992385864
+  },
+  {
+    "slot": 27,
+    "edit_type": "Remove an existing object",
+    "size": [
+      1344,
+      768
+    ],
+    "lpips_orig_N10": 0.19833599030971527,
+    "lpips_edit_N10": 0.1975764036178589,
+    "lpips_orig_N20": 0.2149726152420044,
+    "lpips_edit_N20": 0.21551792323589325,
+    "lpips_orig_N40": 0.24167141318321228,
+    "lpips_edit_N40": 0.2456318438053131,
+    "lpips_orig_N60": 0.2626654803752899,
+    "lpips_edit_N60": 0.2658553719520569
+  },
+  {
+    "slot": 28,
+    "edit_type": "Apply seasonal transformation (summer \u2194 winter)",
+    "size": [
+      896,
+      1152
+    ],
+    "lpips_orig_N10": 0.25602424144744873,
+    "lpips_edit_N10": 0.21334032714366913,
+    "lpips_orig_N20": 0.27495867013931274,
+    "lpips_edit_N20": 0.22147761285305023,
+    "lpips_orig_N40": 0.2990393042564392,
+    "lpips_edit_N40": 0.23760412633419037,
+    "lpips_orig_N60": 0.3148719072341919,
+    "lpips_edit_N60": 0.24900242686271667
+  },
+  {
+    "slot": 29,
+    "edit_type": "Change the size/shape/orientation of an object",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.20814526081085205,
+    "lpips_edit_N10": 0.22271177172660828,
+    "lpips_orig_N20": 0.21543985605239868,
+    "lpips_edit_N20": 0.2308257669210434,
+    "lpips_orig_N40": 0.23092405498027802,
+    "lpips_edit_N40": 0.247504323720932,
+    "lpips_orig_N60": 0.24080035090446472,
+    "lpips_edit_N60": 0.2613292932510376
+  },
+  {
+    "slot": 31,
+    "edit_type": "Remove an existing object",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.21191124618053436,
+    "lpips_edit_N10": 0.18667936325073242,
+    "lpips_orig_N20": 0.22276459634304047,
+    "lpips_edit_N20": 0.19665181636810303,
+    "lpips_orig_N40": 0.24149814248085022,
+    "lpips_edit_N40": 0.2137191891670227,
+    "lpips_orig_N60": 0.2535322904586792,
+    "lpips_edit_N60": 0.22728551924228668
+  },
+  {
+    "slot": 32,
+    "edit_type": "Photo to cartoon/sketch/comic",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.2512568235397339,
+    "lpips_edit_N10": 0.12084025144577026,
+    "lpips_orig_N20": 0.26015180349349976,
+    "lpips_edit_N20": 0.12180173397064209,
+    "lpips_orig_N40": 0.27777421474456787,
+    "lpips_edit_N40": 0.12764272093772888,
+    "lpips_orig_N60": 0.29076072573661804,
+    "lpips_edit_N60": 0.13207277655601501
+  },
+  {
+    "slot": 34,
+    "edit_type": "Add a new object to the scene",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.21628588438034058,
+    "lpips_edit_N10": 0.24958549439907074,
+    "lpips_orig_N20": 0.2354884296655655,
+    "lpips_edit_N20": 0.2633835971355438,
+    "lpips_orig_N40": 0.2648758888244629,
+    "lpips_edit_N40": 0.28614920377731323,
+    "lpips_orig_N60": 0.2837979197502136,
+    "lpips_edit_N60": 0.30103933811187744
+  },
+  {
+    "slot": 35,
+    "edit_type": "Change weather conditions (sunny/rainy/snowy)",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.22455139458179474,
+    "lpips_edit_N10": 0.20786717534065247,
+    "lpips_orig_N20": 0.23921023309230804,
+    "lpips_edit_N20": 0.22749117016792297,
+    "lpips_orig_N40": 0.26490139961242676,
+    "lpips_edit_N40": 0.2599872350692749,
+    "lpips_orig_N60": 0.2847406268119812,
+    "lpips_edit_N60": 0.2837991416454315
+  },
+  {
+    "slot": 36,
+    "edit_type": "Outpainting (extend canvas beyond boundaries)",
+    "size": [
+      864,
+      1184
+    ],
+    "lpips_orig_N10": 0.19641537964344025,
+    "lpips_edit_N10": 0.20319384336471558,
+    "lpips_orig_N20": 0.20432937145233154,
+    "lpips_edit_N20": 0.2153889536857605,
+    "lpips_orig_N40": 0.22377237677574158,
+    "lpips_edit_N40": 0.23665976524353027,
+    "lpips_orig_N60": 0.23669734597206116,
+    "lpips_edit_N60": 0.25221335887908936
+  },
+  {
+    "slot": 39,
+    "edit_type": "Replace one object category with another",
+    "size": [
+      1024,
+      1024
+    ],
+    "lpips_orig_N10": 0.1607641875743866,
+    "lpips_edit_N10": 0.14667478203773499,
+    "lpips_orig_N20": 0.17961695790290833,
+    "lpips_edit_N20": 0.16298726201057434,
+    "lpips_orig_N40": 0.2104881852865219,
+    "lpips_edit_N40": 0.19362890720367432,
+    "lpips_orig_N60": 0.23271042108535767,
+    "lpips_edit_N60": 0.21519064903259277
+  },
+  {
+    "slot": 40,
+    "edit_type": "Change overall color tone (warm \u2194 cool)",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.2278348058462143,
+    "lpips_edit_N10": 0.17927667498588562,
+    "lpips_orig_N20": 0.2391480803489685,
+    "lpips_edit_N20": 0.18948039412498474,
+    "lpips_orig_N40": 0.25760018825531006,
+    "lpips_edit_N40": 0.2093200832605362,
+    "lpips_orig_N60": 0.2692267894744873,
+    "lpips_edit_N60": 0.2245565950870514
+  },
+  {
+    "slot": 42,
+    "edit_type": "Zoom in",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.18593928217887878,
+    "lpips_edit_N10": 0.16056987643241882,
+    "lpips_orig_N20": 0.19731593132019043,
+    "lpips_edit_N20": 0.17313702404499054,
+    "lpips_orig_N40": 0.21763457357883453,
+    "lpips_edit_N40": 0.1939523071050644,
+    "lpips_orig_N60": 0.23184914886951447,
+    "lpips_edit_N60": 0.21078026294708252
+  },
+  {
+    "slot": 43,
+    "edit_type": "Modern \u2194 historical style/look",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.2900043725967407,
+    "lpips_edit_N10": 0.24681667983531952,
+    "lpips_orig_N20": 0.3044648766517639,
+    "lpips_edit_N20": 0.25837013125419617,
+    "lpips_orig_N40": 0.32712578773498535,
+    "lpips_edit_N40": 0.28179630637168884,
+    "lpips_orig_N60": 0.34159210324287415,
+    "lpips_edit_N60": 0.29394131898880005
+  },
+  {
+    "slot": 44,
+    "edit_type": "Change overall color tone (warm \u2194 cool)",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.1787678301334381,
+    "lpips_edit_N10": 0.18156300485134125,
+    "lpips_orig_N20": 0.19349931180477142,
+    "lpips_edit_N20": 0.19295324385166168,
+    "lpips_orig_N40": 0.2173231989145279,
+    "lpips_edit_N40": 0.21487662196159363,
+    "lpips_orig_N60": 0.23442961275577545,
+    "lpips_edit_N60": 0.2301359623670578
+  },
+  {
+    "slot": 46,
+    "edit_type": "Strong artistic style transfer (e.g., Van Gogh/anime/etc.)",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.23177176713943481,
+    "lpips_edit_N10": 0.26398974657058716,
+    "lpips_orig_N20": 0.24662849307060242,
+    "lpips_edit_N20": 0.28308671712875366,
+    "lpips_orig_N40": 0.2715756297111511,
+    "lpips_edit_N40": 0.31219953298568726,
+    "lpips_orig_N60": 0.2849887013435364,
+    "lpips_edit_N60": 0.3347818851470947
+  },
+  {
+    "slot": 47,
+    "edit_type": "Zoom in",
+    "size": [
+      864,
+      1184
+    ],
+    "lpips_orig_N10": 0.21367108821868896,
+    "lpips_edit_N10": 0.2014838457107544,
+    "lpips_orig_N20": 0.2249092310667038,
+    "lpips_edit_N20": 0.21121680736541748,
+    "lpips_orig_N40": 0.24495401978492737,
+    "lpips_edit_N40": 0.23025377094745636,
+    "lpips_orig_N60": 0.26093965768814087,
+    "lpips_edit_N60": 0.24356557428836823
+  },
+  {
+    "slot": 48,
+    "edit_type": "Replace text in signs/posters/billboards",
+    "size": [
+      1344,
+      768
+    ],
+    "lpips_orig_N10": 0.2261410355567932,
+    "lpips_edit_N10": 0.16817951202392578,
+    "lpips_orig_N20": 0.23744644224643707,
+    "lpips_edit_N20": 0.17836987972259521,
+    "lpips_orig_N40": 0.25664323568344116,
+    "lpips_edit_N40": 0.1972704529762268,
+    "lpips_orig_N60": 0.27306318283081055,
+    "lpips_edit_N60": 0.2099372297525406
+  },
+  {
+    "slot": 50,
+    "edit_type": "Change weather conditions (sunny/rainy/snowy)",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.23120196163654327,
+    "lpips_edit_N10": 0.23868200182914734,
+    "lpips_orig_N20": 0.24142904579639435,
+    "lpips_edit_N20": 0.24553702771663666,
+    "lpips_orig_N40": 0.2606174945831299,
+    "lpips_edit_N40": 0.2605174779891968,
+    "lpips_orig_N60": 0.27392759919166565,
+    "lpips_edit_N60": 0.2721949815750122
+  },
+  {
+    "slot": 54,
+    "edit_type": "Photo to cartoon/sketch/comic",
+    "size": [
+      768,
+      1344
+    ],
+    "lpips_orig_N10": 0.2576294541358948,
+    "lpips_edit_N10": 0.20385441184043884,
+    "lpips_orig_N20": 0.2706702649593353,
+    "lpips_edit_N20": 0.21412207186222076,
+    "lpips_orig_N40": 0.2929871082305908,
+    "lpips_edit_N40": 0.23286586999893188,
+    "lpips_orig_N60": 0.3090069890022278,
+    "lpips_edit_N60": 0.24663826823234558
+  },
+  {
+    "slot": 55,
+    "edit_type": "Photo to cartoon/sketch/comic",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.26016664505004883,
+    "lpips_edit_N10": 0.17998230457305908,
+    "lpips_orig_N20": 0.2738723158836365,
+    "lpips_edit_N20": 0.19953802227973938,
+    "lpips_orig_N40": 0.30019640922546387,
+    "lpips_edit_N40": 0.2292599380016327,
+    "lpips_orig_N60": 0.3184652030467987,
+    "lpips_edit_N60": 0.25157299637794495
+  },
+  {
+    "slot": 58,
+    "edit_type": "Add film grain or vintage filter",
+    "size": [
+      1344,
+      768
+    ],
+    "lpips_orig_N10": 0.23349101841449738,
+    "lpips_edit_N10": 0.2444673329591751,
+    "lpips_orig_N20": 0.24248911440372467,
+    "lpips_edit_N20": 0.25405311584472656,
+    "lpips_orig_N40": 0.26132023334503174,
+    "lpips_edit_N40": 0.27376696467399597,
+    "lpips_orig_N60": 0.274169385433197,
+    "lpips_edit_N60": 0.28635454177856445
+  },
+  {
+    "slot": 62,
+    "edit_type": "Zoom in",
+    "size": [
+      832,
+      1248
+    ],
+    "lpips_orig_N10": 0.23262476921081543,
+    "lpips_edit_N10": 0.17472729086875916,
+    "lpips_orig_N20": 0.2442762851715088,
+    "lpips_edit_N20": 0.18773767352104187,
+    "lpips_orig_N40": 0.2642267346382141,
+    "lpips_edit_N40": 0.21004512906074524,
+    "lpips_orig_N60": 0.2793760895729065,
+    "lpips_edit_N60": 0.22520685195922852
+  },
+  {
+    "slot": 63,
+    "edit_type": "Add film grain or vintage filter",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.2933879792690277,
+    "lpips_edit_N10": 0.3041253089904785,
+    "lpips_orig_N20": 0.31292206048965454,
+    "lpips_edit_N20": 0.3139597773551941,
+    "lpips_orig_N40": 0.3443368971347809,
+    "lpips_edit_N40": 0.3343818187713623,
+    "lpips_orig_N60": 0.36765944957733154,
+    "lpips_edit_N60": 0.34581300616264343
+  },
+  {
+    "slot": 65,
+    "edit_type": "Apply seasonal transformation (summer \u2194 winter)",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.29500049352645874,
+    "lpips_edit_N10": 0.292081356048584,
+    "lpips_orig_N20": 0.3127346932888031,
+    "lpips_edit_N20": 0.3100345730781555,
+    "lpips_orig_N40": 0.3421473205089569,
+    "lpips_edit_N40": 0.3406318426132202,
+    "lpips_orig_N60": 0.3614317774772644,
+    "lpips_edit_N60": 0.36091792583465576
+  },
+  {
+    "slot": 66,
+    "edit_type": "Add new (handwritten/printed/etc) text",
+    "size": [
+      768,
+      1344
+    ],
+    "lpips_orig_N10": 0.2297775000333786,
+    "lpips_edit_N10": 0.20722414553165436,
+    "lpips_orig_N20": 0.24472615122795105,
+    "lpips_edit_N20": 0.2223362773656845,
+    "lpips_orig_N40": 0.26833125948905945,
+    "lpips_edit_N40": 0.2456689178943634,
+    "lpips_orig_N60": 0.2843214273452759,
+    "lpips_edit_N60": 0.26378118991851807
+  },
+  {
+    "slot": 67,
+    "edit_type": "Line-art ink sketch of the person",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.18810664117336273,
+    "lpips_edit_N10": 0.16826990246772766,
+    "lpips_orig_N20": 0.20647986233234406,
+    "lpips_edit_N20": 0.18053054809570312,
+    "lpips_orig_N40": 0.23526161909103394,
+    "lpips_edit_N40": 0.20321902632713318,
+    "lpips_orig_N60": 0.25459206104278564,
+    "lpips_edit_N60": 0.2204754650592804
+  },
+  {
+    "slot": 68,
+    "edit_type": "Outpainting (extend canvas beyond boundaries)",
+    "size": [
+      1024,
+      1024
+    ],
+    "lpips_orig_N10": 0.21420904994010925,
+    "lpips_edit_N10": 0.20058780908584595,
+    "lpips_orig_N20": 0.22799959778785706,
+    "lpips_edit_N20": 0.21302467584609985,
+    "lpips_orig_N40": 0.25168076157569885,
+    "lpips_edit_N40": 0.23468399047851562,
+    "lpips_orig_N60": 0.2684354782104492,
+    "lpips_edit_N60": 0.24974533915519714
+  },
+  {
+    "slot": 69,
+    "edit_type": "Strong artistic style transfer (e.g., Van Gogh/anime/etc.)",
+    "size": [
+      832,
+      1248
+    ],
+    "lpips_orig_N10": 0.21116939187049866,
+    "lpips_edit_N10": 0.2294367402791977,
+    "lpips_orig_N20": 0.22107702493667603,
+    "lpips_edit_N20": 0.24821707606315613,
+    "lpips_orig_N40": 0.2400946468114853,
+    "lpips_edit_N40": 0.27872613072395325,
+    "lpips_orig_N60": 0.252689003944397,
+    "lpips_edit_N60": 0.299850732088089
+  },
+  {
+    "slot": 70,
+    "edit_type": "Photo to cartoon/sketch/comic",
+    "size": [
+      1024,
+      1024
+    ],
+    "lpips_orig_N10": 0.25286194682121277,
+    "lpips_edit_N10": 0.07494215667247772,
+    "lpips_orig_N20": 0.2684309482574463,
+    "lpips_edit_N20": 0.07597775757312775,
+    "lpips_orig_N40": 0.2998587489128113,
+    "lpips_edit_N40": 0.08084036409854889,
+    "lpips_orig_N60": 0.3198627233505249,
+    "lpips_edit_N60": 0.08382605761289597
+  },
+  {
+    "slot": 71,
+    "edit_type": "Add a new object to the scene",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.2644454538822174,
+    "lpips_edit_N10": 0.2354792058467865,
+    "lpips_orig_N20": 0.2750850319862366,
+    "lpips_edit_N20": 0.24917183816432953,
+    "lpips_orig_N40": 0.29303309321403503,
+    "lpips_edit_N40": 0.2725648581981659,
+    "lpips_orig_N60": 0.30768927931785583,
+    "lpips_edit_N60": 0.28748032450675964
+  },
+  {
+    "slot": 75,
+    "edit_type": "Line-art ink sketch of the person",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.18881522119045258,
+    "lpips_edit_N10": 0.20198117196559906,
+    "lpips_orig_N20": 0.20605513453483582,
+    "lpips_edit_N20": 0.21698987483978271,
+    "lpips_orig_N40": 0.232767716050148,
+    "lpips_edit_N40": 0.2447834014892578,
+    "lpips_orig_N60": 0.25560060143470764,
+    "lpips_edit_N60": 0.26538264751434326
+  },
+  {
+    "slot": 77,
+    "edit_type": "Change weather conditions (sunny/rainy/snowy)",
+    "size": [
+      832,
+      1248
+    ],
+    "lpips_orig_N10": 0.19137440621852875,
+    "lpips_edit_N10": 0.18974213302135468,
+    "lpips_orig_N20": 0.20440490543842316,
+    "lpips_edit_N20": 0.20503413677215576,
+    "lpips_orig_N40": 0.22699251770973206,
+    "lpips_edit_N40": 0.2318011373281479,
+    "lpips_orig_N60": 0.2439788281917572,
+    "lpips_edit_N60": 0.250404953956604
+  },
+  {
+    "slot": 78,
+    "edit_type": "Outpainting (extend canvas beyond boundaries)",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.20082607865333557,
+    "lpips_edit_N10": 0.20654791593551636,
+    "lpips_orig_N20": 0.21589651703834534,
+    "lpips_edit_N20": 0.21847085654735565,
+    "lpips_orig_N40": 0.24004283547401428,
+    "lpips_edit_N40": 0.23915919661521912,
+    "lpips_orig_N60": 0.25771981477737427,
+    "lpips_edit_N60": 0.25476884841918945
+  },
+  {
+    "slot": 80,
+    "edit_type": "Add new scene context/background",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.30746912956237793,
+    "lpips_edit_N10": 0.25588458776474,
+    "lpips_orig_N20": 0.32672983407974243,
+    "lpips_edit_N20": 0.27466654777526855,
+    "lpips_orig_N40": 0.35552072525024414,
+    "lpips_edit_N40": 0.3026776909828186,
+    "lpips_orig_N60": 0.37599101662635803,
+    "lpips_edit_N60": 0.3259452283382416
+  },
+  {
+    "slot": 81,
+    "edit_type": "Apply seasonal transformation (summer \u2194 winter)",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.24337878823280334,
+    "lpips_edit_N10": 0.22882172465324402,
+    "lpips_orig_N20": 0.26352357864379883,
+    "lpips_edit_N20": 0.23942050337791443,
+    "lpips_orig_N40": 0.29215678572654724,
+    "lpips_edit_N40": 0.25895053148269653,
+    "lpips_orig_N60": 0.31337618827819824,
+    "lpips_edit_N60": 0.27384650707244873
+  },
+  {
+    "slot": 83,
+    "edit_type": "Add a new object to the scene",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.3054407238960266,
+    "lpips_edit_N10": 0.2935844957828522,
+    "lpips_orig_N20": 0.32268020510673523,
+    "lpips_edit_N20": 0.3096582293510437,
+    "lpips_orig_N40": 0.34754878282546997,
+    "lpips_edit_N40": 0.33727630972862244,
+    "lpips_orig_N60": 0.3652150630950928,
+    "lpips_edit_N60": 0.3562276363372803
+  },
+  {
+    "slot": 84,
+    "edit_type": "Remove an existing object",
+    "size": [
+      864,
+      1184
+    ],
+    "lpips_orig_N10": 0.16320949792861938,
+    "lpips_edit_N10": 0.17846067249774933,
+    "lpips_orig_N20": 0.17227715253829956,
+    "lpips_edit_N20": 0.1847715675830841,
+    "lpips_orig_N40": 0.18782813847064972,
+    "lpips_edit_N40": 0.19759626686573029,
+    "lpips_orig_N60": 0.1971520632505417,
+    "lpips_edit_N60": 0.20875635743141174
+  },
+  {
+    "slot": 85,
+    "edit_type": "Change overall color tone (warm \u2194 cool)",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.2226725071668625,
+    "lpips_edit_N10": 0.25106436014175415,
+    "lpips_orig_N20": 0.23825088143348694,
+    "lpips_edit_N20": 0.2658139169216156,
+    "lpips_orig_N40": 0.2641218900680542,
+    "lpips_edit_N40": 0.2906705141067505,
+    "lpips_orig_N60": 0.282378613948822,
+    "lpips_edit_N60": 0.30836784839630127
+  },
+  {
+    "slot": 86,
+    "edit_type": "Add film grain or vintage filter",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.21598437428474426,
+    "lpips_edit_N10": 0.27515745162963867,
+    "lpips_orig_N20": 0.2302100956439972,
+    "lpips_edit_N20": 0.28386181592941284,
+    "lpips_orig_N40": 0.2515738904476166,
+    "lpips_edit_N40": 0.3048308491706848,
+    "lpips_orig_N60": 0.26253047585487366,
+    "lpips_edit_N60": 0.3202745020389557
+  },
+  {
+    "slot": 87,
+    "edit_type": "Apply seasonal transformation (summer \u2194 winter)",
+    "size": [
+      1344,
+      768
+    ],
+    "lpips_orig_N10": 0.2273494452238083,
+    "lpips_edit_N10": 0.17625239491462708,
+    "lpips_orig_N20": 0.23623062670230865,
+    "lpips_edit_N20": 0.18586884438991547,
+    "lpips_orig_N40": 0.25529488921165466,
+    "lpips_edit_N40": 0.20415489375591278,
+    "lpips_orig_N60": 0.2665567994117737,
+    "lpips_edit_N60": 0.2165784239768982
+  },
+  {
+    "slot": 88,
+    "edit_type": "Photo to cartoon/sketch/comic",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.18433620035648346,
+    "lpips_edit_N10": 0.09119054675102234,
+    "lpips_orig_N20": 0.19853605329990387,
+    "lpips_edit_N20": 0.09671515971422195,
+    "lpips_orig_N40": 0.22192919254302979,
+    "lpips_edit_N40": 0.1070118397474289,
+    "lpips_orig_N60": 0.23819953203201294,
+    "lpips_edit_N60": 0.11462301760911942
+  },
+  {
+    "slot": 92,
+    "edit_type": "Add a new object to the scene",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.3092297911643982,
+    "lpips_edit_N10": 0.30710554122924805,
+    "lpips_orig_N20": 0.31969794631004333,
+    "lpips_edit_N20": 0.32285305857658386,
+    "lpips_orig_N40": 0.33996981382369995,
+    "lpips_edit_N40": 0.3503926396369934,
+    "lpips_orig_N60": 0.35148268938064575,
+    "lpips_edit_N60": 0.36946409940719604
+  },
+  {
+    "slot": 93,
+    "edit_type": "Outpainting (extend canvas beyond boundaries)",
+    "size": [
+      832,
+      1248
+    ],
+    "lpips_orig_N10": 0.2157926857471466,
+    "lpips_edit_N10": 0.23028090596199036,
+    "lpips_orig_N20": 0.22701281309127808,
+    "lpips_edit_N20": 0.24520203471183777,
+    "lpips_orig_N40": 0.24834926426410675,
+    "lpips_edit_N40": 0.2701354920864105,
+    "lpips_orig_N60": 0.2600807547569275,
+    "lpips_edit_N60": 0.2878611385822296
+  },
+  {
+    "slot": 94,
+    "edit_type": "Change weather conditions (sunny/rainy/snowy)",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.3474285900592804,
+    "lpips_edit_N10": 0.2945157289505005,
+    "lpips_orig_N20": 0.36614471673965454,
+    "lpips_edit_N20": 0.31056851148605347,
+    "lpips_orig_N40": 0.3954300880432129,
+    "lpips_edit_N40": 0.33995524048805237,
+    "lpips_orig_N60": 0.41599130630493164,
+    "lpips_edit_N60": 0.3581097424030304
+  },
+  {
+    "slot": 95,
+    "edit_type": "Modern \u2194 historical style/look",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.17668797075748444,
+    "lpips_edit_N10": 0.2624911069869995,
+    "lpips_orig_N20": 0.1944645345211029,
+    "lpips_edit_N20": 0.27539536356925964,
+    "lpips_orig_N40": 0.2244124412536621,
+    "lpips_edit_N40": 0.3045407831668854,
+    "lpips_orig_N60": 0.24261046946048737,
+    "lpips_edit_N60": 0.32489103078842163
+  },
+  {
+    "slot": 97,
+    "edit_type": "Photo to cartoon/sketch/comic",
+    "size": [
+      832,
+      1248
+    ],
+    "lpips_orig_N10": 0.2032517045736313,
+    "lpips_edit_N10": 0.13233311474323273,
+    "lpips_orig_N20": 0.22230561077594757,
+    "lpips_edit_N20": 0.13908903300762177,
+    "lpips_orig_N40": 0.2531377673149109,
+    "lpips_edit_N40": 0.1524062156677246,
+    "lpips_orig_N60": 0.2735385000705719,
+    "lpips_edit_N60": 0.16196300089359283
+  },
+  {
+    "slot": 98,
+    "edit_type": "Add film grain or vintage filter",
+    "size": [
+      864,
+      1184
+    ],
+    "lpips_orig_N10": 0.30708053708076477,
+    "lpips_edit_N10": 0.26946520805358887,
+    "lpips_orig_N20": 0.32610586285591125,
+    "lpips_edit_N20": 0.2873826026916504,
+    "lpips_orig_N40": 0.3562364876270294,
+    "lpips_edit_N40": 0.3205668330192566,
+    "lpips_orig_N60": 0.37563350796699524,
+    "lpips_edit_N60": 0.34189459681510925
+  },
+  {
+    "slot": 99,
+    "edit_type": "Photo to cartoon/sketch/comic",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.37545332312583923,
+    "lpips_edit_N10": 0.2863236665725708,
+    "lpips_orig_N20": 0.3892379701137543,
+    "lpips_edit_N20": 0.2970513105392456,
+    "lpips_orig_N40": 0.41407036781311035,
+    "lpips_edit_N40": 0.3155745267868042,
+    "lpips_orig_N60": 0.43318021297454834,
+    "lpips_edit_N60": 0.32827654480934143
+  },
+  {
+    "slot": 100,
+    "edit_type": "Adjust global lighting (golden hour/fluorescent)",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.1996632069349289,
+    "lpips_edit_N10": 0.17831070721149445,
+    "lpips_orig_N20": 0.20675581693649292,
+    "lpips_edit_N20": 0.1867106556892395,
+    "lpips_orig_N40": 0.22059430181980133,
+    "lpips_edit_N40": 0.20289474725723267,
+    "lpips_orig_N60": 0.23131820559501648,
+    "lpips_edit_N60": 0.21427308022975922
+  },
+  {
+    "slot": 102,
+    "edit_type": "Add a new object to the scene",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.20237909257411957,
+    "lpips_edit_N10": 0.23847715556621552,
+    "lpips_orig_N20": 0.2131807506084442,
+    "lpips_edit_N20": 0.2504158318042755,
+    "lpips_orig_N40": 0.2318389117717743,
+    "lpips_edit_N40": 0.27243155241012573,
+    "lpips_orig_N60": 0.24405550956726074,
+    "lpips_edit_N60": 0.28643089532852173
+  },
+  {
+    "slot": 103,
+    "edit_type": "Add a new object to the scene",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.2348017394542694,
+    "lpips_edit_N10": 0.21738864481449127,
+    "lpips_orig_N20": 0.24977603554725647,
+    "lpips_edit_N20": 0.23077404499053955,
+    "lpips_orig_N40": 0.2728593945503235,
+    "lpips_edit_N40": 0.2543226480484009,
+    "lpips_orig_N60": 0.28971272706985474,
+    "lpips_edit_N60": 0.2704637050628662
+  },
+  {
+    "slot": 108,
+    "edit_type": "Remove an existing object",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.24182380735874176,
+    "lpips_edit_N10": 0.1754753142595291,
+    "lpips_orig_N20": 0.24693866074085236,
+    "lpips_edit_N20": 0.18221236765384674,
+    "lpips_orig_N40": 0.26212239265441895,
+    "lpips_edit_N40": 0.19922968745231628,
+    "lpips_orig_N60": 0.27187952399253845,
+    "lpips_edit_N60": 0.20944125950336456
+  },
+  {
+    "slot": 109,
+    "edit_type": "Add a new object to the scene",
+    "size": [
+      832,
+      1248
+    ],
+    "lpips_orig_N10": 0.25586020946502686,
+    "lpips_edit_N10": 0.23457232117652893,
+    "lpips_orig_N20": 0.265729159116745,
+    "lpips_edit_N20": 0.24845045804977417,
+    "lpips_orig_N40": 0.28913718461990356,
+    "lpips_edit_N40": 0.2749021351337433,
+    "lpips_orig_N60": 0.3035973012447357,
+    "lpips_edit_N60": 0.2948128283023834
+  },
+  {
+    "slot": 110,
+    "edit_type": "Add film grain or vintage filter",
+    "size": [
+      864,
+      1184
+    ],
+    "lpips_orig_N10": 0.2973848283290863,
+    "lpips_edit_N10": 0.3055513799190521,
+    "lpips_orig_N20": 0.31494495272636414,
+    "lpips_edit_N20": 0.31573429703712463,
+    "lpips_orig_N40": 0.3436014950275421,
+    "lpips_edit_N40": 0.3383564054965973,
+    "lpips_orig_N60": 0.3633072078227997,
+    "lpips_edit_N60": 0.3532739579677582
+  },
+  {
+    "slot": 111,
+    "edit_type": "Modern \u2194 historical style/look",
+    "size": [
+      864,
+      1184
+    ],
+    "lpips_orig_N10": 0.257575124502182,
+    "lpips_edit_N10": 0.3398570120334625,
+    "lpips_orig_N20": 0.27633315324783325,
+    "lpips_edit_N20": 0.35622528195381165,
+    "lpips_orig_N40": 0.3030623197555542,
+    "lpips_edit_N40": 0.3862268924713135,
+    "lpips_orig_N60": 0.3234086334705353,
+    "lpips_edit_N60": 0.4067366123199463
+  },
+  {
+    "slot": 112,
+    "edit_type": "Change overall color tone (warm \u2194 cool)",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.24102208018302917,
+    "lpips_edit_N10": 0.27601954340934753,
+    "lpips_orig_N20": 0.2583056688308716,
+    "lpips_edit_N20": 0.28910690546035767,
+    "lpips_orig_N40": 0.28509679436683655,
+    "lpips_edit_N40": 0.3112788200378418,
+    "lpips_orig_N60": 0.3028871417045593,
+    "lpips_edit_N60": 0.322670578956604
+  },
+  {
+    "slot": 114,
+    "edit_type": "Adjust global lighting (golden hour/fluorescent)",
+    "size": [
+      832,
+      1248
+    ],
+    "lpips_orig_N10": 0.29109328985214233,
+    "lpips_edit_N10": 0.21440133452415466,
+    "lpips_orig_N20": 0.30630117654800415,
+    "lpips_edit_N20": 0.22616441547870636,
+    "lpips_orig_N40": 0.3302868604660034,
+    "lpips_edit_N40": 0.24751824140548706,
+    "lpips_orig_N60": 0.3470388650894165,
+    "lpips_edit_N60": 0.2633718252182007
+  },
+  {
+    "slot": 117,
+    "edit_type": "Change weather conditions (sunny/rainy/snowy)",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.30318567156791687,
+    "lpips_edit_N10": 0.2536803185939789,
+    "lpips_orig_N20": 0.31575292348861694,
+    "lpips_edit_N20": 0.2623256742954254,
+    "lpips_orig_N40": 0.33915460109710693,
+    "lpips_edit_N40": 0.28018635511398315,
+    "lpips_orig_N60": 0.35475146770477295,
+    "lpips_edit_N60": 0.2913728952407837
+  },
+  {
+    "slot": 118,
+    "edit_type": "Zoom in",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.25687935948371887,
+    "lpips_edit_N10": 0.30665624141693115,
+    "lpips_orig_N20": 0.2747085988521576,
+    "lpips_edit_N20": 0.3221360445022583,
+    "lpips_orig_N40": 0.3051827549934387,
+    "lpips_edit_N40": 0.35041287541389465,
+    "lpips_orig_N60": 0.32738766074180603,
+    "lpips_edit_N60": 0.36856508255004883
+  },
+  {
+    "slot": 120,
+    "edit_type": "Change overall color tone (warm \u2194 cool)",
+    "size": [
+      1344,
+      768
+    ],
+    "lpips_orig_N10": 0.1903967708349228,
+    "lpips_edit_N10": 0.19314584136009216,
+    "lpips_orig_N20": 0.20754803717136383,
+    "lpips_edit_N20": 0.20674985647201538,
+    "lpips_orig_N40": 0.22984489798545837,
+    "lpips_edit_N40": 0.2302558422088623,
+    "lpips_orig_N60": 0.24493464827537537,
+    "lpips_edit_N60": 0.24919989705085754
+  },
+  {
+    "slot": 122,
+    "edit_type": "Modern \u2194 historical style/look",
+    "size": [
+      832,
+      1248
+    ],
+    "lpips_orig_N10": 0.28883790969848633,
+    "lpips_edit_N10": 0.34614554047584534,
+    "lpips_orig_N20": 0.3084166646003723,
+    "lpips_edit_N20": 0.36478152871131897,
+    "lpips_orig_N40": 0.3407134711742401,
+    "lpips_edit_N40": 0.3935244679450989,
+    "lpips_orig_N60": 0.3626321852207184,
+    "lpips_edit_N60": 0.410940945148468
+  },
+  {
+    "slot": 124,
+    "edit_type": "Replace one object category with another",
+    "size": [
+      864,
+      1184
+    ],
+    "lpips_orig_N10": 0.28705427050590515,
+    "lpips_edit_N10": 0.2762775719165802,
+    "lpips_orig_N20": 0.30321362614631653,
+    "lpips_edit_N20": 0.287079393863678,
+    "lpips_orig_N40": 0.3302195072174072,
+    "lpips_edit_N40": 0.3079124689102173,
+    "lpips_orig_N60": 0.3502684235572815,
+    "lpips_edit_N60": 0.3216688632965088
+  },
+  {
+    "slot": 126,
+    "edit_type": "Change overall color tone (warm \u2194 cool)",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.1975930631160736,
+    "lpips_edit_N10": 0.22697731852531433,
+    "lpips_orig_N20": 0.21528269350528717,
+    "lpips_edit_N20": 0.2423926293849945,
+    "lpips_orig_N40": 0.24252617359161377,
+    "lpips_edit_N40": 0.2671123147010803,
+    "lpips_orig_N60": 0.2612299919128418,
+    "lpips_edit_N60": 0.28545141220092773
+  },
+  {
+    "slot": 128,
+    "edit_type": "Replace one object category with another",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.20566542446613312,
+    "lpips_edit_N10": 0.19002997875213623,
+    "lpips_orig_N20": 0.21458369493484497,
+    "lpips_edit_N20": 0.1985473781824112,
+    "lpips_orig_N40": 0.23224103450775146,
+    "lpips_edit_N40": 0.21451757848262787,
+    "lpips_orig_N60": 0.2441646307706833,
+    "lpips_edit_N60": 0.22539660334587097
+  },
+  {
+    "slot": 130,
+    "edit_type": "Change an object's attribute (e.g., color/material)",
+    "size": [
+      832,
+      1248
+    ],
+    "lpips_orig_N10": 0.16510994732379913,
+    "lpips_edit_N10": 0.19045951962471008,
+    "lpips_orig_N20": 0.17788970470428467,
+    "lpips_edit_N20": 0.2036491334438324,
+    "lpips_orig_N40": 0.1954694241285324,
+    "lpips_edit_N40": 0.22465823590755463,
+    "lpips_orig_N60": 0.20880888402462006,
+    "lpips_edit_N60": 0.2393265664577484
+  },
+  {
+    "slot": 132,
+    "edit_type": "Change the size/shape/orientation of an object",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.21006198227405548,
+    "lpips_edit_N10": 0.20458871126174927,
+    "lpips_orig_N20": 0.21949368715286255,
+    "lpips_edit_N20": 0.21639208495616913,
+    "lpips_orig_N40": 0.23734886944293976,
+    "lpips_edit_N40": 0.23694610595703125,
+    "lpips_orig_N60": 0.24551445245742798,
+    "lpips_edit_N60": 0.25048455595970154
+  },
+  {
+    "slot": 133,
+    "edit_type": "Adjust global lighting (golden hour/fluorescent)",
+    "size": [
+      832,
+      1248
+    ],
+    "lpips_orig_N10": 0.21488454937934875,
+    "lpips_edit_N10": 0.20810846984386444,
+    "lpips_orig_N20": 0.2255309820175171,
+    "lpips_edit_N20": 0.2180929034948349,
+    "lpips_orig_N40": 0.24619261920452118,
+    "lpips_edit_N40": 0.23906855285167694,
+    "lpips_orig_N60": 0.2604020833969116,
+    "lpips_edit_N60": 0.2507781982421875
+  },
+  {
+    "slot": 134,
+    "edit_type": "Remove an existing object",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.2675558030605316,
+    "lpips_edit_N10": 0.2553914785385132,
+    "lpips_orig_N20": 0.2874690294265747,
+    "lpips_edit_N20": 0.26816368103027344,
+    "lpips_orig_N40": 0.31357890367507935,
+    "lpips_edit_N40": 0.2907347083091736,
+    "lpips_orig_N60": 0.33010679483413696,
+    "lpips_edit_N60": 0.30719488859176636
+  },
+  {
+    "slot": 135,
+    "edit_type": "Apply seasonal transformation (summer \u2194 winter)",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.18202608823776245,
+    "lpips_edit_N10": 0.2180945873260498,
+    "lpips_orig_N20": 0.19717110693454742,
+    "lpips_edit_N20": 0.23140466213226318,
+    "lpips_orig_N40": 0.2226916253566742,
+    "lpips_edit_N40": 0.25456660985946655,
+    "lpips_orig_N60": 0.23938798904418945,
+    "lpips_edit_N60": 0.2712757885456085
+  },
+  {
+    "slot": 136,
+    "edit_type": "Photo to cartoon/sketch/comic",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.17383155226707458,
+    "lpips_edit_N10": 0.08526220917701721,
+    "lpips_orig_N20": 0.18718262016773224,
+    "lpips_edit_N20": 0.08961538970470428,
+    "lpips_orig_N40": 0.20932278037071228,
+    "lpips_edit_N40": 0.0987662598490715,
+    "lpips_orig_N60": 0.22756215929985046,
+    "lpips_edit_N60": 0.1051875501871109
+  },
+  {
+    "slot": 138,
+    "edit_type": "Remove an existing object",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.2987692356109619,
+    "lpips_edit_N10": 0.2030542492866516,
+    "lpips_orig_N20": 0.31200164556503296,
+    "lpips_edit_N20": 0.21685311198234558,
+    "lpips_orig_N40": 0.33447152376174927,
+    "lpips_edit_N40": 0.2388017624616623,
+    "lpips_orig_N60": 0.35069572925567627,
+    "lpips_edit_N60": 0.2550446093082428
+  },
+  {
+    "slot": 139,
+    "edit_type": "Funko-Pop\u2013style toy figure of the person",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.25729531049728394,
+    "lpips_edit_N10": 0.2352837175130844,
+    "lpips_orig_N20": 0.27762141823768616,
+    "lpips_edit_N20": 0.25024813413619995,
+    "lpips_orig_N40": 0.3075253367424011,
+    "lpips_edit_N40": 0.274478554725647,
+    "lpips_orig_N60": 0.3315325379371643,
+    "lpips_edit_N60": 0.29113632440567017
+  },
+  {
+    "slot": 140,
+    "edit_type": "Change font style or color of visible text if there is text",
+    "size": [
+      768,
+      1344
+    ],
+    "lpips_orig_N10": 0.3153635561466217,
+    "lpips_edit_N10": 0.31164073944091797,
+    "lpips_orig_N20": 0.32954782247543335,
+    "lpips_edit_N20": 0.3283191919326782,
+    "lpips_orig_N40": 0.3530002236366272,
+    "lpips_edit_N40": 0.3545446991920471,
+    "lpips_orig_N60": 0.36860162019729614,
+    "lpips_edit_N60": 0.37311118841171265
+  },
+  {
+    "slot": 142,
+    "edit_type": "Clothing edit (change color/outfit)",
+    "size": [
+      864,
+      1184
+    ],
+    "lpips_orig_N10": 0.22052296996116638,
+    "lpips_edit_N10": 0.20631538331508636,
+    "lpips_orig_N20": 0.23055240511894226,
+    "lpips_edit_N20": 0.2175692617893219,
+    "lpips_orig_N40": 0.24963852763175964,
+    "lpips_edit_N40": 0.2378932535648346,
+    "lpips_orig_N60": 0.2623520493507385,
+    "lpips_edit_N60": 0.2528385519981384
+  },
+  {
+    "slot": 144,
+    "edit_type": "Add film grain or vintage filter",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.29574042558670044,
+    "lpips_edit_N10": 0.31603315472602844,
+    "lpips_orig_N20": 0.31495606899261475,
+    "lpips_edit_N20": 0.3313007056713104,
+    "lpips_orig_N40": 0.34322497248649597,
+    "lpips_edit_N40": 0.35713475942611694,
+    "lpips_orig_N60": 0.3645547926425934,
+    "lpips_edit_N60": 0.37641745805740356
+  },
+  {
+    "slot": 145,
+    "edit_type": "Change weather conditions (sunny/rainy/snowy)",
+    "size": [
+      832,
+      1248
+    ],
+    "lpips_orig_N10": 0.3152289390563965,
+    "lpips_edit_N10": 0.1543266475200653,
+    "lpips_orig_N20": 0.3257448673248291,
+    "lpips_edit_N20": 0.16488197445869446,
+    "lpips_orig_N40": 0.3444114327430725,
+    "lpips_edit_N40": 0.1835475116968155,
+    "lpips_orig_N60": 0.3555489778518677,
+    "lpips_edit_N60": 0.19481408596038818
+  },
+  {
+    "slot": 146,
+    "edit_type": "Change an object's attribute (e.g., color/material)",
+    "size": [
+      832,
+      1248
+    ],
+    "lpips_orig_N10": 0.17237024009227753,
+    "lpips_edit_N10": 0.12892737984657288,
+    "lpips_orig_N20": 0.18565604090690613,
+    "lpips_edit_N20": 0.1361701637506485,
+    "lpips_orig_N40": 0.2050311416387558,
+    "lpips_edit_N40": 0.15390580892562866,
+    "lpips_orig_N60": 0.21879935264587402,
+    "lpips_edit_N60": 0.16608232259750366
+  },
+  {
+    "slot": 147,
+    "edit_type": "Change weather conditions (sunny/rainy/snowy)",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.26508548855781555,
+    "lpips_edit_N10": 0.2351084202528,
+    "lpips_orig_N20": 0.27320948243141174,
+    "lpips_edit_N20": 0.24632908403873444,
+    "lpips_orig_N40": 0.2884650230407715,
+    "lpips_edit_N40": 0.26958540081977844,
+    "lpips_orig_N60": 0.2995747923851013,
+    "lpips_edit_N60": 0.2878016531467438
+  },
+  {
+    "slot": 149,
+    "edit_type": "Sticker-ify the person with bold outline and white border",
+    "size": [
+      832,
+      1248
+    ],
+    "lpips_orig_N10": 0.29945769906044006,
+    "lpips_edit_N10": 0.2765681743621826,
+    "lpips_orig_N20": 0.3131857216358185,
+    "lpips_edit_N20": 0.290981650352478,
+    "lpips_orig_N40": 0.3372936546802521,
+    "lpips_edit_N40": 0.31691616773605347,
+    "lpips_orig_N60": 0.35312244296073914,
+    "lpips_edit_N60": 0.33534377813339233
+  },
+  {
+    "slot": 151,
+    "edit_type": "Strong artistic style transfer (e.g., Van Gogh/anime/etc.)",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.18467670679092407,
+    "lpips_edit_N10": 0.3231986165046692,
+    "lpips_orig_N20": 0.20239706337451935,
+    "lpips_edit_N20": 0.3432689309120178,
+    "lpips_orig_N40": 0.2322351336479187,
+    "lpips_edit_N40": 0.37596622109413147,
+    "lpips_orig_N60": 0.2547346353530884,
+    "lpips_edit_N60": 0.4010263979434967
+  },
+  {
+    "slot": 153,
+    "edit_type": "Modern \u2194 historical style/look",
+    "size": [
+      1024,
+      1024
+    ],
+    "lpips_orig_N10": 0.27650749683380127,
+    "lpips_edit_N10": 0.30022889375686646,
+    "lpips_orig_N20": 0.2971438467502594,
+    "lpips_edit_N20": 0.32024824619293213,
+    "lpips_orig_N40": 0.32708579301834106,
+    "lpips_edit_N40": 0.3522798418998718,
+    "lpips_orig_N60": 0.34867992997169495,
+    "lpips_edit_N60": 0.3735208511352539
+  },
+  {
+    "slot": 155,
+    "edit_type": "Change weather conditions (sunny/rainy/snowy)",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.25138527154922485,
+    "lpips_edit_N10": 0.26653680205345154,
+    "lpips_orig_N20": 0.2679157257080078,
+    "lpips_edit_N20": 0.2825707793235779,
+    "lpips_orig_N40": 0.2930552065372467,
+    "lpips_edit_N40": 0.30984702706336975,
+    "lpips_orig_N60": 0.30956098437309265,
+    "lpips_edit_N60": 0.32908907532691956
+  },
+  {
+    "slot": 157,
+    "edit_type": "Change weather conditions (sunny/rainy/snowy)",
+    "size": [
+      864,
+      1184
+    ],
+    "lpips_orig_N10": 0.31181517243385315,
+    "lpips_edit_N10": 0.32347139716148376,
+    "lpips_orig_N20": 0.3301316797733307,
+    "lpips_edit_N20": 0.34288907051086426,
+    "lpips_orig_N40": 0.3600224256515503,
+    "lpips_edit_N40": 0.3741321563720703,
+    "lpips_orig_N60": 0.38140422105789185,
+    "lpips_edit_N60": 0.3969278931617737
+  },
+  {
+    "slot": 159,
+    "edit_type": "Change weather conditions (sunny/rainy/snowy)",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.26621145009994507,
+    "lpips_edit_N10": 0.24237951636314392,
+    "lpips_orig_N20": 0.28296712040901184,
+    "lpips_edit_N20": 0.2567472457885742,
+    "lpips_orig_N40": 0.3140498995780945,
+    "lpips_edit_N40": 0.2814100682735443,
+    "lpips_orig_N60": 0.3334391117095947,
+    "lpips_edit_N60": 0.29976993799209595
+  },
+  {
+    "slot": 161,
+    "edit_type": "Replace one object category with another",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.24420148134231567,
+    "lpips_edit_N10": 0.1964295357465744,
+    "lpips_orig_N20": 0.25902584195137024,
+    "lpips_edit_N20": 0.2159019410610199,
+    "lpips_orig_N40": 0.28404974937438965,
+    "lpips_edit_N40": 0.24628356099128723,
+    "lpips_orig_N60": 0.3003242313861847,
+    "lpips_edit_N60": 0.2664918303489685
+  },
+  {
+    "slot": 164,
+    "edit_type": "Convert person to Western comic cel-shaded style",
+    "size": [
+      1184,
+      864
+    ],
+    "lpips_orig_N10": 0.2699423134326935,
+    "lpips_edit_N10": 0.2798275947570801,
+    "lpips_orig_N20": 0.28119325637817383,
+    "lpips_edit_N20": 0.28464317321777344,
+    "lpips_orig_N40": 0.30254679918289185,
+    "lpips_edit_N40": 0.30190309882164,
+    "lpips_orig_N60": 0.31581905484199524,
+    "lpips_edit_N60": 0.3131921887397766
+  },
+  {
+    "slot": 165,
+    "edit_type": "Change overall color tone (warm \u2194 cool)",
+    "size": [
+      1248,
+      832
+    ],
+    "lpips_orig_N10": 0.25480616092681885,
+    "lpips_edit_N10": 0.2885158956050873,
+    "lpips_orig_N20": 0.27126163244247437,
+    "lpips_edit_N20": 0.3039429187774658,
+    "lpips_orig_N40": 0.29636821150779724,
+    "lpips_edit_N40": 0.32975417375564575,
+    "lpips_orig_N60": 0.3115466237068176,
+    "lpips_edit_N60": 0.351683646440506
+  }
+]
