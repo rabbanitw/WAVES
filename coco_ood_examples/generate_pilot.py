@@ -27,7 +27,7 @@ load_dotenv("/home/trabbani/WAVES/.env")
 
 COCO_IMG_DIR = "/mnt/data/coco_val2017/val2017"
 COCO_INSTANCES = "/mnt/data/coco_val2017/annotations/instances_val2017.json"
-OUT_DIR = Path("/home/trabbani/WAVES/coco_ood_examples")
+OUT_DIR = Path("/home/trabbani/WAVES/coco_ood_examples/v2")
 ORIG_DIR = OUT_DIR / "orig"
 EDIT_DIR = OUT_DIR / "edit"
 META = OUT_DIR / "metadata.jsonl"
@@ -41,13 +41,17 @@ SEED = 42
 ORIG_DIR.mkdir(parents=True, exist_ok=True)
 EDIT_DIR.mkdir(parents=True, exist_ok=True)
 
-VISION_PROMPT = """You are looking at a single photograph. Suggest ONE realistic, photoreal edit to apply to it.
+VISION_PROMPT = """You are looking at a single photograph. Suggest ONE realistic, photoreal edit to apply to it, written in the verbose art-direction style used by professional image-editing briefs.
 
 Constraints:
 - The edit must reference specific content visible in this image (an object, the lighting, the weather, a color you can see, a region of the frame).
 - The edit must be feasible by a state-of-the-art image-editor (weather change, object add/remove/replace, lighting shift, color tone, zoom, outpainting, attribute change).
-- The result should remain photoreal -- NOT stylized, NOT anime, NOT painting.
-- Output ONLY the imperative edit instruction (1-3 sentences). No preamble, no "here is" or "I suggest". Just the instruction itself."""
+- The result must remain photoreal -- NOT stylized, NOT anime, NOT painting.
+- Aim for ~40-60 words across 3-6 clauses. Include:
+  * material / texture specifics (e.g. "rich mahogany wood tone with a satin finish")
+  * color and lighting details (specific colors, light direction, contrast goals)
+  * one or more "while preserving X" or "ensuring Y" clauses for elements that should stay unchanged
+- Output ONLY the imperative edit instruction itself, as a single dense run-on sentence or 2-3 sentences. No preamble, no "here is", no "I suggest"."""
 
 
 def load_diverse_image_ids():
