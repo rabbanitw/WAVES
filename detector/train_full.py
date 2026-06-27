@@ -47,9 +47,25 @@ from models import BinaryClassifier, count_params
 PHOTOREAL_ROOT = "/mnt/data/pico-banana-400k/photoreal_v2"
 PHOTOREAL_META = "/mnt/data/pico-banana-400k/photoreal_v2/metadata.jsonl"
 OOD_DIR = "/mnt/data/synthid_ood/jpg384"
+OOD2_DIR = "/mnt/data/coco_ood_v2_500/edit"  # photoreal Gemini edits, true OOD
+COCO_NAT_DIR = "/mnt/data/coco_ood_v2_500/orig"  # COCO originals = OOD natural (label=0)
+
+
+def split_80_20(items, seed=17):
+    """Plain 80/20 train/test split by slot. No val set — we score
+    checkpoint quality directly on the in-dist test + OOD eval sets."""
+    items = sorted(items, key=lambda d: d["slot"])
+    rng = random.Random(seed)
+    shuffled = items[:]
+    rng.shuffle(shuffled)
+    n_test = len(shuffled) // 5
+    test = shuffled[:n_test]
+    train = shuffled[n_test:]
+    return train, test
 
 
 def split_75_25(items, seed=17):
+    """Kept for backward-compat with earlier runs (returns train, val, test)."""
     items = sorted(items, key=lambda d: d["slot"])
     rng = random.Random(seed)
     shuffled = items[:]
@@ -57,7 +73,7 @@ def split_75_25(items, seed=17):
     n_test = len(shuffled) // 4
     test = shuffled[:n_test]
     train_all = shuffled[n_test:]
-    n_val = max(500, len(train_all) // 20)  # 5 % of train, min 500
+    n_val = max(500, len(train_all) // 20)
     val = train_all[:n_val]
     train = train_all[n_val:]
     return train, val, test
@@ -96,15 +112,16 @@ class AugmentedDataset(Dataset):
 
 
 class OODSingle(Dataset):
-    """Directory-of-JPEGs dataset, all label=1. Uses the same matched-codec
-    preprocessing as PicoBananaSingle so the model sees identically-shaped
-    inputs at eval."""
+    """Directory-of-JPEGs dataset. Label can be 0 (natural) or 1 (synthetic).
+    Uses the same matched-codec preprocessing as PicoBananaSingle so the
+    model sees identically-shaped inputs at eval."""
 
-    def __init__(self, dir_, image_size=256, jpeg_q=95):
+    def __init__(self, dir_, image_size=256, jpeg_q=95, label=1):
         self.paths = sorted(p for p in os.listdir(dir_) if p.endswith(".jpg"))
         self.dir = dir_
         self.image_size = image_size
         self.jpeg_q = jpeg_q
+        self.label = label
 
     def __len__(self):
         return len(self.paths)
@@ -112,7 +129,7 @@ class OODSingle(Dataset):
     def __getitem__(self, k):
         path = os.path.join(self.dir, self.paths[k])
         img = _load_and_match_codec(path, self.image_size, self.jpeg_q)
-        return {"img": to_tensor_neg1_1(img), "label": 1, "fname": self.paths[k]}
+        return {"img": to_tensor_neg1_1(img), "label": self.label, "fname": self.paths[k]}
 
 
 @torch.no_grad()
@@ -188,28 +205,31 @@ def main():
 
     items = load_metadata(cfg.metadata, photoreal_only=cfg.photoreal_only)
     print(f"loaded {len(items)} photoreal_v2 pairs", flush=True)
-    train_items, val_items, test_items = split_75_25(items, seed=args.seed)
-    print(f"splits (pairs): train={len(train_items)}  val={len(val_items)}  "
-          f"test={len(test_items)}", flush=True)
+    train_items, test_items = split_80_20(items, seed=args.seed)
+    print(f"splits (pairs): train={len(train_items)}  test={len(test_items)}  "
+          f"(no val set)", flush=True)
 
     train_ds_raw = PicoBananaSingle(train_items, cfg)
     train_ds = AugmentedDataset(train_ds_raw, cfg.image_size) if args.aug else train_ds_raw
-    val_ds = PicoBananaSingle(val_items, cfg)
     test_ds = PicoBananaSingle(test_items, cfg)
-    ood_ds = OODSingle(OOD_DIR, image_size=cfg.image_size, jpeg_q=cfg.jpeg_q)
-    print(f"single examples: train={len(train_ds)}  val={len(val_ds)}  "
-          f"test={len(test_ds)}  ood={len(ood_ds)}  aug={args.aug}", flush=True)
+    ood_ds = OODSingle(OOD_DIR, image_size=cfg.image_size, jpeg_q=cfg.jpeg_q, label=1)
+    ood2_ds = OODSingle(OOD2_DIR, image_size=cfg.image_size, jpeg_q=cfg.jpeg_q, label=1)
+    coco_nat_ds = OODSingle(COCO_NAT_DIR, image_size=cfg.image_size, jpeg_q=cfg.jpeg_q, label=0)
+    print(f"single examples: train={len(train_ds)}  test={len(test_ds)}  "
+          f"ood_diffdb={len(ood_ds)}  ood_coco_edit={len(ood2_ds)}  "
+          f"ood_coco_natural={len(coco_nat_ds)}  aug={args.aug}", flush=True)
 
     train_dl = DataLoader(train_ds, batch_size=args.batch, shuffle=True,
                           num_workers=args.workers, pin_memory=True, drop_last=True,
                           persistent_workers=True)
-    val_dl = DataLoader(val_ds, batch_size=args.batch, shuffle=False,
-                        num_workers=args.workers, pin_memory=True,
-                        persistent_workers=True)
     test_dl = DataLoader(test_ds, batch_size=args.batch, shuffle=False,
                          num_workers=args.workers, pin_memory=True)
     ood_dl = DataLoader(ood_ds, batch_size=args.batch, shuffle=False,
                         num_workers=args.workers, pin_memory=True)
+    ood2_dl = DataLoader(ood2_ds, batch_size=args.batch, shuffle=False,
+                         num_workers=args.workers, pin_memory=True)
+    coco_nat_dl = DataLoader(coco_nat_ds, batch_size=args.batch, shuffle=False,
+                             num_workers=args.workers, pin_memory=True)
 
     model = BinaryClassifier(pretrained=True, backbone=args.backbone).to(device)
     print(f"backbone={args.backbone}  params={count_params(model)/1e6:.2f}M", flush=True)
@@ -232,17 +252,18 @@ def main():
     print(f"opt: lr={args.lr}  wd={args.weight_decay}  ls={args.label_smoothing}  "
           f"warmup_steps={warmup_steps}/{total_steps}  aug={args.aug}", flush=True)
 
-    best_val = 0.0
+    best_score = -2.0  # Save best by balanced score = OOD-COCO + (1 - FPR_nat) - 1 = OOD-COCO - FPR_nat
     log_path = os.path.join(args.out_dir, "log.txt")
     flog = open(log_path, "w")
-    flog.write("epoch\tstep\ttrain_loss\tval_acc\tval_loss\ttest_acc\ttest_tpr\ttest_tnr\tood_detect\ttime\n")
+    flog.write("epoch\tstep\ttrain_loss\ttest_acc\ttest_tpr\ttest_tnr\tood_diffdb\tood_coco_edit\tcoco_nat_tnr\tbalanced\ttime\n")
     # Mid-epoch trajectory log
     traj_path = os.path.join(args.out_dir, "trajectory.csv")
     ftraj = None
     if args.eval_every_steps > 0:
         ftraj = open(traj_path, "w")
         ftraj.write("global_step,samples_seen,train_loss_recent,"
-                    "val_acc,test_acc,test_tpr,test_tnr,ood_detect,elapsed_s\n")
+                    "test_acc,test_tpr,test_tnr,ood_diffdb,ood_coco_edit,"
+                    "coco_nat_tnr,balanced,elapsed_s\n")
         ftraj.flush()
     global_step = 0
     t0 = time.time()
@@ -271,51 +292,70 @@ def main():
                       f"loss={loss.item():.4f}  lr={sched.get_last_lr()[0]:.2e}  "
                       f"({el:.0f}s)", flush=True)
             if ftraj is not None and global_step % args.eval_every_steps == 0:
-                vt = evaluate_acc(model, val_dl, device)
                 tt = evaluate_acc(model, test_dl, device)
                 ot = evaluate_acc(model, ood_dl, device)
+                o2 = evaluate_acc(model, ood2_dl, device)
+                cn = evaluate_acc(model, coco_nat_dl, device)  # COCO natural FPR
+                # Balanced score: catch OOD edits AND reject OOD naturals
+                # = ood_coco_edit_TPR + coco_nat_TNR - 1  (Youden's J style, in [-1, +1])
+                bal = o2["tpr"] + cn["tnr"] - 1.0
                 elapsed = time.time() - t0
                 samples_seen = global_step * args.batch
                 ftraj.write(f"{global_step},{samples_seen},"
                             f"{recent_loss/max(1,recent_n):.4f},"
-                            f"{vt['acc']:.4f},{tt['acc']:.4f},"
-                            f"{tt['tpr']:.4f},{tt['tnr']:.4f},"
-                            f"{ot['tpr']:.4f},{elapsed:.0f}\n")
+                            f"{tt['acc']:.4f},{tt['tpr']:.4f},{tt['tnr']:.4f},"
+                            f"{ot['tpr']:.4f},{o2['tpr']:.4f},{cn['tnr']:.4f},"
+                            f"{bal:.4f},{elapsed:.0f}\n")
                 ftraj.flush()
+                if bal > best_score:
+                    best_score = bal
+                    torch.save({
+                        "state_dict": model.state_dict(),
+                        "balanced": bal, "ood_coco": o2["tpr"], "coco_nat_tnr": cn["tnr"],
+                        "step": global_step, "epoch": epoch,
+                        "args": vars(args), "test_id": tt, "test_ood": ot,
+                        "test_ood_coco": o2, "coco_natural": cn,
+                    }, os.path.join(args.out_dir, "best.pt"))
                 print(f"  [TRAJ] step {global_step}  samples={samples_seen}  "
-                      f"val={vt['acc']:.4f}  test={tt['acc']:.4f}  "
-                      f"TPR={tt['tpr']:.4f}  TNR={tt['tnr']:.4f}  "
-                      f"OOD={ot['tpr']:.4f}  ({elapsed:.0f}s)", flush=True)
+                      f"test={tt['acc']:.4f}  TPR={tt['tpr']:.4f}  TNR={tt['tnr']:.4f}  "
+                      f"DiffDB={ot['tpr']:.4f}  COCO-edit={o2['tpr']:.4f}  "
+                      f"COCO-nat-TNR={cn['tnr']:.4f}  bal={bal:+.4f}  "
+                      f"({elapsed:.0f}s)", flush=True)
                 recent_loss, recent_n = 0.0, 0
-        val_m = evaluate_acc(model, val_dl, device)
         test_m = evaluate_acc(model, test_dl, device)
         ood_m = evaluate_acc(model, ood_dl, device)
+        ood2_m = evaluate_acc(model, ood2_dl, device)
+        coconat_m = evaluate_acc(model, coco_nat_dl, device)
+        bal = ood2_m["tpr"] + coconat_m["tnr"] - 1.0
         elapsed = time.time() - t0
         print(f"epoch {epoch:2d}  train_loss={running/n_seen:.4f}  "
-              f"val_acc={val_m['acc']:.4f}  "
-              f"test_acc={test_m['acc']:.4f}  (TPR={test_m['tpr']:.4f}, TNR={test_m['tnr']:.4f})  "
-              f"OOD_detect={ood_m['tpr']:.4f}  ({elapsed:.0f}s)",
+              f"test={test_m['acc']:.4f}  (TPR={test_m['tpr']:.4f}, TNR={test_m['tnr']:.4f})  "
+              f"DiffDB={ood_m['tpr']:.4f}  COCO-edit={ood2_m['tpr']:.4f}  "
+              f"COCO-nat-TNR={coconat_m['tnr']:.4f}  bal={bal:+.4f}  ({elapsed:.0f}s)",
               flush=True)
         flog.write(f"{epoch}\t{(epoch+1)*len(train_dl)}\t{running/n_seen:.4f}\t"
-                   f"{val_m['acc']:.4f}\t{val_m['loss']:.4f}\t"
                    f"{test_m['acc']:.4f}\t{test_m['tpr']:.4f}\t{test_m['tnr']:.4f}\t"
-                   f"{ood_m['tpr']:.4f}\t{elapsed:.0f}\n")
+                   f"{ood_m['tpr']:.4f}\t{ood2_m['tpr']:.4f}\t{coconat_m['tnr']:.4f}\t"
+                   f"{bal:.4f}\t{elapsed:.0f}\n")
         flog.flush()
-        if val_m["acc"] > best_val:
-            best_val = val_m["acc"]
+        if bal > best_score:
+            best_score = bal
             torch.save({
                 "state_dict": model.state_dict(),
-                "val_acc": val_m["acc"], "epoch": epoch, "args": vars(args),
-                "test_id": test_m, "test_ood": ood_m,
+                "balanced": bal, "ood_coco": ood2_m["tpr"], "coco_nat_tnr": coconat_m["tnr"],
+                "epoch": epoch, "args": vars(args),
+                "test_id": test_m, "test_ood": ood_m, "test_ood_coco": ood2_m,
+                "coco_natural": coconat_m,
             }, os.path.join(args.out_dir, "best.pt"))
-            print(f"  -> saved best.pt at val_acc={val_m['acc']:.4f}", flush=True)
+            print(f"  -> saved best.pt at bal={bal:+.4f}", flush=True)
     flog.close()
     if ftraj is not None:
         ftraj.close()
 
     ckpt = torch.load(os.path.join(args.out_dir, "best.pt"), map_location=device)
     model.load_state_dict(ckpt["state_dict"])
-    print(f"\nLoaded best.pt (epoch={ckpt['epoch']} val_acc={ckpt['val_acc']:.4f})", flush=True)
+    sel_metric = "balanced" if "balanced" in ckpt else ("val_acc" if "val_acc" in ckpt else "ood_coco")
+    print(f"\nLoaded best.pt (epoch={ckpt['epoch']} {sel_metric}={ckpt[sel_metric]:+.4f})", flush=True)
 
     print("\n--- in-distribution test ---", flush=True)
     test_m = evaluate_acc(model, test_dl, device)
@@ -323,19 +363,34 @@ def main():
           f"NB-detection (TPR)={test_m['tpr']:.4f}  "
           f"natural-correct-reject (TNR)={test_m['tnr']:.4f}", flush=True)
 
-    print("\n--- OOD synthetic test (all label=1) ---", flush=True)
+    print("\n--- OOD-DiffDB synthetic test (all label=1) ---", flush=True)
     ood_m = evaluate_acc(model, ood_dl, device)
     print(f"  n={ood_m['n']}  OOD-NB-detection rate={ood_m['tpr']:.4f}  "
           f"loss={ood_m['loss']:.4f}", flush=True)
 
+    print("\n--- OOD-COCO photoreal-edit test (all label=1) ---", flush=True)
+    ood2_m = evaluate_acc(model, ood2_dl, device)
+    print(f"  n={ood2_m['n']}  OOD-COCO-edit-detection rate={ood2_m['tpr']:.4f}  "
+          f"loss={ood2_m['loss']:.4f}", flush=True)
+
+    print("\n--- COCO natural correct-rejection test (all label=0) ---", flush=True)
+    coconat_m = evaluate_acc(model, coco_nat_dl, device)
+    print(f"  n={coconat_m['n']}  COCO-natural-correct-reject (TNR)={coconat_m['tnr']:.4f}  "
+          f"FPR={1-coconat_m['tnr']:.4f}  loss={coconat_m['loss']:.4f}", flush=True)
+    bal = ood2_m['tpr'] + coconat_m['tnr'] - 1.0
+    print(f"\n  Balanced score (OOD-COCO + COCO-nat-TNR - 1) = {bal:+.4f}", flush=True)
+
     summary = {
         "best_epoch": ckpt["epoch"],
-        "best_val_acc": ckpt["val_acc"],
+        "best_selector": sel_metric,
+        "best_selector_value": ckpt[sel_metric],
         "n_train_pairs": len(train_items),
-        "n_val_pairs": len(val_items),
         "n_test_pairs": len(test_items),
         "test_id": test_m,
         "test_ood": ood_m,
+        "test_ood_coco": ood2_m,
+        "coco_natural": coconat_m,
+        "balanced_score": bal,
     }
     with open(os.path.join(args.out_dir, "summary.json"), "w") as f:
         json.dump(summary, f, indent=2)
