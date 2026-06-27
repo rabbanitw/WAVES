@@ -1,0 +1,29 @@
+{
+  "src": "/home/trabbani/WAVES/coco_ood_examples/v2/edit/00004.jpg",
+  "ckpt": "/home/trabbani/WAVES/detector/best_ood_balanced_r50.pt",
+  "ckpt_balanced": 0.782258064516129,
+  "eps_linf": 0.12549019607843137,
+  "alpha": 0.00392156862745098,
+  "n_steps_run": 2,
+  "image_size_for_detector": 384,
+  "target_label": 0,
+  "native_size": [
+    1248,
+    832
+  ],
+  "baseline": {
+    "p_natural": 5.048034836363513e-06,
+    "p_synth": 0.9999949932098389,
+    "verdict": "synthetic"
+  },
+  "final": {
+    "p_natural": 0.9999995231628418,
+    "p_synth": 4.33048256809343e-07,
+    "verdict": "natural"
+  },
+  "delta_native_units": {
+    "min_abs": 0.0,
+    "max_abs": 2.000007390975952,
+    "mean_abs": 1.0349717140197754
+  }
+}
