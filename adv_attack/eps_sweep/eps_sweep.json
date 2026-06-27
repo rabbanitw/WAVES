@@ -1,0 +1,106 @@
+{
+  "src": "/home/trabbani/WAVES/coco_ood_examples/v2/edit/00004.jpg",
+  "ckpt": "/home/trabbani/WAVES/detector/best_ood_balanced_r50.pt",
+  "baseline": {
+    "p_natural": 5.048034836363513e-06,
+    "p_synth": 0.9999949932098389
+  },
+  "results": [
+    {
+      "eps_units": 1,
+      "eps": 0.00392156862745098,
+      "steps_to_threshold": 51,
+      "delta_mean_units": 0.7237833738327026,
+      "delta_max_units": 1.0000075101852417,
+      "p_natural_deployed": 0.999968409538269,
+      "p_synth_deployed": 3.161512722726911e-05,
+      "psnr_db": 49.510822599661815,
+      "lpips_vgg": 0.043204016983509064,
+      "png_path": "/home/trabbani/WAVES/adv_attack/eps_sweep/adv_eps001.png"
+    },
+    {
+      "eps_units": 2,
+      "eps": 0.00784313725490196,
+      "steps_to_threshold": 52,
+      "delta_mean_units": 1.3620500564575195,
+      "delta_max_units": 2.000007390975952,
+      "p_natural_deployed": 1.0,
+      "p_synth_deployed": 4.462606639776823e-08,
+      "psnr_db": 44.350564952716034,
+      "lpips_vgg": 0.09307988733053207,
+      "png_path": "/home/trabbani/WAVES/adv_attack/eps_sweep/adv_eps002.png"
+    },
+    {
+      "eps_units": 4,
+      "eps": 0.01568627450980392,
+      "steps_to_threshold": 54,
+      "delta_mean_units": 2.585171937942505,
+      "delta_max_units": 4.000007152557373,
+      "p_natural_deployed": 1.0,
+      "p_synth_deployed": 1.2000544872062258e-12,
+      "psnr_db": 38.852697572646484,
+      "lpips_vgg": 0.15045925974845886,
+      "png_path": "/home/trabbani/WAVES/adv_attack/eps_sweep/adv_eps004.png"
+    },
+    {
+      "eps_units": 8,
+      "eps": 0.03137254901960784,
+      "steps_to_threshold": 58,
+      "delta_mean_units": 4.638398170471191,
+      "delta_max_units": 8.000006675720215,
+      "p_natural_deployed": 1.0,
+      "p_synth_deployed": 7.182459140050698e-22,
+      "psnr_db": 33.6111937207461,
+      "lpips_vgg": 0.22775521874427795,
+      "png_path": "/home/trabbani/WAVES/adv_attack/eps_sweep/adv_eps008.png"
+    },
+    {
+      "eps_units": 16,
+      "eps": 0.06274509803921569,
+      "steps_to_threshold": 66,
+      "delta_mean_units": 6.3634796142578125,
+      "delta_max_units": 16.0000057220459,
+      "p_natural_deployed": 1.0,
+      "p_synth_deployed": 2.599451932387424e-35,
+      "psnr_db": 30.291177210529753,
+      "lpips_vgg": 0.293840229511261,
+      "png_path": "/home/trabbani/WAVES/adv_attack/eps_sweep/adv_eps016.png"
+    },
+    {
+      "eps_units": 32,
+      "eps": 0.12549019607843137,
+      "steps_to_threshold": 82,
+      "delta_mean_units": 7.276923179626465,
+      "delta_max_units": 32.000003814697266,
+      "p_natural_deployed": 1.0,
+      "p_synth_deployed": 8.313763658992707e-41,
+      "psnr_db": 28.86453164909608,
+      "lpips_vgg": 0.32656002044677734,
+      "png_path": "/home/trabbani/WAVES/adv_attack/eps_sweep/adv_eps032.png"
+    },
+    {
+      "eps_units": 64,
+      "eps": 0.25098039215686274,
+      "steps_to_threshold": 114,
+      "delta_mean_units": 8.463034629821777,
+      "delta_max_units": 64.00000762939453,
+      "p_natural_deployed": 1.0,
+      "p_synth_deployed": 5.763540583767973e-42,
+      "psnr_db": 27.540016336067556,
+      "lpips_vgg": 0.3583109974861145,
+      "png_path": "/home/trabbani/WAVES/adv_attack/eps_sweep/adv_eps064.png"
+    },
+    {
+      "eps_units": 96,
+      "eps": 0.3764705882352941,
+      "steps_to_threshold": 146,
+      "delta_mean_units": 9.474482536315918,
+      "delta_max_units": 77.99999237060547,
+      "p_natural_deployed": 1.0,
+      "p_synth_deployed": 3.797518838320254e-43,
+      "psnr_db": 26.558933204249318,
+      "lpips_vgg": 0.38553664088249207,
+      "png_path": "/home/trabbani/WAVES/adv_attack/eps_sweep/adv_eps096.png"
+    }
+  ]
+}
