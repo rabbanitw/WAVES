@@ -32,8 +32,10 @@ from data import to_tensor_neg1_1
 from models import BinaryClassifier
 
 CKPT = "/home/trabbani/WAVES/detector/best_ood_balanced_r50.pt"
-SRC = Path("/home/trabbani/WAVES/coco_ood_examples/v2/edit/00001.jpg")
-OUT_DIR = Path("/home/trabbani/WAVES/regen_attack_flips")
+# Allow override via CLI arg: python regen_attack_00001.py 00003
+SRC_STEM = sys.argv[1] if len(sys.argv) > 1 else "00001"
+SRC = Path(f"/home/trabbani/WAVES/coco_ood_examples/v2/edit/{SRC_STEM}.jpg")
+OUT_DIR = Path(f"/home/trabbani/WAVES/regen_attack_flips_{SRC_STEM}")
 IMAGE_SIZE = 384
 MODEL_SDXL = "stabilityai/stable-diffusion-xl-base-1.0"
 NUM_INFERENCE_STEPS = 1000
