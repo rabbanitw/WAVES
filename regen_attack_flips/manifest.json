@@ -1,0 +1,100 @@
+{
+  "source": "/home/trabbani/WAVES/coco_ood_examples/v2/edit/00001.jpg",
+  "ckpt": "/home/trabbani/WAVES/detector/best_ood_balanced_r50.pt",
+  "detector": "baseline_r50 (best_ood_balanced_r50.pt)",
+  "sdxl_model": "stabilityai/stable-diffusion-xl-base-1.0",
+  "num_inference_steps": 1000,
+  "guidance": 1.0,
+  "seed": 1024,
+  "note": "SDXL img2img regeneration attack. 'strength' scales the amount of noise added before denoising: low strength = light rinse (preserves content), high = heavy rewrite. 'NxM' means N rounds of regen at M inference steps each; each round uses a fresh noise seed (WAVES rinse convention).",
+  "variants": [
+    {
+      "name": "00_original",
+      "path": "/home/trabbani/WAVES/regen_attack_flips/00_original.jpg",
+      "size": [
+        1184,
+        864
+      ],
+      "p_natural": 0.004231515806168318,
+      "p_synth": 0.9957685470581055
+    },
+    {
+      "name": "01_regen_1x10",
+      "path": "/home/trabbani/WAVES/regen_attack_flips/01_regen_1x10.jpg",
+      "n_steps_per_round": 10,
+      "n_rounds": 1,
+      "strength": 0.01,
+      "size": [
+        1184,
+        864
+      ],
+      "p_natural": 0.052062757313251495,
+      "p_synth": 0.9479373097419739
+    },
+    {
+      "name": "02_regen_1x20",
+      "path": "/home/trabbani/WAVES/regen_attack_flips/02_regen_1x20.jpg",
+      "n_steps_per_round": 20,
+      "n_rounds": 1,
+      "strength": 0.02,
+      "size": [
+        1184,
+        864
+      ],
+      "p_natural": 0.14096516370773315,
+      "p_synth": 0.8590348958969116
+    },
+    {
+      "name": "03_regen_1x40",
+      "path": "/home/trabbani/WAVES/regen_attack_flips/03_regen_1x40.jpg",
+      "n_steps_per_round": 40,
+      "n_rounds": 1,
+      "strength": 0.04,
+      "size": [
+        1184,
+        864
+      ],
+      "p_natural": 0.5559927821159363,
+      "p_synth": 0.4440072476863861
+    },
+    {
+      "name": "04_regen_2x10",
+      "path": "/home/trabbani/WAVES/regen_attack_flips/04_regen_2x10.jpg",
+      "n_steps_per_round": 10,
+      "n_rounds": 2,
+      "strength": 0.01,
+      "size": [
+        1184,
+        864
+      ],
+      "p_natural": 0.3563339412212372,
+      "p_synth": 0.6436660885810852
+    },
+    {
+      "name": "05_regen_2x20",
+      "path": "/home/trabbani/WAVES/regen_attack_flips/05_regen_2x20.jpg",
+      "n_steps_per_round": 20,
+      "n_rounds": 2,
+      "strength": 0.02,
+      "size": [
+        1184,
+        864
+      ],
+      "p_natural": 0.3619648814201355,
+      "p_synth": 0.6380351185798645
+    },
+    {
+      "name": "06_regen_2x40",
+      "path": "/home/trabbani/WAVES/regen_attack_flips/06_regen_2x40.jpg",
+      "n_steps_per_round": 40,
+      "n_rounds": 2,
+      "strength": 0.04,
+      "size": [
+        1184,
+        864
+      ],
+      "p_natural": 0.452627956867218,
+      "p_synth": 0.547372043132782
+    }
+  ]
+}
