@@ -1,0 +1,68 @@
+{
+  "source": "/home/trabbani/WAVES/coco_ood_examples/v2/edit/00001.jpg",
+  "ckpt": "/home/trabbani/WAVES/detector/best_ood_balanced_r50.pt",
+  "detector": "baseline_r50 (best_ood_balanced_r50.pt)",
+  "note": "All variants scored through the deploy pipeline: resize 384x384 + JPEG q=95. Native-resolution files saved so the user (or Gemini) sees the same variant.",
+  "variants": [
+    {
+      "name": "00_original",
+      "path": "/home/trabbani/WAVES/darkroom_attack_flips/00_original.jpg",
+      "size": [
+        1184,
+        864
+      ],
+      "p_natural": 0.004231515806168318,
+      "p_synth": 0.9957685470581055
+    },
+    {
+      "name": "01_bright1p5",
+      "path": "/home/trabbani/WAVES/darkroom_attack_flips/01_bright1p5.jpg",
+      "size": [
+        1184,
+        864
+      ],
+      "p_natural": 0.9837141036987305,
+      "p_synth": 0.016285907477140427
+    },
+    {
+      "name": "02_bright1p8",
+      "path": "/home/trabbani/WAVES/darkroom_attack_flips/02_bright1p8.jpg",
+      "size": [
+        1184,
+        864
+      ],
+      "p_natural": 0.9989367127418518,
+      "p_synth": 0.001063299598172307
+    },
+    {
+      "name": "03_sharp8",
+      "path": "/home/trabbani/WAVES/darkroom_attack_flips/03_sharp8.jpg",
+      "size": [
+        1184,
+        864
+      ],
+      "p_natural": 0.7845035791397095,
+      "p_synth": 0.21549645066261292
+    },
+    {
+      "name": "04_noise_std20",
+      "path": "/home/trabbani/WAVES/darkroom_attack_flips/04_noise_std20.jpg",
+      "size": [
+        1184,
+        864
+      ],
+      "p_natural": 0.996319055557251,
+      "p_synth": 0.0036809861194342375
+    },
+    {
+      "name": "05_noise_std40",
+      "path": "/home/trabbani/WAVES/darkroom_attack_flips/05_noise_std40.jpg",
+      "size": [
+        1184,
+        864
+      ],
+      "p_natural": 0.9998214840888977,
+      "p_synth": 0.00017851298616733402
+    }
+  ]
+}
