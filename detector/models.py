@@ -24,8 +24,11 @@ class BinaryClassifier(nn.Module):
         elif backbone == "resnet50":
             weights = models.ResNet50_Weights.IMAGENET1K_V2 if pretrained else None
             net = models.resnet50(weights=weights)
+        elif backbone == "resnet101":
+            weights = models.ResNet101_Weights.IMAGENET1K_V2 if pretrained else None
+            net = models.resnet101(weights=weights)
         else:
-            raise ValueError(f"backbone={backbone!r}, expected resnet18 or resnet50")
+            raise ValueError(f"backbone={backbone!r}, expected resnet18/50/101")
         net.fc = nn.Linear(net.fc.in_features, 2)
         self.backbone = net
         # ImageNet stats applied inside forward() so callers can hand us

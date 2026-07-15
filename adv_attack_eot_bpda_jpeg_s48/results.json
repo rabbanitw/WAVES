@@ -1,0 +1,47 @@
+{
+  "ckpt": "/home/trabbani/WAVES/detector/best_adv_jpegaug_r18.pt",
+  "src": "/home/trabbani/WAVES/coco_ood_examples/v2/edit/00001.jpg",
+  "results": {
+    "EOT_BPDA_JPEG-TTA_q30-95": {
+      "n_eot": 8,
+      "q_choices": [
+        30,
+        50,
+        75,
+        95
+      ],
+      "baseline_p_natural_smooth": 0.004687432665377855,
+      "steps_to_threshold": 0,
+      "delta_max_at_threshold_units": 1.000007539987564,
+      "delta_mean_at_threshold_units": 0.9999526804313064,
+      "trajectory": [
+        {
+          "step": 0,
+          "p_natural": 1.0,
+          "loss_avg": 5.086908936500549,
+          "delta_max_units": 1.000007539987564,
+          "delta_mean_units": 0.9999526804313064
+        }
+      ]
+    },
+    "EOT_BPDA_JPEG_q30_only": {
+      "n_eot": 8,
+      "q_choices": [
+        30
+      ],
+      "baseline_p_natural_smooth": 0.011138894595205784,
+      "steps_to_threshold": 0,
+      "delta_max_at_threshold_units": 1.000007539987564,
+      "delta_mean_at_threshold_units": 0.9999485244043171,
+      "trajectory": [
+        {
+          "step": 0,
+          "p_natural": 0.9999999403953552,
+          "loss_avg": 3.496359348297119,
+          "delta_max_units": 1.000007539987564,
+          "delta_mean_units": 0.9999485244043171
+        }
+      ]
+    }
+  }
+}

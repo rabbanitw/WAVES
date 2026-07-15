@@ -1,0 +1,27 @@
+{
+  "src": "/home/trabbani/WAVES/coco_ood_examples/v2/edit/00004.jpg",
+  "ckpt": "/home/trabbani/WAVES/detector/best_adv_mixed_r18.pt",
+  "ckpt_score": 0.410282258064516,
+  "sigma": 0.025,
+  "n_eot": 20,
+  "n_smooth": 20,
+  "alpha_units": 1.0,
+  "eps_cap_units": 96.0,
+  "p_threshold": 0.999,
+  "baseline_p_natural_no_smooth": 0.014840520918369293,
+  "baseline_p_natural_smooth": 0.001862593344412744,
+  "final_p_natural_no_smooth": 0.9999997615814209,
+  "final_p_natural_smooth": 1.0,
+  "steps_to_threshold": 0,
+  "delta_max_at_threshold_units": 1.000007539987564,
+  "delta_mean_at_threshold_units": 0.9968526405282319,
+  "trajectory": [
+    {
+      "step": 0,
+      "p_natural_smooth": 1.0,
+      "loss_avg": 6.527315592765808,
+      "delta_max_units": 1.000007539987564,
+      "delta_mean_units": 0.9968526405282319
+    }
+  ]
+}

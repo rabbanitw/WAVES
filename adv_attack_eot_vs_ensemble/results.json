@@ -1,0 +1,38 @@
+{
+  "src": "/home/trabbani/WAVES/coco_ood_examples/v2/edit/00001.jpg",
+  "ckpts": [
+    "/home/trabbani/WAVES/detector/runs/adv_mixed_noiseaug_r18/s44/best.pt",
+    "/home/trabbani/WAVES/detector/runs/adv_mixed_noiseaug_r18/s48/best.pt",
+    "/home/trabbani/WAVES/detector/runs/adv_mixed_noiseaug_r18/s53/best.pt",
+    "/home/trabbani/WAVES/detector/runs/adv_mixed_noiseaug_r18/s55/best.pt"
+  ],
+  "scores_per_seed": [
+    0.1995967741935485,
+    0.24630376344086025,
+    0.272513440860215,
+    0.045026881720430234
+  ],
+  "sigma": 0.025,
+  "n_eot": 8,
+  "baseline_p_natural_no_smooth": 0.024855444207787514,
+  "baseline_p_natural_smooth": 0.07153809815645218,
+  "final_p_natural_per_seed": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "final_p_natural_smooth": 1.0,
+  "steps_to_threshold": 0,
+  "delta_max_at_threshold_units": 1.000007539987564,
+  "delta_mean_at_threshold_units": 0.999952086713165,
+  "trajectory": [
+    {
+      "step": 0,
+      "p_natural_smooth": 1.0,
+      "loss_avg": 5.3596789836883545,
+      "delta_max_units": 1.000007539987564,
+      "delta_mean_units": 0.999952086713165
+    }
+  ]
+}

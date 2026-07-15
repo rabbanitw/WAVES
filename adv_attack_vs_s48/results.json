@@ -1,0 +1,19 @@
+{
+  "src": "/home/trabbani/WAVES/coco_ood_examples/v2/edit/00004.jpg",
+  "ckpt": "/home/trabbani/WAVES/detector/runs/adv_mixed_r18/s48/best.pt",
+  "ckpt_score": 0.410282258064516,
+  "baseline": {
+    "p_natural": 0.014840520918369293,
+    "p_synth": 0.9851594567298889
+  },
+  "final": {
+    "p_natural": 1.0,
+    "p_synth": 1.513658230874182e-12
+  },
+  "steps_to_threshold": 1,
+  "delta_max_at_threshold": 2.0000074803829193,
+  "delta_mean_at_threshold": 0.9986370010301471,
+  "eps_cap_units": 96.0,
+  "p_threshold": 0.999,
+  "alpha_units": 1.0
+}
