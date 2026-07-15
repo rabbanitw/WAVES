@@ -1,6 +1,9 @@
 # CLAUDE.md — session notes for the next agent
 
-**Branch:** `experiments-sdxl-rinse-ood`
+**Branch:** `experiments-sdxl-rinse-ood` — **all session work is here**.
+Other branches: `main` is the FedAvg memorization paper (unrelated); `synthid-regen-kit` is the older
+SynthID-detection kit (earlier detector ckpt + technical report, pre-session).
+
 **Session dates:** 2026-06-27 through 2026-07-02
 **Working directory:** `/home/trabbani/WAVES`
 
